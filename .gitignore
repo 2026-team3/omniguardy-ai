@@ -1,0 +1,20 @@
+# datasets
+videos/
+
+# outputs
+runs/
+outputs/
+
+# venv
+.venv/
+venv/
+
+# cache
+__pycache__/
+*.pyc
+
+# vscode
+.vscode/
+
+# matching file
+matched_pairs.json
