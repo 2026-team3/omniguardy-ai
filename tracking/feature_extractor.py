@@ -44,10 +44,7 @@ for (video, track_id), group in grouped:
     # =========================
     total_distance = 0
 
-    for i in range(
-        1,
-        len(trajectory)
-    ):
+    for i in range(1, len(trajectory)):
 
         x1, y1 = trajectory[i - 1]
         x2, y2 = trajectory[i]

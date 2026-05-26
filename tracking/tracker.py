@@ -3,7 +3,11 @@
 import json
 import os
 import pandas as pd
+
 from ultralytics import YOLO
+from collections import defaultdict
+
+import random
 
 model = YOLO("yolov8n.pt")
 
@@ -26,9 +30,37 @@ print("총 pair:", len(matched_pairs))
 tracking_data = []
 
 # =========================
-# 50개 테스트
+# 행동별 그룹화
 # =========================
-for pair in matched_pairs[:50]:
+action_groups = defaultdict(list)
+
+for pair in matched_pairs:
+
+    action = pair["name"].split("_")[1]
+
+    action_groups[action].append(pair)
+
+# =========================
+# 행동별 20개 선택
+# =========================
+selected_pairs = []
+
+for action, pairs in action_groups.items():
+
+    random.shuffle(pairs)
+
+    selected_pairs.extend(
+        pairs[:20]
+    )
+
+print()
+print("선택된 영상 개수:")
+print(len(selected_pairs))
+
+# =========================
+# 레이블 별 20개 테스트
+# =========================
+for pair in selected_pairs:
 
     try:
 
@@ -126,12 +158,12 @@ for pair in matched_pairs[:50]:
 df = pd.DataFrame(tracking_data)
 
 df.to_csv(
-    "./tracking_results.csv",
+    "./tracking_results(100).csv",
     index=False,
     encoding="utf-8-sig"
 )
 
 print()
 print("=" * 50)
-print("tracking_results.csv 저장 완료")
+print("tracking_results(100).csv 저장 완료")
 print("총 row:", len(df))
