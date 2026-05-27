@@ -1,9 +1,10 @@
 import pandas as pd
 import math
+import numpy as np
 
 # tracking 결과 로드
 df = pd.read_csv(
-    "./results/tracking_results.csv"
+    "./results/tracking_results(100).csv"
 )
 
 # 중심점 계산
@@ -44,7 +45,10 @@ for (video, track_id), group in grouped:
     # =========================
     total_distance = 0
 
-    for i in range(1, len(trajectory)):
+    for i in range(
+        1,
+        len(trajectory)
+    ):
 
         x1, y1 = trajectory[i - 1]
         x2, y2 = trajectory[i]
@@ -61,6 +65,54 @@ for (video, track_id), group in grouped:
     # =========================
     frame_count = len(trajectory)
 
+    # =========================
+    # 평균 속도
+    # =========================
+    avg_speed = 0
+
+    if frame_count > 0:
+
+        avg_speed = (
+            total_distance / frame_count
+        )
+
+    # =========================
+    # 이동 범위
+    # =========================
+    xs = [
+        p[0]
+        for p in trajectory
+    ]
+
+    ys = [
+        p[1]
+        for p in trajectory
+    ]
+
+    movement_range = 0
+
+    if len(xs) > 0:
+
+        movement_range = (
+            (max(xs) - min(xs)) +
+            (max(ys) - min(ys))
+        )
+
+    # =========================
+    # trajectory variance
+    # =========================
+    trajectory_variance = 0
+
+    if len(xs) > 1:
+
+        trajectory_variance = (
+            np.var(xs) +
+            np.var(ys)
+        )
+
+    # =========================
+    # 저장
+    # =========================
     feature_data.append({
 
         "video": video,
@@ -69,21 +121,30 @@ for (video, track_id), group in grouped:
 
         "frame_count": frame_count,
 
-        "move_distance": total_distance
+        "move_distance": total_distance,
+
+        "avg_speed": avg_speed,
+
+        "movement_range": movement_range,
+
+        "trajectory_variance":
+            trajectory_variance
     })
 
 # =========================
 # DataFrame 저장
 # =========================
-feature_df = pd.DataFrame(feature_data)
+feature_df = pd.DataFrame(
+    feature_data
+)
 
 print(feature_df.head())
 
 feature_df.to_csv(
-    "./results/behavior_features.csv",
+    "./results/behavior_features(100).csv",
     index=False,
     encoding="utf-8-sig"
 )
 
 print()
-print("behavior_features.csv 저장 완료")
+print("behavior_features(100).csv 저장 완료")

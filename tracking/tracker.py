@@ -9,7 +9,7 @@ from collections import defaultdict
 
 import random
 
-model = YOLO("yolov8n.pt")
+model = YOLO("./models/yolov8n.pt")
 
 # =========================
 # 매칭 정보 로드
