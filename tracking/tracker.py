@@ -7,15 +7,13 @@ import pandas as pd
 from ultralytics import YOLO
 from collections import defaultdict
 
-import random
-
 model = YOLO("./models/yolov8n.pt")
 
 # =========================
 # 매칭 정보 로드
 # =========================
 with open(
-    "./videos/matched_pairs.json",
+    "./splits/train_pairs.json",
     "r",
     encoding="utf-8"
 ) as f:
@@ -29,41 +27,8 @@ print("총 pair:", len(matched_pairs))
 # =========================
 tracking_data = []
 
-# =========================
-# 행동별 그룹화
-# =========================
-action_groups = defaultdict(list)
-
 for pair in matched_pairs:
-
-    action = pair["name"].split("_")[1]
-
-    action_groups[action].append(pair)
-
-# =========================
-# 행동별 20개 선택
-# =========================
-selected_pairs = []
-
-for action, pairs in action_groups.items():
-
-    random.shuffle(pairs)
-
-    selected_pairs.extend(
-        pairs[:20]
-    )
-
-print()
-print("선택된 영상 개수:")
-print(len(selected_pairs))
-
-# =========================
-# 레이블 별 20개 테스트
-# =========================
-for pair in selected_pairs:
-
     try:
-
         video_name = os.path.basename(
             pair["video_path"]
         )
@@ -99,20 +64,16 @@ for pair in selected_pairs:
         # 결과 추출
         # =========================
         for frame_idx, r in enumerate(results):
-
             boxes = r.boxes
-
             if boxes is None:
                 continue
 
             for box in boxes:
-
                 # track id 없는 경우 skip
                 if box.id is None:
                     continue
 
                 track_id = int(box.id[0])
-
                 x1, y1, x2, y2 = (
                     box.xyxy[0]
                     .cpu()
@@ -120,15 +81,10 @@ for pair in selected_pairs:
                 )
 
                 conf = float(box.conf[0])
-
                 cls = int(box.cls[0])
-
                 tracking_data.append({
-
                     "video": pair["name"],
-
                     "frame": frame_idx,
-
                     "track_id": track_id,
 
                     "x1": float(x1),
@@ -137,14 +93,11 @@ for pair in selected_pairs:
                     "y2": float(y2),
 
                     "confidence": conf,
-
                     "class": cls
                 })
-
         print("tracking 완료")
 
     except Exception as e:
-
         print()
         print("에러 발생 -> skip")
         print(video_path)
@@ -158,12 +111,12 @@ for pair in selected_pairs:
 df = pd.DataFrame(tracking_data)
 
 df.to_csv(
-    "./tracking_results(100).csv",
+    "./results/tracking_results(train).csv",
     index=False,
     encoding="utf-8-sig"
 )
 
 print()
 print("=" * 50)
-print("tracking_results(100).csv 저장 완료")
+print("tracking_results(train).csv 저장 완료")
 print("총 row:", len(df))

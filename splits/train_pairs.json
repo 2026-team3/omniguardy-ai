@@ -1,0 +1,2417 @@
+[
+    {
+        "name": "C021_A20_SY15_P01_S04_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S04_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S04_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S01_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S01_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S01_02DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S10_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S10_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S10_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S13_01NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S13_01NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S13_01NBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S09_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S09_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S09_02DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P01_S10_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P01_S10_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P01_S10_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S10_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S10_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S10_03DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P01_S03_02NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P01_S03_02NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P01_S03_02NBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S08_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S08_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S08_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S06_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S06_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S06_02DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S02_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S02_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S02_01DBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S11_01DAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S11_01DAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S11_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S06_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S06_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S06_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S02_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S02_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S02_03DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY17_P07_S03_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY17_P07_S03_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY17_P07_S03_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S07_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S07_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S07_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S12_02NBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S12_02NBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S12_02NBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P01_S03_01NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P01_S03_01NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P01_S03_01NAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S11_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S11_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S11_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S10_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S10_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S10_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S06_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S06_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S06_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S07_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S07_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S07_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S09_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S09_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S09_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S13_02NAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S13_02NAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S13_02NAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S02_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S02_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S02_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P01_S02_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P01_S02_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P01_S02_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S08_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S08_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S08_02DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S02_02DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S02_02DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S02_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S09_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S09_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S09_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S13_02NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S13_02NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S13_02NAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S03_03DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S03_03DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S03_03DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S12_02NAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S12_02NAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S12_02NAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S06_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S06_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S06_02DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S03_01NAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S03_01NAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S03_01NAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY32_P01_S05_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY32_P01_S05_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY32_P01_S05_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S08_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S08_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S08_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S05_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S05_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S05_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P07_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P07_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P07_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY17_P07_S03_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY17_P07_S03_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY17_P07_S03_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY17_P07_S07_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY17_P07_S07_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY17_P07_S07_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S10_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S10_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S10_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S08_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S08_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S08_02DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P01_S04_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P01_S04_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P01_S04_02DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P01_S06_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P01_S06_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P01_S06_01DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P07_S10_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P07_S10_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P07_S10_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S05_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S05_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S05_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S08_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S08_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S08_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S08_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S08_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S08_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S04_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S04_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S04_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S09_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S09_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S09_03DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY17_P07_S02_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY17_P07_S02_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY17_P07_S02_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S08_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S08_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S08_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY32_P01_S05_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY32_P01_S05_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY32_P01_S05_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P01_S02_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P01_S02_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P01_S02_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P07_S02_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P07_S02_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P07_S02_03DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S06_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S06_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S06_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S04_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S04_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S04_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P07_S02_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P07_S02_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P07_S02_02DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S11_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S11_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S11_02DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S03_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S03_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S03_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P07_S12_01NBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P07_S12_01NBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P07_S12_01NBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S03_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S03_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S03_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S10_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S10_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S10_02DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY17_P07_S01_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY17_P07_S01_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY17_P07_S01_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S13_01NBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S13_01NBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S13_01NBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S02_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S02_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S02_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P01_S10_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P01_S10_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P01_S10_01DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S08_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S08_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S08_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S11_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S11_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S11_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S12_02NBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S12_02NBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S12_02NBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S10_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S10_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S10_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S07_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S07_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S07_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S01_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S01_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S01_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S03_01NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S03_01NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S03_01NAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S09_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S09_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S09_03DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S12_02NAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S12_02NAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S12_02NAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S02_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S02_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S02_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S07_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S07_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S07_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P01_S01_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P01_S01_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P01_S01_02DBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S10_01DBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S10_01DBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S10_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S03_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S03_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S03_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P01_S06_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P01_S06_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P01_S06_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S10_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S10_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S10_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S12_02NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S12_02NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S12_02NBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P07_S06_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P07_S06_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P07_S06_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S04_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S04_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S04_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S12_01NBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S12_01NBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S12_01NBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S12_03NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S12_03NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S12_03NAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S12_01NBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S12_01NBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S12_01NBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S11_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S11_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S11_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S06_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S06_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S06_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P01_S12_02NBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P01_S12_02NBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P01_S12_02NBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY17_P07_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY17_P07_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY17_P07_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P07_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P07_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P07_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S12_01NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S12_01NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S12_01NAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S10_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S10_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S10_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P01_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P01_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P01_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S09_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S09_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S09_02DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P07_S10_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P07_S10_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P07_S10_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S10_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S10_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S10_02DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S04_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S04_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S04_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S10_03DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S10_03DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S10_03DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S09_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S09_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S09_02DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S03_02DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S03_02DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S03_02DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S07_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S07_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S07_02DAS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P07_S10_01DBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P07_S10_01DBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P07_S10_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S09_03DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S09_03DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S09_03DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S10_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S10_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S10_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S10_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S10_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S10_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S02_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S02_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S02_03DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S14_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S14_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S14_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S08_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S08_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S08_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S09_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S09_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S09_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S01_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S01_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S01_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S12_02NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S12_02NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S12_02NAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P01_S04_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P01_S04_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P01_S04_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S09_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S09_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S09_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S03_02NBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S03_02NBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S03_02NBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S06_01DAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S06_01DAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S06_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S02_03DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S02_03DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S02_03DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S07_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S07_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S07_01DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S07_02DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S07_02DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S07_02DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P01_S08_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P01_S08_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P01_S08_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P07_S02_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P07_S02_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P07_S02_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S03_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S03_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S03_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S09_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S09_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S09_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P07_S03_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P07_S03_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P07_S03_03DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P01_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P01_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P01_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S12_03NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S12_03NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S12_03NAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S12_01NBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S12_01NBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S12_01NBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S07_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S07_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S07_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S14_03DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S14_03DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S14_03DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P01_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P01_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P01_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P01_S04_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P01_S04_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P01_S04_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S11_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S11_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S11_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY17_P01_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY17_P01_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY17_P01_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S08_03DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S08_03DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S08_03DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S06_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S06_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S06_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S01_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S01_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S01_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P07_S02_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P07_S02_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P07_S02_02DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S01_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S01_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S01_02DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P01_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P01_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P01_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S04_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S04_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S04_02DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S10_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S10_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S10_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S06_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S06_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S06_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY32_P01_S05_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY32_P01_S05_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY32_P01_S05_02DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S05_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S05_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S05_02DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S10_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S10_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S10_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S07_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S07_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S07_01DBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P07_S13_01NAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P07_S13_01NAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P07_S13_01NAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P01_S11_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P01_S11_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P01_S11_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S07_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S07_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S07_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S10_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S10_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S10_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S03_03DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S03_03DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S03_03DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S07_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S07_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S07_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S09_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S09_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S09_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S11_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S11_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S11_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S06_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S06_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S06_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S12_01NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S12_01NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S12_01NAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P07_S08_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P07_S08_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P07_S08_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S06_02DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S06_02DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S06_02DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY32_P01_S06_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY32_P01_S06_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY32_P01_S06_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S02_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S02_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S02_02DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S03_02DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S03_02DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S03_02DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S09_02DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S09_02DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S09_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P01_S03_02NAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P01_S03_02NAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P01_S03_02NAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S11_01NAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S11_01NAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S11_01NAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S08_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S08_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S08_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S04_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S04_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S04_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S11_03NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S11_03NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S11_03NAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S07_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S07_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S07_02DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY17_P01_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY17_P01_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY17_P01_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY17_P07_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY17_P07_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY17_P07_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY32_P01_S08_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY32_P01_S08_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY32_P01_S08_02DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S10_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S10_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S10_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P01_S02_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P01_S02_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P01_S02_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S08_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S08_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S08_01DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY17_P01_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY17_P01_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY17_P01_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P07_S02_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P07_S02_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P07_S02_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S03_02NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S03_02NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S03_02NBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P01_S09_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P01_S09_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P01_S09_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S05_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S05_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S05_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S14_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S14_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S14_02DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S03_01NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S03_01NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S03_01NAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S11_02DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S11_02DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S11_02DAS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S08_01DAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S08_01DAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S08_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P01_S01_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P01_S01_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P01_S01_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S02_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S02_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S02_02DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S14_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S14_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S14_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY32_P01_S07_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY32_P01_S07_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY32_P01_S07_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S04_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S04_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S04_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S06_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S06_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S06_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S06_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S06_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S06_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P01_S09_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P01_S09_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P01_S09_02DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S09_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S09_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S09_01DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P01_S04_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P01_S04_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P01_S04_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S02_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S02_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S02_01DBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S04_01DAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S04_01DAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S04_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S13_02NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S13_02NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S13_02NBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S13_01NAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S13_01NAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S13_01NAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S08_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S08_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S08_02DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY17_P07_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY17_P07_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY17_P07_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S10_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S10_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S10_01DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S08_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S08_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S08_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S13_02NBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S13_02NBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S13_02NBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S13_03NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S13_03NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S13_03NAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY32_P01_S05_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY32_P01_S05_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY32_P01_S05_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S07_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S07_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S07_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S10_03DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S10_03DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S10_03DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S07_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S07_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S07_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S02_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S02_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S02_02DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P01_S08_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P01_S08_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P01_S08_02DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY17_P07_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY17_P07_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY17_P07_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S03_01NAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S03_01NAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S03_01NAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S11_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S11_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S11_01DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY17_P01_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY17_P01_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY17_P01_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S06_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S06_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S06_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S06_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S06_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S06_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY17_P07_S07_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY17_P07_S07_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY17_P07_S07_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S12_01NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S12_01NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S12_01NBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S08_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S08_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S08_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S06_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S06_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S06_01DBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S11_01DBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S11_01DBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S11_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY17_P07_S03_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY17_P07_S03_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY17_P07_S03_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P07_S03_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P07_S03_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P07_S03_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S13_02NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S13_02NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S13_02NBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S02_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S02_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S02_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P01_S02_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P01_S02_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P01_S02_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S13_01NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S13_01NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S13_01NAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S02_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S02_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S02_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S03_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S03_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S03_01DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S09_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S09_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S09_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S14_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S14_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S14_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S08_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S08_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S08_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY17_P07_S06_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY17_P07_S06_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY17_P07_S06_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S10_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S10_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S10_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S14_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S14_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S14_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY17_P01_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY17_P01_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY17_P01_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY16_P01_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY16_P01_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY16_P01_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S12_02NAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S12_02NAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S12_02NAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P01_S10_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P01_S10_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P01_S10_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY17_P07_S06_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY17_P07_S06_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY17_P07_S06_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S13_01NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S13_01NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S13_01NAS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P07_S08_01DAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P07_S08_01DAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P07_S08_01DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S06_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S06_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S06_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S11_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S11_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S11_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S10_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S10_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S10_01DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S12_01NBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S12_01NBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S12_01NBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S09_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S09_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S09_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S07_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S07_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S07_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S10_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S10_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S10_03DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S08_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S08_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S08_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY17_P07_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY17_P07_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY17_P07_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P01_S08_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P01_S08_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P01_S08_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S06_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S06_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S06_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S11_02NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S11_02NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S11_02NAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S08_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S08_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S08_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S09_03DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S09_03DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S09_03DAS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S02_01DBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S02_01DBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S02_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S07_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S07_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S07_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S08_02DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S08_02DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S08_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY17_P07_S01_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY17_P07_S01_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY17_P07_S01_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P01_S01_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P01_S01_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P01_S01_02DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S13_01NBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S13_01NBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S13_01NBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S03_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S03_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S03_02DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P07_S14_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P07_S14_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P07_S14_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY17_P07_S06_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY17_P07_S06_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY17_P07_S06_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S13_03NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S13_03NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S13_03NBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S07_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S07_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S07_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S07_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S07_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S07_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S03_01NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S03_01NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S03_01NBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S13_01NBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S13_01NBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S13_01NBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S03_01NBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S03_01NBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S03_01NBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S08_03DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S08_03DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S08_03DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S08_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S08_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S08_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S01_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S01_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S01_02DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P07_S07_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P07_S07_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P07_S07_01DAS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P07_S03_01DBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P07_S03_01DBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P07_S03_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S02_02DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S02_02DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S02_02DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S07_02DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S07_02DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S07_02DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S04_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S04_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S04_01DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S06_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S06_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S06_01DAS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P07_S03_01DAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P07_S03_01DAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P07_S03_01DAS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S06_01DBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S06_01DBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S06_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S09_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S09_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S09_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S01_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S01_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S01_02DBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S05_01DAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S05_01DAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S05_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S10_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S10_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S10_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S01_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S01_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S01_03DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S12_01NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S12_01NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S12_01NAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S09_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S09_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S09_02DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P01_S05_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P01_S05_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P01_S05_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S14_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S14_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S14_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S14_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S14_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S14_01DAS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S07_01DBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S07_01DBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S07_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S02_02DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S02_02DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S02_02DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S14_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S14_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S14_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY17_P07_S03_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY17_P07_S03_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY17_P07_S03_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P07_S14_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P07_S14_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P07_S14_01DBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S05_01DBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S05_01DBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S05_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S12_01NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S12_01NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S12_01NBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P01_S12_01NAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P01_S12_01NAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P01_S12_01NAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S11_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S11_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S11_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S03_02NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S03_02NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S03_02NAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S05_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S05_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S05_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S13_02NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S13_02NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S13_02NBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S08_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S08_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S08_03DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S08_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S08_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S08_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P01_S11_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P01_S11_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P01_S11_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S01_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S01_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S01_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S05_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S05_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S05_01DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S01_02DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S01_02DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S01_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S06_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S06_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S06_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P01_S13_02NBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P01_S13_02NBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P01_S13_02NBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY17_P07_S07_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY17_P07_S07_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY17_P07_S07_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S06_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S06_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S06_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S07_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S07_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S07_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY17_P01_S04_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY17_P01_S04_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY17_P01_S04_01DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P07_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P07_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P07_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P07_S03_03DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P07_S03_03DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P07_S03_03DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S07_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S07_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S07_02DBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P07_S07_01DBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P07_S07_01DBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P07_S07_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S10_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S10_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S10_01DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S02_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S02_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S02_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S08_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S08_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S08_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P01_S04_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P01_S04_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P01_S04_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P07_S03_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P07_S03_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P07_S03_02DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S04_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S04_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S04_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S06_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S06_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S06_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P07_S06_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P07_S06_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P07_S06_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S12_01NAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S12_01NAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S12_01NAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S10_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S10_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S10_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S13_01NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S13_01NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S13_01NAS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P07_S11_01DAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P07_S11_01DAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P07_S11_01DAS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P07_S10_01DAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P07_S10_01DAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P07_S10_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P07_S03_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P07_S03_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P07_S03_02DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY17_P07_S06_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY17_P07_S06_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY17_P07_S06_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S11_01NAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S11_01NAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S11_01NAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY32_P01_S08_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY32_P01_S08_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY32_P01_S08_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S13_01NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S13_01NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S13_01NBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S14_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S14_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S14_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S10_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S10_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S10_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S04_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S04_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S04_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S05_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S05_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S05_02DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S10_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S10_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S10_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P01_S10_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P01_S10_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P01_S10_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S14_03DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S14_03DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S14_03DAS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P07_S09_01DBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P07_S09_01DBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P07_S09_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S05_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S05_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S05_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S01_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S01_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S01_02DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S01_02DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S01_02DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S01_02DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S13_01NBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S13_01NBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S13_01NBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S07_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S07_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S07_02DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P07_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P07_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P07_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P01_S02_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P01_S02_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P01_S02_02DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S01_03DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S01_03DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S01_03DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S09_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S09_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S09_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S06_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S06_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S06_02DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S07_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S07_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S07_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S03_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S03_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S03_03DBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S10_01DAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S10_01DAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S10_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S06_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S06_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S06_01DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S13_02NAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S13_02NAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S13_02NAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S07_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S07_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S07_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S11_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S11_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S11_02DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S13_01NAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S13_01NAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S13_01NAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S13_02NBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S13_02NBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S13_02NBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S10_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S10_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S10_02DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S07_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S07_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S07_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S06_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S06_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S06_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S06_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S06_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S06_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S07_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S07_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S07_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S07_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S07_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S07_02DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S12_01NAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S12_01NAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S12_01NAS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P07_S14_01DBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P07_S14_01DBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P07_S14_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S04_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S04_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S04_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P01_S05_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P01_S05_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P01_S05_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S08_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S08_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S08_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S07_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S07_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S07_02DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S06_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S06_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S06_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S09_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S09_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S09_02DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY17_P01_S02_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY17_P01_S02_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY17_P01_S02_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S11_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S11_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S11_02DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S03_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S03_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S03_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S11_02NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S11_02NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S11_02NAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S03_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S03_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S03_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S12_01NAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S12_01NAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S12_01NAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S12_03NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S12_03NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S12_03NBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S05_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S05_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S05_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S06_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S06_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S06_02DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY17_P07_S03_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY17_P07_S03_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY17_P07_S03_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S10_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S10_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S10_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S09_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S09_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S09_02DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P01_S07_02DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P01_S07_02DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P01_S07_02DAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY17_P07_S02_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY17_P07_S02_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY17_P07_S02_01DBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P07_S07_01DAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P07_S07_01DAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P07_S07_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S06_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S06_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S06_03DBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY16_P01_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY16_P01_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY16_P01_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S06_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S06_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S06_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S03_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S03_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S03_02DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY17_P01_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY17_P01_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY17_P01_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S08_01DBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S08_01DBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S08_01DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S13_03NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S13_03NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S13_03NBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S01_02DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S01_02DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S01_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S09_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S09_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S09_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S03_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S03_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S03_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S07_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S07_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S07_03DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P01_S03_01NAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P01_S03_01NAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P01_S03_01NAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY17_P01_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY17_P01_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY17_P01_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S08_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S08_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S08_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S14_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S14_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S14_02DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY17_P07_S06_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY17_P07_S06_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY17_P07_S06_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S06_03DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S06_03DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S06_03DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S09_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S09_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S09_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S14_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S14_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S14_03DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S03_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S03_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S03_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P01_S01_01DBS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P01_S01_01DBS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P01_S01_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S10_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S10_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S10_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P01_S12_02NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P01_S12_02NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P01_S12_02NAS.mp4"
+    },
+    {
+        "name": "C021_A21_SY16_P07_S13_01NAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY16_P07_S13_01NAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY16_P07_S13_01NAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S09_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S09_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S09_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S10_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S10_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S10_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S08_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S08_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S08_01DBS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S03_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S03_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S03_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S12_01NAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S12_01NAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S12_01NAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P01_S04_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P01_S04_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P01_S04_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S08_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S08_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S08_01DBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P07_S14_01DAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P07_S14_01DAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P07_S14_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S12_03NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S12_03NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S12_03NBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S09_02DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S09_02DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S09_02DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S06_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S06_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S06_02DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S07_01DAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S07_01DAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S07_01DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P01_S02_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P01_S02_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P01_S02_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P07_S03_01DAS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P07_S03_01DAS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P07_S03_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S01_03DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S01_03DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S01_03DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S08_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S08_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S08_03DBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S10_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S10_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S10_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY15_P07_S09_02DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY15_P07_S09_02DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY15_P07_S09_02DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S05_01DBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S05_01DBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S05_01DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY15_P01_S03_01NBS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY15_P01_S03_01NBS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY15_P01_S03_01NBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY17_P07_S02_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY17_P07_S02_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY17_P07_S02_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY17_P01_S04_01DBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY17_P01_S04_01DBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY17_P01_S04_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P01_S03_01NBS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P01_S03_01NBS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P01_S03_01NBS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S12_02NBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S12_02NBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S12_02NBS.mp4"
+    },
+    {
+        "name": "C021_A17_SY15_P07_S06_01DAS",
+        "json_path": "./videos/unzipped\\TL15\\C021_A17_SY15_P07_S06_01DAS.json",
+        "video_path": "./videos/unzipped\\TS15\\C021_A17_SY15_P07_S06_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P07_S14_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P07_S14_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P07_S14_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S10_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S10_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S10_02DBS.mp4"
+    },
+    {
+        "name": "C021_A21_SY17_P01_S03_01NAS",
+        "json_path": "./videos/unzipped\\TL14\\C021_A21_SY17_P01_S03_01NAS.json",
+        "video_path": "./videos/unzipped\\TS14\\C021_A21_SY17_P01_S03_01NAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY15_P07_S07_02DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY15_P07_S07_02DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY15_P07_S07_02DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY15_P01_S07_02DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY15_P01_S07_02DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY15_P01_S07_02DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY16_P07_S14_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY16_P07_S14_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY16_P07_S14_01DAS.mp4"
+    },
+    {
+        "name": "C021_A20_SY16_P07_S09_01DBS",
+        "json_path": "./videos/unzipped\\TL11\\C021_A20_SY16_P07_S09_01DBS.json",
+        "video_path": "./videos/unzipped\\TS11\\C021_A20_SY16_P07_S09_01DBS.mp4"
+    },
+    {
+        "name": "C021_A19_SY17_P07_S03_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY17_P07_S03_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY17_P07_S03_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY16_P01_S04_01DAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY16_P01_S04_01DAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY16_P01_S04_01DAS.mp4"
+    },
+    {
+        "name": "C021_A19_SY17_P07_S01_01DAS",
+        "json_path": "./videos/unzipped\\TL13\\C021_A19_SY17_P07_S01_01DAS.json",
+        "video_path": "./videos/unzipped\\TS13\\C021_A19_SY17_P07_S01_01DAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P01_S03_02NAS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P01_S03_02NAS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P01_S03_02NAS.mp4"
+    },
+    {
+        "name": "C021_A18_SY17_P07_S01_03DBS",
+        "json_path": "./videos/unzipped\\TL12\\C021_A18_SY17_P07_S01_03DBS.json",
+        "video_path": "./videos/unzipped\\TS12\\C021_A18_SY17_P07_S01_03DBS.mp4"
+    }
+]
