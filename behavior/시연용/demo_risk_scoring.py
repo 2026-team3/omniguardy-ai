@@ -1,7 +1,7 @@
 import pandas as pd
 
 df = pd.read_csv(
-    "./results/merged_features(train).csv"
+    "./results/시연용/merged_features(test).csv"
 )
 
 results = []
@@ -115,10 +115,10 @@ result_df = pd.DataFrame(results)
 print(result_df.head())
 
 result_df.to_csv(
-    "./results/risk_results(train).csv",
+    "./results/시연용/risk_results(test).csv",
     index=False,
     encoding="utf-8-sig"
 )
 
 print()
-print("risk_results(train).csv 저장 완료")
+print("risk_results(test).csv 저장 완료")
