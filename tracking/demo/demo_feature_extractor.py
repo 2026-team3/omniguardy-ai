@@ -26,6 +26,7 @@ for (video, track_id), group in grouped:
     # frame 순 정렬
     group = group.sort_values("frame")
     trajectory = []
+    confidences = []
 
     for _, row in group.iterrows():
         trajectory.append(
@@ -34,6 +35,10 @@ for (video, track_id), group in grouped:
                 row["center_y"]
             )
         )
+        confidences.append(
+            row["confidence"]
+        )
+
     # =========================
     # 이동거리 계산
     # =========================
@@ -86,6 +91,13 @@ for (video, track_id), group in grouped:
         )
 
     # =========================
+    # detection confidence
+    # =========================
+    avg_confidence = np.mean(confidences)
+    min_confidence = np.min(confidences)
+    confidence_variance = np.var(confidences)
+    
+    # =========================
     # 저장
     # =========================
     feature_data.append({
@@ -95,8 +107,10 @@ for (video, track_id), group in grouped:
         "move_distance": total_distance,
         "avg_speed": avg_speed,
         "movement_range": movement_range,
-        "trajectory_variance":
-            trajectory_variance
+        "trajectory_variance": trajectory_variance,
+        "avg_confidence": avg_confidence,
+        "min_confidence": min_confidence,
+        "confidence_variance": confidence_variance
     })
 
 # =========================

@@ -68,6 +68,7 @@ for video_name in os.listdir(video_dir):
                     .cpu()
                     .numpy()
                 )
+                conf = float(box.conf[0])
 
                 tracking_data.append({
 
@@ -79,6 +80,7 @@ for video_name in os.listdir(video_dir):
 
                     "frame": frame_idx,
                     "track_id": track_id,
+                    "confidence": conf,
 
                     "x1": float(x1),
                     "y1": float(y1),

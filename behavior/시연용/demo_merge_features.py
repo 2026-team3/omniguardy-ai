@@ -4,6 +4,16 @@ import pandas as pd
 behavior_df = pd.read_csv("./results/시연용/behavior_features(test).csv")
 pose_df = pd.read_csv("./results/시연용/pose_features(test).csv")
 
+
+person_count_df = (
+    pd.read_csv(
+        "./results/시연용/behavior_features(test).csv"
+    )
+    .groupby("video")["track_id"]
+    .nunique()
+    .reset_index(name="person_count")
+)
+
 # video 이름 통일
 pose_df["video"] = (pose_df["video"].str.replace(".mp4", "", regex=False))
 
@@ -14,13 +24,21 @@ pose_df["video"] = (pose_df["video"].str.replace(".mp4", "", regex=False))
 behavior_df = (
     behavior_df
     .groupby("video")
-    .mean(numeric_only=True)
+    .max(numeric_only=True)
     .reset_index()
 )
 
 # feature merge
 merged_df = pd.merge(
     behavior_df, pose_df, on="video", how="inner"
+)
+
+# person count merge
+merged_df = pd.merge(
+    merged_df,
+    person_count_df,
+    on="video",
+    how="left"
 )
 
 # 불필여한 column 제거
