@@ -72,12 +72,17 @@ for _, row in df.iterrows():
         score += 15
         events.append("비정상 상체 방향")
 
+    print(row["video"])
+    print("person_count:", row["person_count"])
+    print("avg_speed:", row["avg_speed"])
+    print("frame_count:", row["frame_count"])   
+    print()
     # 사용자 뒤 외부인 접근 (현재는 그냥 인원수 다 체크)
     if (
-        row["person_count"] >= 2
-        and row["arm_extension"] > 0.45
-        and row["frame_count"] > 90
-        and row["avg_speed"] < 20
+        row["person_count"] >= 3
+        and row["avg_speed"] > 10
+        and row["avg_speed"] < 25
+        and row["frame_count"] > 80
     ):
         score += 75
         events.append("사용자 뒤 접근")
@@ -128,11 +133,12 @@ for _, row in df.iterrows():
     # 저장
     # =========================
     results.append({
-        "video": row["video"],
-        "events": ", ".join(events),
-        "risk_score": score,
-        "risk_level": level
-    })
+    "module": "vision",
+    "video": row["video"],
+    "events": events,
+    "risk_score": score,
+    "risk_level": level,
+})
 
 result_df = pd.DataFrame(results)
 print(result_df.head())
