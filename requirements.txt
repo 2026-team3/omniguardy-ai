@@ -1,0 +1,14 @@
+tensorflow==2.15.0
+keras==2.15.0
+
+numpy
+librosa
+soundfile
+
+scikit-learn
+
+fastapi
+uvicorn
+torchcodec
+
+python-multipart
