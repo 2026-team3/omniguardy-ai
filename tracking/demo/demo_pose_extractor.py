@@ -4,13 +4,7 @@ import mediapipe as mp
 import pandas as pd
 import math
 import os
-import random
 import numpy as np
-
-from mediapipe.tasks import python
-from mediapipe.tasks.python import vision
-from mediapipe.tasks.python.vision import drawing_utils
-from mediapipe.tasks.python.vision import drawing_styles
 
 # =========================
 # 모델 경로
@@ -18,24 +12,6 @@ from mediapipe.tasks.python.vision import drawing_styles
 model_path = (
     "./models/pose_landmarker_lite.task"
 )
-
-
-def draw_landmarks_on_image(rgb_image, detection_result):
-  pose_landmarks_list = detection_result.pose_landmarks
-  annotated_image = np.copy(rgb_image)
-
-  pose_landmark_style = drawing_styles.get_default_pose_landmarks_style()
-  pose_connection_style = drawing_utils.DrawingSpec(color=(0, 255, 0), thickness=2)
-
-  for pose_landmarks in pose_landmarks_list:
-    drawing_utils.draw_landmarks(
-        image=annotated_image,
-        landmark_list=pose_landmarks,
-        connections=vision.PoseLandmarksConnections.POSE_LANDMARKS,
-        landmark_drawing_spec=pose_landmark_style,
-        connection_drawing_spec=pose_connection_style)
-
-  return annotated_image
 
 # =========================
 # Pose Landmarker 생성
@@ -70,12 +46,11 @@ video_list = [
     if v.endswith(".mp4")
 ]
 
-visualize_video = video_list[0]
-
 # =========================
 # 결과 저장
 # =========================
 pose_features = []
+pose_landmark_data = []
 
 # =========================
 # 영상 반복
@@ -101,6 +76,7 @@ for video_name in video_list:
         # fps 이상하면 기본값
         if fps <= 0:
             fps = 30
+        
 
         frame_idx = 0
         right_hand_positions = []
@@ -119,8 +95,8 @@ for video_name in video_list:
             # =========================
             # 10프레임마다만 처리
             # =========================
-            if frame_idx % 10 != 0:
-                continue
+            # if frame_idx % 10 != 0:
+            #     continue
 
             # =========================
             # timestamp(ms)
@@ -134,50 +110,27 @@ for video_name in video_list:
             # =========================
             # Pose 추론
             # =========================
-            result = (
-                landmarker.detect_for_video(mp_image, timestamp_ms)
-            )
-
-            # =========================
-            # Visualization
-            # =========================
-            if video_name == visualize_video:
-                annotated_image = (
-                    draw_landmarks_on_image(
-                        rgb_frame,
-                        result
-                    )
-                )
-                cv2.imshow(
-                    "Pose Visualization",
-                    cv2.cvtColor(annotated_image, cv2.COLOR_RGB2BGR)
-                )
-                if result.segmentation_masks:
-                    segmentation_mask = (
-                        result.segmentation_masks[0]
-                        .numpy_view()
-                    )
-                    segmentation_mask = np.squeeze( segmentation_mask )
-                    visualized_mask = (segmentation_mask * 255).astype(np.uint8)
-                    visualized_mask = np.stack([visualized_mask] * 3, axis=-1)
-                    cv2.imshow(
-                        "Segmentation Mask",
-                        visualized_mask
-                    )
-                key = cv2.waitKey(1)
-
-                    # ESC 누르면 종료
-                if key == 27:
-                    break
+            result = landmarker.detect_for_video(mp_image, timestamp_ms)
+            
 
             if len(result.pose_landmarks) == 0:
                 continue
             landmarks = (result.pose_landmarks[0])
+            # =========================
+            # landmark 저장
+            # =========================
+            for landmark_id, lm in enumerate(landmarks):
+                pose_landmark_data.append({
+                    "video": video_name.replace(".mp4", ""),
+                    "frame": frame_idx,
+                    "landmark_id": landmark_id,
+                    "x": lm.x,
+                    "y": lm.y
+                })
 
             # =========================
             # 주요 landmark
             # =========================
-            nose = landmarks[0]
             left_shoulder = landmarks[11]
             right_shoulder = landmarks[12]
             right_wrist = landmarks[16]
@@ -232,6 +185,7 @@ for video_name in video_list:
             arm_lengths.append(arm_length)
 
         cap.release()
+        
         landmarker.close()
 
         # =========================
@@ -313,10 +267,16 @@ pose_df.to_csv(
     index=False,
     encoding="utf-8-sig"
 )
+pose_landmark_df = pd.DataFrame(pose_landmark_data)
+pose_landmark_df.to_csv(
+    "./results/시연용/pose_landmarks(test).csv",
+    index=False,
+    encoding="utf-8-sig"
+)
+
 
 print()
 print("=" * 50)
 print("pose_features(test).csv 저장 완료")
 print("총 row:", len(pose_df))
 
-cv2.destroyAllWindows()
