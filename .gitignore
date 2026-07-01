@@ -18,3 +18,5 @@ __pycache__/
 
 # matching file
 matched_pairs.json
+
+results/
