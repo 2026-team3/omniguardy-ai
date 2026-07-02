@@ -7,24 +7,11 @@ pose_df = pd.read_csv("./results/pose_features(train).csv")
 # video 이름 통일
 pose_df["video"] = (pose_df["video"].str.replace(".mp4", "", regex=False))
 
-# -----------------------------------
-# behavior feature aggregation
-# track 단위 -> 영상 단위
-# -----------------------------------
-behavior_df = (
-    behavior_df
-    .groupby("video")
-    .mean(numeric_only=True)
-    .reset_index()
-)
-
 # feature merge
-merged_df = pd.merge(
-    behavior_df, pose_df, on="video", how="inner"
-)
+merged_df = pd.merge(behavior_df, pose_df, on="video", how="inner")
 
 # 불필여한 column 제거
-drop_columns = ["track_id", "frame_count_y"]
+drop_columns = ["frame_count_y"]
 
 for col in drop_columns:
     if col in merged_df.columns:
@@ -48,6 +35,5 @@ print("=" * 50)
 print("merged_features(train).csv 저장 완료")
 print()
 print(merged_df.head())
-print()
-print("총 row:")
-print(len(merged_df))
+print("총 row:", len(merged_df))
+

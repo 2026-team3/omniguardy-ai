@@ -32,18 +32,42 @@ df["label"] = (
 # ===========================================
 feature_cols = [
     "frame_count",
+
     "move_distance",
     "avg_speed",
+    "max_speed",
+    "min_speed",
+    "std_speed",
+
     "movement_range",
     "trajectory_variance",
-    "hand_motion",
-    "body_motion",
-    "upper_body_angle",
-    "arm_extension"
+
+    "hand_motion_sum",
+    "hand_motion_mean",
+    "hand_motion_std",
+    "hand_motion_max",
+
+    "body_motion_sum",
+    "body_motion_mean",
+    "body_motion_std",
+    "body_motion_max",
+
+    "upper_body_angle_mean",
+    "upper_body_angle_std",
+    "upper_body_angle_max",
+    "upper_body_angle_min",
+
+    "arm_extension_mean",
+    "arm_extension_std",
+    "arm_extension_max",
+    "arm_extension_min"
 ]
 
 X = df[feature_cols]
 y = df["label"]
+
+print(X.shape)
+print(X.columns)
 
 # ===========================================
 # Train / Test Split
@@ -60,8 +84,9 @@ X_train, X_test, y_train, y_test = train_test_split(
 # RandomForest
 # ===========================================
 model = RandomForestClassifier(
-    n_estimators=300,
+    n_estimators=500,
     max_depth=None,
+    min_samples_leaf=2,
     random_state=42,
     class_weight="balanced"
 )
@@ -69,6 +94,7 @@ model = RandomForestClassifier(
 print("="*60)
 print("Training RandomForest...")
 print("="*60)
+
 
 model.fit(
     X_train,

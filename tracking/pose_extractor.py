@@ -237,49 +237,75 @@ for video_name in video_list:
         # =========================
         # hand motion
         # =========================
-        hand_motion = 0
+        hand_motion_list = []
 
         for i in range(1, len(right_hand_positions)):
-
             x1, y1 = (right_hand_positions[i - 1])
             x2, y2 = (right_hand_positions[i])
 
-            dist = math.sqrt(
-                (x2 - x1) ** 2 + (y2 - y1) ** 2
-            )
+            dist = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+            hand_motion_list.append(dist)
 
-            hand_motion += dist
+        if len(hand_motion_list):
+            hand_motion_sum = np.sum(hand_motion_list)
+            hand_motion_mean = np.mean(hand_motion_list)
+            hand_motion_std = np.std(hand_motion_list)
+            hand_motion_max = np.max(hand_motion_list)
+        else:
+            hand_motion_sum = 0
+            hand_motion_mean = 0
+            hand_motion_std = 0
+            hand_motion_max = 0
 
         # =========================
         # body motion
         # =========================
-        body_motion = 0
+        body_motion_list = []
 
         for i in range( 1, len(body_positions)):
             x1, y1 = (body_positions[i - 1])
             x2, y2 = (body_positions[i])
             
-            dist = math.sqrt(
-                (x2 - x1) ** 2 + (y2 - y1) ** 2
-            )
+            dist = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+            body_motion_list.append(dist)
 
-            body_motion += dist
+        if len(body_motion_list):
+            body_motion_sum = np.sum(body_motion_list)
+            body_motion_mean = np.mean(body_motion_list)
+            body_motion_std = np.std(body_motion_list)
+            body_motion_max = np.max(body_motion_list)
+        else:
+            body_motion_sum = 0
+            body_motion_mean = 0
+            body_motion_std = 0
+            body_motion_max = 0
 
         # =========================
-        # 평균값
+        # arm extension
         # =========================
-        avg_arm_extension = 0
-        avg_upper_body_angle = 0
-
-        if len(arm_lengths) > 0:
-            avg_arm_extension = np.mean(
-                arm_lengths
-            )
-
-        if len(upper_body_angles) > 0:
-            avg_upper_body_angle = np.mean(
-                upper_body_angles
-            )
+        if len(arm_lengths):
+            arm_extension_mean = np.mean(arm_lengths)
+            arm_extension_std = np.std(arm_lengths)
+            arm_extension_max = np.max(arm_lengths)
+            arm_extension_min = np.min(arm_lengths)
+        else:
+            arm_extension_mean = 0
+            arm_extension_std = 0
+            arm_extension_max = 0
+            arm_extension_min = 0
+        # =========================
+        # upper body angle
+        # =========================
+        if len(upper_body_angles):
+            upper_body_angle_mean = np.mean(upper_body_angles)
+            upper_body_angle_std = np.std(upper_body_angles)
+            upper_body_angle_max = np.max(upper_body_angles)
+            upper_body_angle_min = np.min(upper_body_angles)
+        else:
+            upper_body_angle_mean = 0
+            upper_body_angle_std = 0
+            upper_body_angle_max = 0
+            upper_body_angle_min = 0
 
         # =========================
         # 저장
@@ -287,10 +313,29 @@ for video_name in video_list:
         pose_features.append({
             "video": video_name,
             "frame_count": frame_idx,
-            "hand_motion": hand_motion,
-            "body_motion": body_motion,
-            "upper_body_angle": avg_upper_body_angle,
-            "arm_extension": avg_arm_extension
+            # Hand Motion
+            "hand_motion_sum": hand_motion_sum,
+            "hand_motion_mean": hand_motion_mean,
+            "hand_motion_std": hand_motion_std,
+            "hand_motion_max": hand_motion_max,
+
+            # Body Motion
+            "body_motion_sum": body_motion_sum,
+            "body_motion_mean": body_motion_mean,
+            "body_motion_std": body_motion_std,
+            "body_motion_max": body_motion_max,
+
+            # Upper Body Angle
+            "upper_body_angle_mean": upper_body_angle_mean,
+            "upper_body_angle_std": upper_body_angle_std,
+            "upper_body_angle_max": upper_body_angle_max,
+            "upper_body_angle_min": upper_body_angle_min,
+
+            # Arm Extension
+            "arm_extension_mean": arm_extension_mean,
+            "arm_extension_std": arm_extension_std,
+            "arm_extension_max": arm_extension_max,
+            "arm_extension_min": arm_extension_min
         })
 
         print("pose feature 추출 완료")

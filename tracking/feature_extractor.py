@@ -17,6 +17,7 @@ df["center_y"] = (
 
 # feature 저장용
 feature_data = []
+speeds = []
 
 # trajectory grouping
 grouped = df.groupby(
@@ -38,16 +39,17 @@ for (video, track_id), group in grouped:
     # 이동거리 계산
     # =========================
     total_distance = 0
+    speeds = []
 
     for i in range(1, len(trajectory)):
 
         x1, y1 = trajectory[i - 1]
         x2, y2 = trajectory[i]
         dist = math.sqrt(
-            (x2 - x1) ** 2 +
-            (y2 - y1) ** 2
+            (x2 - x1) ** 2 + (y2 - y1) ** 2
         )
         total_distance += dist
+        speeds.append(dist)
 
     # =========================
     # 체류 frame 수
@@ -59,9 +61,16 @@ for (video, track_id), group in grouped:
     # =========================
     # 평균 속도
     # =========================
-    avg_speed = 0
-    if frame_count > 0:
-        avg_speed = (total_distance / (frame_count-1))
+    if len(speeds) > 0:
+        avg_speed = np.mean(speeds)
+        max_speed = np.max(speeds)
+        min_speed = np.min(speeds)
+        std_speed = np.std(speeds)
+    else:
+        avg_speed = 0
+        max_speed = 0
+        min_speed = 0
+        std_speed = 0
 
     # =========================
     # 이동 범위
@@ -93,16 +102,26 @@ for (video, track_id), group in grouped:
         "track_id": track_id,
         "frame_count": frame_count,
         "move_distance": total_distance,
+
         "avg_speed": avg_speed,
+        "max_speed": max_speed,
+        "min_speed": min_speed,
+        "std_speed": std_speed,
+
         "movement_range": movement_range,
-        "trajectory_variance":
-            trajectory_variance
+        "trajectory_variance": trajectory_variance
     })
 
 # =========================
 # DataFrame 저장
 # =========================
 feature_df = pd.DataFrame(feature_data)
+# 가장 오래 추적된 Track만 사용
+feature_df = (
+    feature_df
+    .sort_values("frame_count", ascending=False)
+    .drop_duplicates(subset="video")
+)
 
 print(feature_df.head())
 feature_df.to_csv(
