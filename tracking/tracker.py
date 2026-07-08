@@ -1,122 +1,79 @@
-# 루트에서 실행
-
-import json
 import os
 import pandas as pd
 
 from ultralytics import YOLO
-from collections import defaultdict
+from utils.video_loader import load_video_infos
 
 model = YOLO("./models/yolov8n.pt")
+video_infos = load_video_infos()
 
-# =========================
-# 매칭 정보 로드
-# =========================
-with open(
-    "./splits/train_pairs.json",
-    "r",
-    encoding="utf-8"
-) as f:
-
-    matched_pairs = json.load(f)
-
-print("총 pair:", len(matched_pairs))
-
-# =========================
-# tracking 결과 저장용
-# =========================
+# Tracking
 tracking_data = []
 
-for pair in matched_pairs:
+for item in video_infos:
     try:
-        video_name = os.path.basename(
-            pair["video_path"]
-        )
+        print("="*50)
+        print(item["video"])
 
-        video_path = os.path.join(
-            "./videos/trimmed",
-            video_name
-        )
-
-        print()
-        print("=" * 50)
-        print("현재 영상:")
-        print(video_path)
-
-        # 파일 없으면 skip
-        if not os.path.exists(video_path):
-
-            print("파일 없음 -> skip")
+        if not os.path.exists(item["video_path"]):
+            print("파일 없음")
             continue
-
-        # =========================
-        # Tracking 실행
-        # =========================
+          
         results = model.track(
-            source=video_path,
+            source=item["video_path"],
             tracker="botsort.yaml",
             persist=True,
             save=False,
             conf=0.3
         )
 
-        # =========================
         # 결과 추출
-        # =========================
         for frame_idx, r in enumerate(results):
-            boxes = r.boxes
-            if boxes is None:
+            if r.boxes is None:
                 continue
 
-            for box in boxes:
-                # track id 없는 경우 skip
+            for box in r.boxes:
                 if box.id is None:
                     continue
 
-                track_id = int(box.id[0])
                 x1, y1, x2, y2 = (
                     box.xyxy[0]
                     .cpu()
                     .numpy()
                 )
 
-                conf = float(box.conf[0])
-                cls = int(box.cls[0])
                 tracking_data.append({
-                    "video": pair["name"],
+                    "video": item["video"],
+                    "label": item["label"],
                     "frame": frame_idx,
-                    "track_id": track_id,
+                    "track_id": int(box.id[0]),
 
                     "x1": float(x1),
                     "y1": float(y1),
                     "x2": float(x2),
                     "y2": float(y2),
 
-                    "confidence": conf,
-                    "class": cls
+                    "confidence": float(box.conf[0]),
+                    "class": int(box.cls[0])
                 })
         print("tracking 완료")
 
     except Exception as e:
         print()
-        print("에러 발생 -> skip")
-        print(video_path)
+        print(item["video"])
         print(e)
 
         continue
 
-# =========================
 # CSV 저장
-# =========================
 df = pd.DataFrame(tracking_data)
 
 df.to_csv(
-    "./results/tracking_results(train).csv",
+    "./results/tracking_results(07.07).csv",
     index=False,
     encoding="utf-8-sig"
 )
 
 print()
-print("=" * 50)
-print("tracking_results(train).csv 저장 완료")
+print(df.head())
 print("총 row:", len(df))

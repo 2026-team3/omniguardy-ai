@@ -4,7 +4,7 @@ import numpy as np
 
 # tracking 결과 로드
 df = pd.read_csv(
-    "./results/tracking_results(train).csv"
+    "./results/tracking_results(07.07).csv"
 )
 
 # 중심점 계산
@@ -125,10 +125,10 @@ feature_df = (
 
 print(feature_df.head())
 feature_df.to_csv(
-    "./results/behavior_features(train).csv",
+    "./results/behavior_features(07.07).csv",
     index=False,
     encoding="utf-8-sig"
 )
 
 print()
-print("behavior_features(train).csv 저장 완료")
+print("behavior_features(07.07).csv 저장 완료")

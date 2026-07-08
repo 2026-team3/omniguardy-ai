@@ -1,24 +1,19 @@
-# MediaPipe Tasks API 기반 Pose Extractor
 import cv2
 import mediapipe as mp
 import pandas as pd
 import math
-import os
-import random
 import numpy as np
-
-from mediapipe.tasks import python
+from utils.video_loader import load_video_infos
 from mediapipe.tasks.python import vision
 from mediapipe.tasks.python.vision import drawing_utils
 from mediapipe.tasks.python.vision import drawing_styles
 
-# =========================
-# 모델 경로
-# =========================
 model_path = (
     "./models/pose_landmarker_lite.task"
 )
 
+video_infos = load_video_infos()
+visualize_video = video_infos[0]["video"]
 
 def draw_landmarks_on_image(rgb_image, detection_result):
   pose_landmarks_list = detection_result.pose_landmarks
@@ -37,9 +32,7 @@ def draw_landmarks_on_image(rgb_image, detection_result):
 
   return annotated_image
 
-# =========================
 # Pose Landmarker 생성
-# =========================
 BaseOptions = mp.tasks.BaseOptions
 PoseLandmarker = mp.tasks.vision.PoseLandmarker
 PoseLandmarkerOptions = mp.tasks.vision.PoseLandmarkerOptions
@@ -53,45 +46,21 @@ options = PoseLandmarkerOptions(
     min_tracking_confidence=0.5
 )
 
-landmarker = (
-    PoseLandmarker.create_from_options(
-        options
-    )
-)
 
-# =========================
-# 영상 경로
-# =========================
-video_dir = "./videos/trimmed"
-
-video_list = [
-
-    v for v in os.listdir(video_dir)
-    if v.endswith(".mp4")
-]
-
-visualize_video = video_list[0]
-
-# =========================
 # 결과 저장
-# =========================
 pose_features = []
 
-# =========================
 # 영상 반복
-# =========================
-for video_name in video_list:
-
+for item in video_infos:
+    video_name = item["video"]
+    video_path = item["video_path"]
     try:
-        # =========================
         # 영상마다 새 landmarker 생성
-        # =========================
         landmarker = (
             PoseLandmarker.create_from_options(
                 options
             )
         )
-        video_path = os.path.join(video_dir, video_name)
         print()
         print("=" * 50)
         print("현재 영상:")
@@ -109,38 +78,28 @@ for video_name in video_list:
         upper_body_angles = []
 
         while True:
-
             ret, frame = cap.read()
             if not ret:
                 break
-
             frame_idx += 1
 
-            # =========================
             # 10프레임마다만 처리
-            # =========================
             if frame_idx % 10 != 0:
                 continue
 
-            # =========================
             # timestamp(ms)
-            # =========================
-            timestamp_ms = int(frame_idx * 100)
+            timestamp_ms = int((frame_idx / fps) * 1000)
 
             rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             mp_image = mp.Image(image_format = mp.ImageFormat.SRGB, 
                                 data=rgb_frame)
 
-            # =========================
             # Pose 추론
-            # =========================
             result = (
                 landmarker.detect_for_video(mp_image, timestamp_ms)
             )
 
-            # =========================
             # Visualization
-            # =========================
             if video_name == visualize_video:
                 annotated_image = (
                     draw_landmarks_on_image(
@@ -174,26 +133,19 @@ for video_name in video_list:
                 continue
             landmarks = (result.pose_landmarks[0])
 
-            # =========================
             # 주요 landmark
-            # =========================
-            nose = landmarks[0]
             left_shoulder = landmarks[11]
             right_shoulder = landmarks[12]
             right_wrist = landmarks[16]
 
-            # =========================
             # 손 위치
-            # =========================
             hand_x = right_wrist.x
             hand_y = right_wrist.y
             right_hand_positions.append(
                 (hand_x, hand_y)
             )
 
-            # =========================
             # body center
-            # =========================
             body_center_x = (
                 left_shoulder.x +
                 right_shoulder.x
@@ -211,18 +163,14 @@ for video_name in video_list:
                 )
             )
 
-            # =========================
             # 상체 각도
-            # =========================
             dx = (right_shoulder.x - left_shoulder.x )
             dy = (right_shoulder.y - left_shoulder.y )
 
             angle = math.degrees(math.atan2(dy, dx))
             upper_body_angles.append(angle)
 
-            # =========================
             # 팔 뻗음
-            # =========================
             arm_length = math.sqrt(
                 (right_wrist.x - right_shoulder.x) ** 2 
                 +
@@ -234,9 +182,7 @@ for video_name in video_list:
         cap.release()
         landmarker.close()
 
-        # =========================
         # hand motion
-        # =========================
         hand_motion_list = []
 
         for i in range(1, len(right_hand_positions)):
@@ -257,9 +203,7 @@ for video_name in video_list:
             hand_motion_std = 0
             hand_motion_max = 0
 
-        # =========================
         # body motion
-        # =========================
         body_motion_list = []
 
         for i in range( 1, len(body_positions)):
@@ -280,9 +224,7 @@ for video_name in video_list:
             body_motion_std = 0
             body_motion_max = 0
 
-        # =========================
         # arm extension
-        # =========================
         if len(arm_lengths):
             arm_extension_mean = np.mean(arm_lengths)
             arm_extension_std = np.std(arm_lengths)
@@ -293,9 +235,8 @@ for video_name in video_list:
             arm_extension_std = 0
             arm_extension_max = 0
             arm_extension_min = 0
-        # =========================
+
         # upper body angle
-        # =========================
         if len(upper_body_angles):
             upper_body_angle_mean = np.mean(upper_body_angles)
             upper_body_angle_std = np.std(upper_body_angles)
@@ -307,9 +248,7 @@ for video_name in video_list:
             upper_body_angle_max = 0
             upper_body_angle_min = 0
 
-        # =========================
         # 저장
-        # =========================
         pose_features.append({
             "video": video_name,
             "frame_count": frame_idx,
@@ -349,19 +288,17 @@ for video_name in video_list:
 
         continue
 
-# =========================
 # CSV 저장
-# =========================
 pose_df = pd.DataFrame( pose_features )
 pose_df.to_csv(
-    "./results/pose_features(train).csv",
+    "./results/pose_features(07.07).csv",
     index=False,
     encoding="utf-8-sig"
 )
 
 print()
 print("=" * 50)
-print("pose_features(train).csv 저장 완료")
+print("pose_features(07.07).csv 저장 완료")
 print("총 row:", len(pose_df))
 
 cv2.destroyAllWindows()
