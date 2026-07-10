@@ -23,9 +23,11 @@ speeds = []
 grouped = df.groupby(
     ["video", "track_id"]
 )
+
 for (video, track_id), group in grouped:
     # frame 순 정렬
     group = group.sort_values("frame")
+    label = group["label"].iloc[0]
     trajectory = []
 
     for _, row in group.iterrows():
@@ -100,6 +102,7 @@ for (video, track_id), group in grouped:
     feature_data.append({
         "video": video,
         "track_id": track_id,
+        "label": label, 
         "frame_count": frame_count,
         "move_distance": total_distance,
 

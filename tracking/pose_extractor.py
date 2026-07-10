@@ -54,6 +54,7 @@ pose_features = []
 for item in video_infos:
     video_name = item["video"]
     video_path = item["video_path"]
+    label = item["label"]
     try:
         # 영상마다 새 landmarker 생성
         landmarker = (
@@ -251,6 +252,7 @@ for item in video_infos:
         # 저장
         pose_features.append({
             "video": video_name,
+            "label": label,
             "frame_count": frame_idx,
             # Hand Motion
             "hand_motion_sum": hand_motion_sum,
