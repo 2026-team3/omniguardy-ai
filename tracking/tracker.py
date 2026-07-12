@@ -5,15 +5,18 @@ from ultralytics import YOLO
 from utils.video_loader import load_video_infos
 
 model = YOLO("./models/yolov8n.pt")
-video_infos = load_video_infos()
+video_infos = load_video_infos(split="train")
 
 # Tracking
 tracking_data = []
 
-for item in video_infos:
+for idx, item in enumerate(video_infos):
     try:
-        print("="*50)
+        print("=" * 50)
+        print(f"[{idx + 1}/{len(video_infos)}]")
         print(item["video"])
+        print("label:", item["label"])
+        print("source:", item["source"])
 
         if not os.path.exists(item["video_path"]):
             print("파일 없음")
@@ -22,9 +25,11 @@ for item in video_infos:
         results = model.track(
             source=item["video_path"],
             tracker="botsort.yaml",
-            persist=True,
+            persist=False,
             save=False,
-            conf=0.3
+            conf=0.3,
+            classes=[0],     # person만 추적
+            stream = True
         )
 
         # 결과 추출
@@ -45,6 +50,9 @@ for item in video_infos:
                 tracking_data.append({
                     "video": item["video"],
                     "label": item["label"],
+                    "source": item["source"],
+                    "split": item["split"],
+
                     "frame": frame_idx,
                     "track_id": int(box.id[0]),
 
@@ -69,7 +77,7 @@ for item in video_infos:
 df = pd.DataFrame(tracking_data)
 
 df.to_csv(
-    "./results/tracking_results(07.07).csv",
+    "./results/after_augmentation/tracking_results(07.12).csv",
     index=False,
     encoding="utf-8-sig"
 )
