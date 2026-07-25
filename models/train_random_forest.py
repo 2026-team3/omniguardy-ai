@@ -4,20 +4,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import (
-    classification_report,
-    confusion_matrix,
-    ConfusionMatrixDisplay,
-    accuracy_score
-)
-from sklearn.model_selection import train_test_split
 
+# train feature load
 df = pd.read_csv(
-    "./results/merged_features(07.07).csv"
+    "./results/after_augmentation/merged_features(07.12).csv"
 )
-
-# Label 생성
-y = df["label"]
 
 # 사용할 Feature
 feature_cols = [
@@ -53,25 +44,24 @@ feature_cols = [
     "arm_extension_min"
 ]
 
-X = df[feature_cols]
-y = df["label"]
+X_train = df[feature_cols]
+y_train = df["label"]
 
-print(X.shape)
-print(X.columns)
+print("=" * 60)
+print("Train Data")
+print("=" * 60)
 
-print("label NaN:", df["label"].isna().sum())
+print("X shape:", X_train.shape)
 
 print("\nClass distribution")
-print(df["label"].value_counts())
+print(y_train.value_counts())
 
-# Train / Test Split 
-X_train, X_test, y_train, y_test = train_test_split(
-    X,
-    y,
-    test_size=0.2,
-    random_state=42,
-    stratify=y
-)
+print("\nLabel NaN:")
+print(y_train.isna().sum())
+
+print("\nFeature NaN:")
+print(X_train.isna().sum())
+
 
 # RandomForest
 model = RandomForestClassifier(
@@ -79,7 +69,8 @@ model = RandomForestClassifier(
     max_depth=None,
     min_samples_leaf=2,
     random_state=42,
-    class_weight="balanced"
+    class_weight="balanced",
+    n_jobs=-1
 )
 
 print("="*60)
@@ -92,70 +83,13 @@ model.fit(
     y_train
 )
 
-# Prediction
-pred = model.predict(X_test)
 
-# Accuracy -> 다중 레이블의 경우, 각 레이블의 ACC 값의 평균으로 평가
-acc = accuracy_score(
-    y_test,
-    pred
-)
-
-print()
-print("="*60)
-print(f"Accuracy : {acc:.4f}")
-print("="*60)
-
-print()
-print(classification_report(
-    y_test,
-    pred
-))
-
-print(model.classes_)
-print(len(model.classes_))
-
-save_dir = "./results/random_forest(07.07)"
+save_dir = "./results/after_augmentation/train_random_forest"
 
 os.makedirs(
     save_dir,
     exist_ok=True
 )
-
-report = classification_report(
-    y_test,
-    pred,
-    output_dict=True
-)
-
-report_df = pd.DataFrame(report).transpose()
-
-report_df.to_csv(
-    f"{save_dir}/classification_report.csv",
-    encoding="utf-8-sig"
-)
-
-labels = model.classes_
-
-# Confusion Matrix
-cm = confusion_matrix(
-    y_test,
-    pred
-)
-
-disp = ConfusionMatrixDisplay(
-    confusion_matrix=cm,
-    display_labels=labels
-)
-
-fig, ax = plt.subplots(figsize=(7,7))
-disp.plot(ax=ax)
-plt.tight_layout()
-plt.savefig(
-    f"{save_dir}/confusion_matrix.png",
-    dpi=300
-)
-plt.close()
 
 # Feature Importance
 importance = pd.DataFrame({
@@ -175,20 +109,18 @@ print("="*60)
 print(importance)
 
 importance.to_csv(
-    f"{save_dir}/feature_importance.csv",
+    f"{save_dir}/train_feature_importance.csv",
     index=False,
     encoding="utf-8-sig"
 )
 
+# Feature Importance Plot
 plt.figure(figsize=(12,6))
-plt.bar(
-    importance["feature"],
-    importance["importance"]
-)
+plt.bar(importance["feature"], importance["importance"])
 plt.xticks(rotation=60, ha="right")
 plt.tight_layout()
 plt.savefig(
-    f"{save_dir}/feature_importance.png",
+    f"{save_dir}/train_feature_importance.png",
     dpi=300
 )
 plt.close()
@@ -196,7 +128,7 @@ plt.close()
 # Save Model
 joblib.dump(
     model,
-    f"{save_dir}/random_forest.pkl"
+    f"{save_dir}/train_random_forest.pkl"
 )
 
 print("\nTop 10 Features")
@@ -205,5 +137,5 @@ print(importance.head(10))
 print()
 print("="*60)
 print("Model Saved")
-print(f"{save_dir}/random_forest.pkl")
+print(f"{save_dir}/train_random_forest.pkl")
 print("="*60)

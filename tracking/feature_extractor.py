@@ -4,7 +4,7 @@ import numpy as np
 
 # tracking 결과 로드
 df = pd.read_csv(
-    "./results/tracking_results(07.07).csv"
+    "./results/after_augmentation/tracking_results(07.12).csv"
 )
 
 # 중심점 계산
@@ -33,6 +33,7 @@ for (video, track_id), group in grouped:
     for _, row in group.iterrows():
         trajectory.append(
             (
+                row["frame"],
                 row["center_x"],
                 row["center_y"]
             )
@@ -45,13 +46,16 @@ for (video, track_id), group in grouped:
 
     for i in range(1, len(trajectory)):
 
-        x1, y1 = trajectory[i - 1]
-        x2, y2 = trajectory[i]
-        dist = math.sqrt(
-            (x2 - x1) ** 2 + (y2 - y1) ** 2
-        )
+        frame1, x1, y1 = trajectory[i - 1]
+        frame2, x2, y2 = trajectory[i]
+
+        dist = math.sqrt((x2 - x1) ** 2 +(y2 - y1) ** 2)
+        frame_gap = frame2 - frame1
         total_distance += dist
-        speeds.append(dist)
+
+        if frame_gap > 0:
+            speed = dist / frame_gap
+            speeds.append(speed)
 
     # =========================
     # 체류 frame 수
@@ -77,8 +81,8 @@ for (video, track_id), group in grouped:
     # =========================
     # 이동 범위
     # =========================
-    xs = [p[0] for p in trajectory]
-    ys = [p[1] for p in trajectory]
+    xs = [p[1] for p in trajectory]
+    ys = [p[2] for p in trajectory]
 
     movement_range = 0
     if len(xs) > 0:
@@ -128,10 +132,10 @@ feature_df = (
 
 print(feature_df.head())
 feature_df.to_csv(
-    "./results/behavior_features(07.07).csv",
+    "./results/after_augmentation/behavior_features(07.12).csv",
     index=False,
     encoding="utf-8-sig"
 )
 
 print()
-print("behavior_features(07.07).csv 저장 완료")
+print("behavior_features(07.12).csv 저장 완료")

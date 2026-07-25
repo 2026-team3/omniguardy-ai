@@ -9,10 +9,10 @@ AUG_COUNT = {
     "A17": 2,
     "A18": 0,
     "A19": 1,
-    "A20": 0,
+    "A20": 0,          # AIHub용
     "A21": 1,
-    "delivery": 2,
-    "normal": 2,
+    "delivery": 8,
+    "normal": 4,
 }
 
 # Augmentation
@@ -98,7 +98,11 @@ def augment_video(
 
 
 # Main
-video_infos = load_video_infos()
+video_infos = load_video_infos(
+    split="train",
+    include_mydata=True,
+    include_augmented=False
+)
 
 os.makedirs(
     OUTPUT_ROOT,
@@ -114,22 +118,26 @@ for item in video_infos:
     video_path = item["video_path"]
     label = item["label"]
 
-    # 직접 촬영 LookingInside(A20)만 증강
-    if not (
-        "mydata" in os.path.normpath(video_path).split(os.sep)
-        and label == "A20"
-    ):
+    source = item["source"]
+
+    is_mydata = source == "mydata"
+    is_aihub = source == "AIHub"
+
+    # mydata 또는 AIHub 원본만 증강
+    if not (is_mydata or is_aihub):
         continue
-    # 직접 촬영 LookingInside는 영상당 3개 증강
-    aug_count = 3
 
-    # 현재 클래스의 증강 횟수
-    # aug_count = AUG_COUNT.get(label, 0)
+    # ------------------------
+    # 증강 횟수 결정
+    # ------------------------
 
-    # 증강하지 않는 클래스는 skip
-    # if aug_count == 0:
-    #     print(f"증강 제외: {video_name}({label})")
-    #     continue
+    if is_mydata and label == "A20":
+        aug_count = 15
+    else:
+        aug_count = AUG_COUNT.get(label, 0)
+
+    if aug_count == 0:
+        continue
 
     if not os.path.exists(video_path):
         print("파일 없음:", video_path)
@@ -140,9 +148,8 @@ for item in video_infos:
     os.makedirs(label_dir, exist_ok=True)
 
     for aug_idx in range(aug_count):
-        output_name = (
-            f"{video_name}_aug{aug_idx + 1}.mp4"
-        )
+        base, ext = os.path.splitext(video_name)
+        output_name = f"{base}_aug{aug_idx+1}{ext}"
 
         output_path = os.path.join(label_dir, output_name)
         # 이미 생성된 영상이면 skip

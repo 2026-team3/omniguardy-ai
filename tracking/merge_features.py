@@ -1,8 +1,8 @@
 import pandas as pd
 
 # CSV 로드
-behavior_df = pd.read_csv("./results/behavior_features(07.07).csv")
-pose_df = pd.read_csv("./results/pose_features(07.07).csv")
+behavior_df = pd.read_csv("./results/after_augmentation/behavior_features(07.12).csv")
+pose_df = pd.read_csv("./results/after_augmentation/pose_features(07.12).csv")
 
 # video 이름 통일
 pose_df["video"] = (pose_df["video"].str.replace(".mp4", "", regex=False))
@@ -32,15 +32,16 @@ print(merged_df.columns)
 
 # 저장
 merged_df.to_csv(
-    "./results/merged_features(07.07).csv",
+    "./results/after_augmentation/merged_features(07.12).csv",
     index=False,
     encoding="utf-8-sig"
 )
 
+
 print("Merged:", len(merged_df))
 print()
 print("=" * 50)
-print("merged_features(07.07).csv 저장 완료")
+print("merged_features(07.12).csv 저장 완료")
 print()
 print(merged_df.head())
 print("총 row:", len(merged_df))

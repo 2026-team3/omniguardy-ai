@@ -12,8 +12,9 @@ model_path = (
     "./models/pose_landmarker_lite.task"
 )
 
-video_infos = load_video_infos()
-visualize_video = video_infos[0]["video"]
+video_infos = load_video_infos(split="train")
+print("전체 영상 수:", len(video_infos))
+#visualize_video = video_infos[0]["video"]
 
 def draw_landmarks_on_image(rgb_image, detection_result):
   pose_landmarks_list = detection_result.pose_landmarks
@@ -73,10 +74,12 @@ for item in video_infos:
             fps = 30
 
         frame_idx = 0
-        right_hand_positions = []
-        body_positions = []
-        arm_lengths = []
-        upper_body_angles = []
+        right_hand_positions = [[] for _ in range(2)]
+        body_positions = [[] for _ in range(2)]
+        arm_lengths = [[] for _ in range(2)]
+        upper_body_angles = [[] for _ in range(2)]
+        processed_frame_count = 0
+        pose_detected_count = 0
 
         while True:
             ret, frame = cap.read()
@@ -87,6 +90,7 @@ for item in video_infos:
             # 10프레임마다만 처리
             if frame_idx % 10 != 0:
                 continue
+            processed_frame_count += 1
 
             # timestamp(ms)
             timestamp_ms = int((frame_idx / fps) * 1000)
@@ -101,84 +105,71 @@ for item in video_infos:
             )
 
             # Visualization
-            if video_name == visualize_video:
-                annotated_image = (
-                    draw_landmarks_on_image(
-                        rgb_frame,
-                        result
-                    )
-                )
-                cv2.imshow(
-                    "Pose Visualization",
-                    cv2.cvtColor(annotated_image, cv2.COLOR_RGB2BGR)
-                )
-                if result.segmentation_masks:
-                    segmentation_mask = (
-                        result.segmentation_masks[0]
-                        .numpy_view()
-                    )
-                    segmentation_mask = np.squeeze( segmentation_mask )
-                    visualized_mask = (segmentation_mask * 255).astype(np.uint8)
-                    visualized_mask = np.stack([visualized_mask] * 3, axis=-1)
-                    cv2.imshow(
-                        "Segmentation Mask",
-                        visualized_mask
-                    )
-                key = cv2.waitKey(1)
+            # if video_name == visualize_video:
+            #     annotated_image = (
+            #         draw_landmarks_on_image(
+            #             rgb_frame,
+            #             result
+            #         )
+            #     )
+            #     cv2.imshow(
+            #         "Pose Visualization",
+            #         cv2.cvtColor(annotated_image, cv2.COLOR_RGB2BGR)
+            #     )
+            #     if result.segmentation_masks:
+            #         segmentation_mask = (
+            #             result.segmentation_masks[0]
+            #             .numpy_view()
+            #         )
+            #         segmentation_mask = np.squeeze( segmentation_mask )
+            #         visualized_mask = (segmentation_mask * 255).astype(np.uint8)
+            #         visualized_mask = np.stack([visualized_mask] * 3, axis=-1)
+            #         cv2.imshow(
+            #             "Segmentation Mask",
+            #             visualized_mask
+            #         )
+            #     key = cv2.waitKey(1)
 
-                    # ESC 누르면 종료
-                if key == 27:
-                    break
+            #         # ESC 누르면 종료
+            #     if key == 27:
+            #         break
 
             if len(result.pose_landmarks) == 0:
                 continue
-            landmarks = (result.pose_landmarks[0])
+            pose_detected_count += 1
 
-            # 주요 landmark
-            left_shoulder = landmarks[11]
-            right_shoulder = landmarks[12]
-            right_wrist = landmarks[16]
+            for pose_idx, landmarks in enumerate(
+                result.pose_landmarks[:2]
+            ):
+                # 주요 landmark
+                left_shoulder = landmarks[11]
+                right_shoulder = landmarks[12]
+                right_wrist = landmarks[16]
 
-            # 손 위치
-            hand_x = right_wrist.x
-            hand_y = right_wrist.y
-            right_hand_positions.append(
-                (hand_x, hand_y)
-            )
+                # Hand Position
+                hand_x = right_wrist.x
+                hand_y = right_wrist.y
 
-            # body center
-            body_center_x = (
-                left_shoulder.x +
-                right_shoulder.x
-            ) / 2
+                right_hand_positions[pose_idx].append(( frame_idx, hand_x, hand_y))
 
-            body_center_y = (
-                left_shoulder.y +
-                right_shoulder.y
-            ) / 2
+                # Body Center
+                body_center_x = (left_shoulder.x + right_shoulder.x) / 2
+                body_center_y = (left_shoulder.y + right_shoulder.y) / 2
 
-            body_positions.append(
-                (
-                    body_center_x,
-                    body_center_y
-                )
-            )
+                body_positions[pose_idx].append((frame_idx, body_center_x, body_center_y))
 
-            # 상체 각도
-            dx = (right_shoulder.x - left_shoulder.x )
-            dy = (right_shoulder.y - left_shoulder.y )
+                # Upper Body Angle
+                dx = (right_shoulder.x - left_shoulder.x)
+                dy = (right_shoulder.y - left_shoulder.y)
 
-            angle = math.degrees(math.atan2(dy, dx))
-            upper_body_angles.append(angle)
+                angle = math.degrees(math.atan2(dy, dx))
+                upper_body_angles[pose_idx].append(angle)
 
-            # 팔 뻗음
-            arm_length = math.sqrt(
-                (right_wrist.x - right_shoulder.x) ** 2 
-                +
-                (right_wrist.y - right_shoulder.y) ** 2
-            )
+                # Arm Extension
+                arm_length = math.sqrt((right_wrist.x - right_shoulder.x) ** 2
+                    + ( right_wrist.y - right_shoulder.y) ** 2)
 
-            arm_lengths.append(arm_length)
+                arm_lengths[pose_idx].append(arm_length)
 
         cap.release()
         landmarker.close()
@@ -186,12 +177,19 @@ for item in video_infos:
         # hand motion
         hand_motion_list = []
 
-        for i in range(1, len(right_hand_positions)):
-            x1, y1 = (right_hand_positions[i - 1])
-            x2, y2 = (right_hand_positions[i])
+        for pose_idx in range(2):
 
-            dist = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-            hand_motion_list.append(dist)
+            positions = right_hand_positions[pose_idx]
+            for i in range(1, len(positions)):
+                frame1, x1, y1 = positions[i - 1]
+                frame2, x2, y2 = positions[i]
+
+                dist = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+
+                frame_gap = frame2 - frame1
+                if frame_gap > 0:
+                    hand_motion = (dist / frame_gap)
+                    hand_motion_list.append(hand_motion)
 
         if len(hand_motion_list):
             hand_motion_sum = np.sum(hand_motion_list)
@@ -207,12 +205,19 @@ for item in video_infos:
         # body motion
         body_motion_list = []
 
-        for i in range( 1, len(body_positions)):
-            x1, y1 = (body_positions[i - 1])
-            x2, y2 = (body_positions[i])
-            
-            dist = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-            body_motion_list.append(dist)
+        for pose_idx in range(2):
+            positions = body_positions[pose_idx]
+
+            for i in range(1, len(positions)):
+                frame1, x1, y1 = positions[i - 1]
+                frame2, x2, y2 = positions[i]
+
+                dist = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+
+                frame_gap = frame2 - frame1
+                if frame_gap > 0:
+                    body_motion = (dist / frame_gap)
+                    body_motion_list.append(body_motion)
 
         if len(body_motion_list):
             body_motion_sum = np.sum(body_motion_list)
@@ -226,11 +231,16 @@ for item in video_infos:
             body_motion_max = 0
 
         # arm extension
-        if len(arm_lengths):
-            arm_extension_mean = np.mean(arm_lengths)
-            arm_extension_std = np.std(arm_lengths)
-            arm_extension_max = np.max(arm_lengths)
-            arm_extension_min = np.min(arm_lengths)
+        all_arm_lengths = []
+
+        for pose_idx in range(2):
+            all_arm_lengths.extend(arm_lengths[pose_idx])
+
+        if len(all_arm_lengths):
+            arm_extension_mean = np.mean(all_arm_lengths)
+            arm_extension_std = np.std(all_arm_lengths)
+            arm_extension_max = np.max(all_arm_lengths)
+            arm_extension_min = np.min(all_arm_lengths)
         else:
             arm_extension_mean = 0
             arm_extension_std = 0
@@ -238,11 +248,16 @@ for item in video_infos:
             arm_extension_min = 0
 
         # upper body angle
-        if len(upper_body_angles):
-            upper_body_angle_mean = np.mean(upper_body_angles)
-            upper_body_angle_std = np.std(upper_body_angles)
-            upper_body_angle_max = np.max(upper_body_angles)
-            upper_body_angle_min = np.min(upper_body_angles)
+        all_upper_body_angles = []
+
+        for pose_idx in range(2):
+            all_upper_body_angles.extend(upper_body_angles[pose_idx])
+
+        if len(all_upper_body_angles):
+            upper_body_angle_mean = np.mean(all_upper_body_angles)
+            upper_body_angle_std = np.std(all_upper_body_angles)
+            upper_body_angle_max = np.max(all_upper_body_angles)
+            upper_body_angle_min = np.min(all_upper_body_angles)
         else:
             upper_body_angle_mean = 0
             upper_body_angle_std = 0
@@ -293,14 +308,14 @@ for item in video_infos:
 # CSV 저장
 pose_df = pd.DataFrame( pose_features )
 pose_df.to_csv(
-    "./results/pose_features(07.07).csv",
+    "./results/after_augmentation/pose_features(07.12).csv",
     index=False,
     encoding="utf-8-sig"
 )
 
 print()
 print("=" * 50)
-print("pose_features(07.07).csv 저장 완료")
+print("pose_features(07.12).csv 저장 완료")
 print("총 row:", len(pose_df))
 
 cv2.destroyAllWindows()

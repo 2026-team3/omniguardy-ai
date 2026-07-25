@@ -1,5 +1,5 @@
-import json
 import os
+import pandas as pd
 
 CLASS_MAP = {
     "lookingInside": "A20",
@@ -7,138 +7,168 @@ CLASS_MAP = {
     "normal": "normal",
 }
 
-def load_video_infos(
-    split="train",
-    include_mydata=True,
-    include_augmented=True
-):
-    video_infos = []
 
-    # AIHub
-    split_path = (
-        f"./splits/{split}_pairs.json"
+def load_video_infos(
+        split="train",
+        include_mydata=True,
+        include_augmented=False
+):
+
+    if split == "train":
+        if include_augmented:
+            ann_path = "./splits/annotations/train_annotations_all.csv"
+        else:
+            ann_path = "./splits/annotations/train_annotations.csv"
+    else:
+        ann_path = f"./splits/annotations/{split}_annotations.csv"
+
+    ann = pd.read_csv(ann_path)
+
+     # 필요한 source만 선택
+    valid_sources = ["AIHub"]
+
+    if include_mydata:
+        valid_sources.append("mydata")
+
+    if include_augmented:
+        valid_sources.append("augmented")
+
+    ann = ann[
+        ann["source"].isin(valid_sources)
+    ]
+
+    # annotation은 block 단위이므로
+    # video 단위로 중복 제거
+    videos = (
+        ann[
+            ["video", "label", "source"]
+        ]
+        .drop_duplicates()
+        .reset_index(drop=True)
     )
 
-    with open(
-        split_path,
-        "r",
-        encoding="utf-8"
-    ) as f:
-        matched_pairs = json.load(f)
+    # ==========================
+    # mydata 영상 추가
+    # ==========================
+    if include_mydata:
 
-    for pair in matched_pairs:
-        video_name = os.path.basename(
-            pair["video_path"]
-        )
+        for folder, label in CLASS_MAP.items():
+
+            folder_path = os.path.join(
+                "./videos/mydata",
+                folder
+            )
+
+            if not os.path.exists(folder_path):
+                continue
+
+            for file in os.listdir(folder_path):
+
+                if not file.endswith(".mp4"):
+                    continue
+
+                videos.loc[len(videos)] = {
+                    "video": file,
+                    "label": label,
+                    "source": "mydata"
+                }
+
+    video_infos = []
+
+    for _, row in videos.iterrows():
+
+        video = row["video"]
+        label = row["label"]
+        source = row["source"]
+
+        ##########################
+        # video path 생성
+        ##########################
+
+        if source == "AIHub":
+
+            video_path = None
+
+            for folder in os.listdir("./videos/unzipped"):
+
+                candidate = os.path.join(
+                    "./videos/unzipped",
+                    folder,
+                    video
+                )
+
+                if os.path.exists(candidate):
+                    video_path = candidate
+                    break
+
+        elif source == "mydata":
+
+            folder = next(
+                (
+                    k
+                    for k, v in CLASS_MAP.items()
+                    if v == label
+                ),
+                label
+            )
+
+            video_path = os.path.join(
+                "./videos/mydata",
+                folder,
+                video
+            )
+
+        elif source == "augmented":
+
+            video_path = os.path.join(
+                "./videos/augmented",
+                label,
+                video
+            )
+
+        else:
+            continue
+
+        ##########################
+        # 존재하는 영상만 추가
+        ##########################
+
+        if video_path is None:
+            continue
+
+        if not os.path.exists(video_path):
+            continue
 
         video_infos.append({
-            "video": pair["name"],
-            "label": pair["name"].split("_")[1],
-            "video_path": os.path.join(
-                "./videos/AIHub",
-                video_name
-            ),
-            "source": "AIHub",
+
+            "video": video,
+            "label": label,
+            "video_path": video_path,
+            "source": source,
             "split": split
+
         })
-
-    # mydata (train에만 포함)
-    if (
-        split == "train"
-        and include_mydata
-    ):
-        custom_root = "./videos/mydata"
-
-        if os.path.exists(custom_root):
-            for folder_name in os.listdir(
-                custom_root
-            ):
-                label_path = os.path.join(
-                    custom_root,
-                    folder_name
-                )
-
-                if not os.path.isdir(label_path):
-                    continue
-
-                mapped_label = CLASS_MAP.get(
-                    folder_name,
-                    folder_name
-                )
-
-                for video in os.listdir(label_path):
-                    if not video.lower().endswith(".mp4"):
-                        continue
-
-                    video_infos.append({
-                        "video": os.path.splitext(video)[0],
-                        "label": mapped_label,
-                        "video_path": os.path.join(
-                            label_path,
-                            video
-                        ),
-                        "source": "mydata",
-                        "split": "train"
-                    })
-
-    # Augmented (train에만 포함)
-    if (
-        split == "train"
-        and include_augmented
-    ):
-        augmented_root = "./videos/augmented"
-
-        if os.path.exists(augmented_root):
-            for label in os.listdir(augmented_root):
-                label_path = os.path.join(augmented_root, label)
-
-                if not os.path.isdir(label_path):
-                    continue
-
-                for video in os.listdir(label_path):
-                    if not video.lower().endswith(".mp4"):
-                        continue
-
-                    video_infos.append({
-                        "video": os.path.splitext(video)[0],
-                        "label": label,
-                        "video_path": os.path.join(
-                            label_path,
-                            video
-                        ),
-                        "source": "augmented",
-                        "split": "train"
-                    })
 
     return video_infos
 
+
 if __name__ == "__main__":
-    train_infos = load_video_infos(split="train")
-    valid_infos = load_video_infos(split="valid")
-    test_infos = load_video_infos(split="test")
 
-    print()
-    print("=" * 50)
-    print("Train:", len(train_infos))
-    print("Valid:", len(valid_infos))
-    print("Test:", len(test_infos))
-
-    print()
-    print("Train source")
     from collections import Counter
 
-    print(
-        Counter(
-            item["source"]
-            for item in train_infos
-        )
-    )
+    for split in ["train", "valid", "test"]:
 
-    print()
-    print("Train label")
-    print(
-        Counter(
-            item["label"]
-            for item in train_infos
-        )
-    )
+        infos = load_video_infos(split)
+
+        print()
+        print("=" * 50)
+        print(split.upper())
+        print("=" * 50)
+
+        print("Videos :", len(infos))
+
+        print("\nSource")
+        print(Counter(x["source"] for x in infos))
+
+        print("\nLabel")
+        print(Counter(x["label"] for x in infos))
