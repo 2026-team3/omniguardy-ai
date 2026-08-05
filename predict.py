@@ -1,43 +1,137 @@
 import librosa
 import numpy as np
 import tensorflow as tf
+import os
 
 from feature import audio_to_mel
 
-MODEL_PATH = "models/audio_model.keras"
 
-model = tf.keras.models.load_model(MODEL_PATH, compile=False)
+MODEL_PATH = "models/audio_model_v2.keras"
+
+
+print("Loading model...")
+
+model = tf.keras.models.load_model(
+    MODEL_PATH,
+    compile=False
+)
+
+print("Model loaded")
+print("Input shape:", model.input_shape)
+
 
 
 def preprocess(audio, sr):
-    mel = audio_to_mel(audio, sr)
 
-    # shape 안전 보정 (중요)
-    if mel.shape != (128, 128):
-        fixed = np.zeros((128, 128))
-        h = min(128, mel.shape[0])
-        w = min(128, mel.shape[1])
-        fixed[:h, :w] = mel[:h, :w]
-        mel = fixed
+    mel = audio_to_mel(
+        audio,
+        sr
+    )
 
-    return mel.astype(np.float32)
+    print(
+        "Mel shape:",
+        mel.shape
+    )
+
+    return mel.astype(
+        np.float32
+    )
+
 
 
 def predict_audio(audio_path):
 
-    audio, sr = librosa.load(audio_path, sr=22050)
+    print(
+        "Loading:",
+        audio_path
+    )
 
-    # mono 보장
-    if audio.ndim > 1:
-        audio = np.mean(audio, axis=1)
 
-    mel = preprocess(audio, sr)
+    audio, sr = librosa.load(
+        audio_path,
+        sr=22050,
+        mono=True
+    )
 
-    # model input shape
+
+    print(
+        "Audio length:",
+        len(audio)
+    )
+
+
+    mel = preprocess(
+        audio,
+        sr
+    )
+
+
     mel = mel[np.newaxis, ..., np.newaxis]
 
-    score = model.predict(mel, verbose=0)[0][0]
 
-    label = "ABNORMAL" if score >= 0.5 else "NORMAL"
+    print(
+        "Input:",
+        mel.shape
+    )
 
-    return label, float(score)
+
+    pred = model.predict(
+        mel,
+        verbose=0
+    )
+
+
+    score = float(
+        pred[0][0]
+    )
+
+
+    label = (
+        "ABNORMAL"
+        if score >= 0.5
+        else "NORMAL"
+    )
+
+
+    return label, score
+
+
+
+
+if __name__ == "__main__":
+
+
+    path = (
+        r"dataset/normal/"
+        r"아파트 도어락 현관문.wav"
+    )
+
+
+    if not os.path.exists(path):
+
+        print(
+            "File not found:",
+            path
+        )
+
+        exit()
+
+
+    label, score = predict_audio(
+        path
+    )
+
+
+    print("================")
+    print("RESULT")
+    print("================")
+
+    print(
+        "Label:",
+        label
+    )
+
+    print(
+        "Score:",
+        score
+    )
