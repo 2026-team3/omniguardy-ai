@@ -1,46 +1,46 @@
 ﻿# Entrance Behavior Vision Pipeline
 
-현관 카메라 영상에서 정상 활동과 이상행동을 블록 단위로 분류하는 Vision 파이프라인입니다.
+A Vision pipeline that classifies normal activities and anomalous behaviors in entrance camera footage on a block-by-block basis.
 
-## 분류 라벨
+## Classification Labels
 
-| 라벨 | 의미 |
-|---|---|
-| N1 | 정상 현관 활동: 거주자 출입, 일반 배달, 대기, 이탈 |
-| A17 | 초인종 반복 누름 |
-| A18 | 문 열기 반복 시도 |
-| A19 | 문 반복 발차기 |
-| A20 | 문 안쪽을 들여다보기 시도 |
-| A21 | 장시간 또는 반복 문 두드림 |
+| Label | Meaning                                                                           |
+| ----- | --------------------------------------------------------------------------------- |
+| N1    | Normal entrance activity: resident entry/exit, regular delivery, waiting, leaving |
+| A17   | Repeatedly pressing the doorbell                                                  |
+| A18   | Repeated attempts to open the door                                                |
+| A19   | Repeatedly kicking the door                                                       |
+| A20   | Attempting to look inside the door                                                |
+| A21   | Prolonged or repeated knocking on the door                                        |
 
-## 데이터 분할
+## Data Split
 
-| 구분 | 사용 데이터 |
-|---|---|
-| Train | AIHub TL/TS, mydata, train 원본에서 파생된 augmentation |
-| Validation | AIHub VL/VS 원본 영상만 사용 |
-| Test | 별도 전시 카메라 또는 보류 현장 영상으로 추후 구성 |
+| Split      | Data Used                                                                            |
+| ---------- | ------------------------------------------------------------------------------------ |
+| Train      | AIHub TL/TS, mydata, and augmented data derived from the original train data         |
+| Validation | Original AIHub VL/VS videos only                                                     |
+| Test       | Separate exhibition camera footage or held-out field footage to be constructed later |
 
-mydata의 `normal`, `delivery`는 N1으로 사용하고, `lookingInside`는 A20으로 사용합니다.
+`normal` and `delivery` from mydata are used as N1, while `lookingInside` is used as A20.
 
-## 처리 흐름
+## Processing Pipeline
 
 ```text
-영상
-→ YOLO 사람 탐지 + BoT-SORT tracking
-→ MediaPipe Pose 추출
-→ annotation 블록별 행동·pose 특징 집계
-→ XGBoost 분류
-→ N1 / A17~A21 예측 결과
+Video
+→ YOLO person detection + BoT-SORT tracking
+→ MediaPipe Pose extraction
+→ Aggregation of behavior and pose features by annotation block
+→ XGBoost classification
+→ N1 / A17~A21 predictions
 ```
 
-- tracking과 pose는 영상당 한 번만 실행합니다.
-- 특징과 학습은 annotation의 `start_frame`, `end_frame` 블록 범위를 사용합니다.
-- train의 augmentation은 원본 블록 경계를 그대로 사용합니다.
+* Tracking and pose extraction are performed only once per video.
+* Feature extraction and training use the `start_frame` and `end_frame` ranges of each annotation block.
+* Augmented training data uses the original block boundaries.
 
-## 실행 순서
+## Execution Order
 
-가상환경을 활성화한 뒤 프로젝트 루트에서 실행합니다.
+Activate the virtual environment and run the following commands from the project root.
 
 ```powershell
 python .\utils\load_annotation.py
@@ -52,30 +52,31 @@ python .\tracking\merge_features.py
 python .\models\train_XGBoost.py
 ```
 
-`tracker.py`와 `pose_extractor.py`는 영상별 CSV가 이미 있으면 건너뛰므로, 중단 후 재실행할 수 있습니다.
+`tracker.py` and `pose_extractor.py` skip processing when per-video CSV files already exist, allowing the pipeline to be safely re-run after interruption.
 
-## 생성 결과
+## Generated Outputs
 
-| 경로 | 내용 |
-|---|---|
-| `splits/annotations/train_annotations.csv` | TL/TS 기반 AIHub train 블록 manifest |
-| `splits/annotations/valid_annotations.csv` | VL/VS 기반 validation 블록 manifest |
-| `splits/annotations/train_annotations_all.csv` | AIHub + mydata + augmentation train manifest |
-| `results/tracking/` | 영상별 사람 tracking 결과 |
-| `results/pose/` | 영상별 pose 프레임 특징 |
-| `results/features/` | 블록별 behavior·pose 병합 특징 |
-| `results/models/xgboost_validation/` | validation report, confusion matrix, 모델 파일 |
+| Path                                           | Contents                                                          |
+| ---------------------------------------------- | ----------------------------------------------------------------- |
+| `splits/annotations/train_annotations.csv`     | AIHub train block manifest based on TL/TS                         |
+| `splits/annotations/valid_annotations.csv`     | Validation block manifest based on VL/VS                          |
+| `splits/annotations/train_annotations_all.csv` | Combined train manifest including AIHub + mydata + augmented data |
+| `results/tracking/`                            | Per-video person tracking results                                 |
+| `results/pose/`                                | Per-video frame-level pose features                               |
+| `results/features/`                            | Merged block-level behavior and pose features                     |
+| `results/models/xgboost_validation/`           | Validation report, confusion matrix, and model files              |
 
-## 현재 baseline 결과
+## Current Baseline Results
 
-AIHub VL/VS hold-out validation 기준:
+AIHub VL/VS hold-out validation results:
 
-- Accuracy: **86.36%**
-- Macro F1-score: **68.82%**
-- Weighted F1-score: **86.20%**
+* Accuracy: **86.36%**
+* Macro F1-score: **68.82%**
+* Weighted F1-score: **86.20%**
 
-N1 비중이 높으므로 Accuracy만이 아니라 Macro F1-score를 함께 평가합니다. 이 결과는 validation 성능이며, 최종 일반화 성능은 전시 카메라 또는 별도 현장 test 영상으로 추가 검증해야 합니다.
+Since N1 accounts for a large proportion of the data, Macro F1-score is evaluated alongside Accuracy rather than relying on Accuracy alone. These results represent validation performance, and final generalization performance should be further evaluated using exhibition camera footage or separate field test videos.
 
-## Git 관리
+## Git Management
 
-원본·증강 영상, 실행 결과, 자동 생성 manifest, 모델 가중치는 `.gitignore`로 제외합니다. 코드와 재현에 필요한 설정 파일만 Git으로 관리합니다.
+Original and augmented videos, execution results, automatically generated manifests, and model weights are excluded from Git using `.gitignore`. Only code and configuration files required for reproducibility are tracked in Git.
+
