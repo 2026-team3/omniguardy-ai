@@ -1,222 +1,71 @@
-import os
+﻿"""train 특징으로 XGBoost를 학습하고 VL/VS validation 성능을 평가한다."""
+
+from pathlib import Path
+
 import joblib
-import pandas as pd
 import matplotlib.pyplot as plt
-
-from xgboost import XGBClassifier
+import pandas as pd
+from sklearn.metrics import ConfusionMatrixDisplay, accuracy_score, classification_report, confusion_matrix
 from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import (
-    classification_report,
-    confusion_matrix,
-    ConfusionMatrixDisplay,
-    accuracy_score
-)
+from sklearn.utils.class_weight import compute_sample_weight
+from xgboost import XGBClassifier
 
 
-df = pd.read_csv(
-    "./results/merged_features(07.07).csv"
-)
+FEATURE_ROOT = Path("results/features")
+OUTPUT_ROOT = Path("results/models/xgboost_validation")
+METADATA_COLUMNS = {
+    "block_id", "split", "video", "video_path", "source", "label", "block_type",
+    "start_frame", "end_frame",
+}
 
-feature_cols = [
-    "frame_count",
 
-    "move_distance",
-    "avg_speed",
-    "max_speed",
-    "min_speed",
-    "std_speed",
+def main() -> None:
+    train = pd.read_csv(FEATURE_ROOT / "train_merged_features.csv")
+    valid = pd.read_csv(FEATURE_ROOT / "valid_merged_features.csv")
+    feature_columns = [column for column in train.columns if column not in METADATA_COLUMNS]
+    missing = set(feature_columns) - set(valid.columns)
+    if missing:
+        raise ValueError(f"validation 특징 열이 없습니다: {sorted(missing)}")
+    if not feature_columns:
+        raise ValueError("학습할 특징 열이 없습니다.")
 
-    "movement_range",
-    "trajectory_variance",
+    encoder = LabelEncoder()
+    y_train = encoder.fit_transform(train["label"])
+    unknown = set(valid["label"]) - set(encoder.classes_)
+    if unknown:
+        raise ValueError(f"train에 없는 validation 라벨: {sorted(unknown)}")
+    y_valid = encoder.transform(valid["label"])
 
-    "hand_motion_sum",
-    "hand_motion_mean",
-    "hand_motion_std",
-    "hand_motion_max",
+    model = XGBClassifier(
+        objective="multi:softprob",
+        num_class=len(encoder.classes_),
+        n_estimators=300,
+        max_depth=5,
+        learning_rate=0.05,
+        subsample=0.8,
+        colsample_bytree=0.8,
+        eval_metric="mlogloss",
+        random_state=42,
+    )
+    weights = compute_sample_weight(class_weight="balanced", y=y_train)
+    model.fit(train[feature_columns], y_train, sample_weight=weights)
 
-    "body_motion_sum",
-    "body_motion_mean",
-    "body_motion_std",
-    "body_motion_max",
+    prediction = model.predict(valid[feature_columns])
+    accuracy = accuracy_score(y_valid, prediction)
+    print(f"VL/VS validation accuracy: {accuracy:.4f}")
 
-    "upper_body_angle_mean",
-    "upper_body_angle_std",
-    "upper_body_angle_max",
-    "upper_body_angle_min",
+    OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
+    report = classification_report(y_valid, prediction, target_names=encoder.classes_, output_dict=True, zero_division=0)
+    pd.DataFrame(report).transpose().to_csv(OUTPUT_ROOT / "validation_report.csv", encoding="utf-8-sig")
+    matrix = confusion_matrix(y_valid, prediction, labels=range(len(encoder.classes_)))
+    figure, axis = plt.subplots(figsize=(7, 7))
+    ConfusionMatrixDisplay(matrix, display_labels=encoder.classes_).plot(ax=axis, colorbar=False)
+    figure.tight_layout()
+    figure.savefig(OUTPUT_ROOT / "validation_confusion_matrix.png", dpi=200)
+    plt.close(figure)
+    pd.DataFrame({"feature": feature_columns, "importance": model.feature_importances_}).sort_values("importance", ascending=False).to_csv(OUTPUT_ROOT / "feature_importance.csv", index=False, encoding="utf-8-sig")
+    joblib.dump({"model": model, "label_encoder": encoder, "feature_columns": feature_columns}, OUTPUT_ROOT / "xgboost_validation.pkl")
 
-    "arm_extension_mean",
-    "arm_extension_std",
-    "arm_extension_max",
-    "arm_extension_min"
-]
 
-X = df[feature_cols]
-y = df["label"]
-
-print(X.shape)
-print("\nClass distribution")
-print(y.value_counts())
-
-# Label Encoding
-label_encoder = LabelEncoder()
-y_encoded = label_encoder.fit_transform(y)
-
-# Train/Test Split
-X_train, X_test, y_train, y_test = train_test_split(
-    X,
-    y_encoded,
-    test_size=0.2,
-    random_state=42,
-    stratify=y_encoded
-)
-
-# XGBoost
-model = XGBClassifier(
-    objective="multi:softmax",
-    num_class=len(label_encoder.classes_),
-
-    n_estimators=300,
-    max_depth=6,
-    learning_rate=0.05,
-
-    subsample=0.8,
-    colsample_bytree=0.8,
-
-    random_state=42,
-    eval_metric="mlogloss"
-)
-
-print("=" * 60)
-print("Training XGBoost...")
-print("=" * 60)
-
-model.fit(X_train, y_train)
-
-pred = model.predict(X_test)
-
-acc = accuracy_score(
-    y_test,
-    pred
-)
-
-print()
-print("=" * 60)
-print(f"Accuracy : {acc:.4f}")
-print("=" * 60)
-
-print()
-
-print(classification_report(
-    y_test,
-    pred,
-    target_names=label_encoder.classes_
-))
-
-save_dir = "./results/xgboost(07.07)"
-
-os.makedirs(
-    save_dir,
-    exist_ok=True
-)
-
-report = classification_report(
-    y_test,
-    pred,
-    target_names=label_encoder.classes_,
-    output_dict=True
-)
-
-pd.DataFrame(report).transpose().to_csv(
-    f"{save_dir}/classification_report.csv",
-    encoding="utf-8-sig"
-)
-
-# Confusion Matrix
-labels = list(range(len(label_encoder.classes_)))
-
-cm = confusion_matrix(
-    y_test,
-    pred,
-    labels=labels
-)
-
-disp = ConfusionMatrixDisplay(
-    confusion_matrix=cm,
-    display_labels=label_encoder.classes_
-)
-
-fig, ax = plt.subplots(figsize=(7,7))
-
-disp.plot(ax=ax)
-
-plt.tight_layout()
-
-plt.savefig(
-    f"{save_dir}/confusion_matrix.png",
-    dpi=300
-)
-
-plt.close()
-
-# Feature Importance
-importance = pd.DataFrame({
-    "feature": feature_cols,
-    "importance": model.feature_importances_
-})
-
-importance = importance.sort_values(
-    "importance",
-    ascending=False
-)
-
-print()
-print("=" * 60)
-print("Feature Importance")
-print("=" * 60)
-print(importance)
-
-print("\nTop 10 Features")
-print(importance.head(10))
-
-importance.to_csv(
-    f"{save_dir}/feature_importance.csv",
-    index=False,
-    encoding="utf-8-sig"
-)
-
-plt.figure(figsize=(12,6))
-
-plt.bar(
-    importance["feature"],
-    importance["importance"]
-)
-
-plt.xticks(
-    rotation=60,
-    ha="right"
-)
-
-plt.tight_layout()
-
-plt.savefig(
-    f"{save_dir}/feature_importance.png",
-    dpi=300
-)
-
-plt.close()
-
-# Save Model
-joblib.dump(
-    {
-        "model": model,
-        "label_encoder": label_encoder
-    },
-    f"{save_dir}/xgboost.pkl"
-)
-
-print()
-print("=" * 60)
-print("Model Saved")
-print(f"{save_dir}/xgboost.pkl")
-print("=" * 60)
+if __name__ == "__main__":
+    main()

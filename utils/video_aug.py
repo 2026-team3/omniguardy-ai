@@ -15,7 +15,6 @@ AUG_COUNT = {
     "normal": 4,
 }
 
-# Augmentation
 transform = at.ReplayCompose([  # 각 프레임에 서로 다른 augmentation을 적용하지 않도록!! (시간적으로 일관된 augmentation 만들기)
     at.Affine(
         scale=(0.9, 1.1),   # 영상 크기를 랜덤하게 90% ~ 110% 범위로 변경
@@ -97,7 +96,6 @@ def augment_video(
     return True
 
 
-# Main
 video_infos = load_video_infos(
     split="train",
     include_mydata=True,

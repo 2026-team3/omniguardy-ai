@@ -1,222 +1,90 @@
-import math
+﻿"""tracking 결과를 annotation의 모든 블록 범위로 잘라 행동 특징을 만든다."""
+
+from hashlib import sha1
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
 
-# ==========================================
-# 설정
-# ==========================================
-
-SPLITS = ["train", "valid", "test"]
-
-TRACKING_DIR = Path("./results/tracking")
-ANNOTATION_DIR = Path("./splits/annotations")
-OUTPUT_DIR = Path("./results/features")
-
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+ANNOTATION_ROOT = Path("splits/annotations")
+TRACKING_ROOT = Path("results/tracking")
+OUTPUT_ROOT = Path("results/features")
+SPLITS = ("train", "valid")
 
 
-# ==========================================
-# Feature 계산 함수
-# ==========================================
+def block_id(row: pd.Series) -> str:
+    """영상 경로와 프레임 범위를 사용해 안정적인 블록 식별자를 만든다."""
+    value = "|".join(map(str, [row.video_path, row.start_frame, row.end_frame, row.label, row.source]))
+    return sha1(value.encode("utf-8")).hexdigest()
 
-def extract_track_feature(group):
 
+def track_features(group: pd.DataFrame) -> dict | None:
+    """한 사람 track의 이동 특징을 계산한다."""
     group = group.sort_values("frame")
-
-    trajectory = list(
-        zip(
-            group["frame"],
-            group["center_x"],
-            group["center_y"]
-        )
-    )
-
-    frame_count = len(trajectory)
-
-    # 너무 짧은 track 제거
-    if frame_count < 10:
+    if len(group) < 10:
         return None
-
-    total_distance = 0
-    speeds = []
-
-    for i in range(1, len(trajectory)):
-
-        f1, x1, y1 = trajectory[i - 1]
-        f2, x2, y2 = trajectory[i]
-
-        dist = math.sqrt(
-            (x2 - x1) ** 2 +
-            (y2 - y1) ** 2
-        )
-
-        gap = f2 - f1
-
-        total_distance += dist
-
-        if gap > 0:
-            speeds.append(dist / gap)
-
-    xs = group["center_x"].values
-    ys = group["center_y"].values
-
+    x = (group["x1"].to_numpy() + group["x2"].to_numpy()) / 2
+    y = (group["y1"].to_numpy() + group["y2"].to_numpy()) / 2
+    frames = group["frame"].to_numpy()
+    distances = np.hypot(np.diff(x), np.diff(y))
+    gaps = np.diff(frames)
+    speeds = distances[gaps > 0] / gaps[gaps > 0]
     return {
-
-        "frame_count": frame_count,
-
-        "move_distance": total_distance,
-
-        "avg_speed": np.mean(speeds) if speeds else 0,
-        "max_speed": np.max(speeds) if speeds else 0,
-        "min_speed": np.min(speeds) if speeds else 0,
-        "std_speed": np.std(speeds) if speeds else 0,
-
-        "movement_range":
-            (xs.max() - xs.min()) +
-            (ys.max() - ys.min()),
-
-        "trajectory_variance":
-            np.var(xs) +
-            np.var(ys)
+        "tracking_frame_count": len(group),
+        "move_distance": distances.sum(),
+        "avg_speed": speeds.mean() if len(speeds) else 0.0,
+        "max_speed": speeds.max() if len(speeds) else 0.0,
+        "min_speed": speeds.min() if len(speeds) else 0.0,
+        "std_speed": speeds.std() if len(speeds) else 0.0,
+        "movement_range": (x.max() - x.min()) + (y.max() - y.min()),
+        "trajectory_variance": np.var(x) + np.var(y),
     }
 
 
-# ==========================================
-# Split 반복
-# ==========================================
+def summarize_block(block: pd.DataFrame) -> dict:
+    """블록 안의 여러 사람 track을 하나의 특징 행으로 요약한다."""
+    features = [feature for _, group in block.groupby("track_id") if (feature := track_features(group))]
+    if not features:
+        return {"has_tracking": 0, "tracked_person_count": 0}
+    frame = pd.DataFrame(features)
+    result = {"has_tracking": 1, "tracked_person_count": len(frame)}
+    for column in frame.columns:
+        result[f"{column}_mean"] = frame[column].mean()
+        result[f"{column}_max"] = frame[column].max()
+        result[f"{column}_std"] = frame[column].std(ddof=0)
+    return result
 
-for split in SPLITS:
 
-    print("=" * 60)
-    print(split)
+def main() -> None:
+    OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
+    for split in SPLITS:
+        annotation_name = "train_annotations_all.csv" if split == "train" else "valid_annotations.csv"
+        annotations = pd.read_csv(ANNOTATION_ROOT / annotation_name)
+        annotations["block_id"] = annotations.apply(block_id, axis=1)
+        rows = []
+        for video_path, blocks in annotations.groupby("video_path", sort=False):
+            video = Path(video_path).stem
+            tracking_path = TRACKING_ROOT / split / f"{video}.csv"
+            tracking = pd.read_csv(tracking_path) if tracking_path.is_file() else pd.DataFrame()
+            for _, annotation in blocks.iterrows():
+                required = {"frame", "track_id", "x1", "y1", "x2", "y2"}
+                if required.issubset(tracking.columns):
+                    selected = tracking[(tracking["frame"] >= annotation.start_frame) & (tracking["frame"] <= annotation.end_frame)]
+                    summary = summarize_block(selected)
+                else:
+                    summary = {"has_tracking": 0, "tracked_person_count": 0}
+                rows.append({
+                    "block_id": annotation.block_id, "split": split, "video": annotation.video,
+                    "video_path": annotation.video_path, "source": annotation.source,
+                    "label": annotation.label, "block_type": annotation.block_type,
+                    "start_frame": annotation.start_frame, "end_frame": annotation.end_frame,
+                    **summary,
+                })
+        output = OUTPUT_ROOT / f"{split}_behavior_features.csv"
+        pd.DataFrame(rows).fillna(0).to_csv(output, index=False, encoding="utf-8-sig")
+        print(f"{split}: {len(rows)}개 블록 저장 -> {output}")
 
-    tracking = pd.read_csv(
-        TRACKING_DIR / f"{split}_tracking.csv"
-    )
-    print(f"\n[{split}]")
-    print("Tracking videos :", tracking["video"].nunique())
-    print("Tracking frame range :", tracking["frame"].min(), "~", tracking["frame"].max())
 
-    if split == "train":
-        annotations = pd.read_csv(
-            ANNOTATION_DIR / "train_annotations_all.csv"
-        )
-    else:
-        annotations = pd.read_csv(
-            ANNOTATION_DIR / f"{split}_annotations.csv"
-        )
-    # action block만 사용
-    annotations = annotations[
-        annotations["block_type"] == "action"
-    ].reset_index(drop=True)
-    print("Annotation videos :", annotations["video"].nunique())
-    print("Annotation rows :", len(annotations))
-
-    # 중심점 계산
-    tracking["center_x"] = (
-        tracking["x1"] + tracking["x2"]
-    ) / 2
-
-    tracking["center_y"] = (
-        tracking["y1"] + tracking["y2"]
-    ) / 2
-
-    feature_rows = []
-
-    # ----------------------------------
-    # annotation(block) 반복
-    # ----------------------------------
-
-    for _, ann in annotations.iterrows():
-
-        block = tracking[
-            (tracking["video"] == ann["video"])
-            &
-            (tracking["frame"] >= ann["start_frame"])
-            &
-            (tracking["frame"] <= ann["end_frame"])
-        ]
-
-        if block.empty:
-
-            video_tracking = tracking[
-                tracking["video"] == ann["video"]
-            ]
-
-            print("=" * 60)
-            print(f"No tracking: {ann['video']}")
-            print(f"Action frame : {ann['start_frame']} ~ {ann['end_frame']}")
-
-            if video_tracking.empty:
-                print("Video does not exist in tracking.csv")
-            else:
-                print(
-                    "Tracking frame :",
-                    video_tracking["frame"].min(),
-                    "~",
-                    video_tracking["frame"].max()
-                )
-
-            break
-
-        # -----------------------------
-        # track별 feature 계산
-        # -----------------------------
-
-        track_features = []
-
-        for track_id, group in block.groupby("track_id"):
-
-            feature = extract_track_feature(group)
-
-            if feature is None:
-                continue
-
-            feature["track_id"] = track_id
-
-            track_features.append(feature)
-
-        if len(track_features) == 0:
-            continue
-        
-        track_df = pd.DataFrame(track_features)
-
-        numeric_cols = track_df.drop(columns="track_id")
-
-        aggregated = {}
-
-        for col in numeric_cols.columns:
-            aggregated[f"{col}_mean"] = numeric_cols[col].mean()
-            aggregated[f"{col}_max"] = numeric_cols[col].max()
-            aggregated[f"{col}_std"] = numeric_cols[col].std()
-
-        feature_rows.append({
-
-            "video": ann["video"],
-            "label": ann["label"],
-            "block_type": ann["block_type"],
-            "start_frame": ann["start_frame"],
-            "end_frame": ann["end_frame"],
-
-            **aggregated
-        })
-
-    feature_df = pd.DataFrame(feature_rows).fillna(0)
-
-    save_path = (
-        OUTPUT_DIR /
-        f"{split}_behavior_features.csv"
-    )
-
-    feature_df.to_csv(
-        save_path,
-        index=False,
-        encoding="utf-8-sig"
-    )
-
-    print(feature_df.head())
-    print("rows :", len(feature_df))
-    print("saved :", save_path)
+if __name__ == "__main__":
+    main()

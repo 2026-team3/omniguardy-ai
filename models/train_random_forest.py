@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 
 from sklearn.ensemble import RandomForestClassifier
 
-# train feature load
 df = pd.read_csv(
     "./results/after_augmentation/merged_features(07.12).csv"
 )
@@ -63,7 +62,6 @@ print("\nFeature NaN:")
 print(X_train.isna().sum())
 
 
-# RandomForest
 model = RandomForestClassifier(
     n_estimators=500,   # 숲을 구성할 나무의 수 (default=10, 많을수록 일반화 but, trade-off 고려)
     max_depth=None,
@@ -77,7 +75,6 @@ print("="*60)
 print("Training RandomForest...")
 print("="*60)
 
-# Train
 model.fit(
     X_train,
     y_train
@@ -91,7 +88,6 @@ os.makedirs(
     exist_ok=True
 )
 
-# Feature Importance
 importance = pd.DataFrame({
     "feature": feature_cols,
     "importance": model.feature_importances_
@@ -114,7 +110,6 @@ importance.to_csv(
     encoding="utf-8-sig"
 )
 
-# Feature Importance Plot
 plt.figure(figsize=(12,6))
 plt.bar(importance["feature"], importance["importance"])
 plt.xticks(rotation=60, ha="right")
@@ -125,7 +120,6 @@ plt.savefig(
 )
 plt.close()
 
-# Save Model
 joblib.dump(
     model,
     f"{save_dir}/train_random_forest.pkl"

@@ -1,179 +1,129 @@
-import cv2
-import pandas as pd
+﻿"""AIHub, mydata, augmentation을 합쳐 train 전용 manifest를 만든다."""
+
 from pathlib import Path
 
-from utils.video_loader import load_video_infos
+import cv2
+import pandas as pd
 
 
-AIHUB_ANNOTATION = "./splits/annotations/train_annotations.csv"
-OUTPUT_PATH = "./splits/annotations/train_annotations_all.csv"
+AIHUB_ANNOTATION = Path("splits/annotations/train_annotations.csv")
+OUTPUT_PATH = Path("splits/annotations/train_annotations_all.csv")
+MYDATA_ROOT = Path("videos/mydata")
+AUGMENTED_ROOT = Path("videos/augmented")
+TARGET_LABELS = {"N1", "A17", "A18", "A19", "A20", "A21"}
+
+MYDATA_CONFIG = {
+    "normal": {"label": "N1", "block_type": "normal", "normal_subtype": "resident"},
+    "delivery": {"label": "N1", "block_type": "normal", "normal_subtype": "delivery"},
+    "lookingInside": {"label": "A20", "block_type": "action", "normal_subtype": pd.NA},
+}
 
 
-def read_aihub_annotations():
-    return pd.read_csv(AIHUB_ANNOTATION)
-
-
-def get_frame_count(video_path):
-    cap = cv2.VideoCapture(video_path)
-
-    if not cap.isOpened():
-        print(f"영상 열기 실패 : {video_path}")
+def get_frame_count(video_path: Path) -> int | None:
+    capture = cv2.VideoCapture(str(video_path))
+    if not capture.isOpened():
+        print(f"CANNOT OPEN: {video_path}")
         return None
-
-    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    cap.release()
-
-    return frame_count
+    frame_count = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
+    capture.release()
+    return frame_count if frame_count > 0 else None
 
 
-def generate_mydata_annotations(video_infos):
-
+def generate_mydata_annotations() -> pd.DataFrame:
     rows = []
+    for folder, config in MYDATA_CONFIG.items():
+        for video_path in sorted((MYDATA_ROOT / folder).glob("*.mp4")):
+            frame_count = get_frame_count(video_path)
+            if frame_count is None:
+                continue
+            rows.append({
+                "split": "train",
+                "video": video_path.name,
+                "annotation_video": pd.NA,
+                "video_path": str(video_path.resolve()),
+                "json_path": pd.NA,
+                "label": config["label"],
+                "block_type": config["block_type"],
+                "start_frame": 0,
+                "end_frame": frame_count - 1,
+                "source": "mydata",
+                "normal_subtype": config["normal_subtype"],
+            })
+    return pd.DataFrame(rows)
 
-    for item in video_infos:
 
-        if item["source"] != "mydata":
+def generate_augmented_annotations(base_annotations: pd.DataFrame) -> pd.DataFrame:
+    """train 원본에서 파생된 augmentation 영상에만 부모 블록을 복사한다."""
+    rows = []
+    base_by_video = {
+        video: group
+        for video, group in base_annotations.groupby("video", dropna=False)
+    }
+
+    for augmented_path in AUGMENTED_ROOT.rglob("*.mp4"):
+        augmented_name = augmented_path.name
+        if "_aug" not in augmented_name:
             continue
 
-        frame_count = get_frame_count(item["video_path"])
+        base_name = augmented_name.split("_aug", 1)[0] + augmented_path.suffix
+        parent_blocks = base_by_video.get(base_name)
+        if parent_blocks is None:
+            print(f"NO PARENT ANNOTATION: {augmented_path}")
+            continue
 
+        frame_count = get_frame_count(augmented_path)
         if frame_count is None:
             continue
 
-        if item["label"] == "normal":
-            label = "N1"
-            block_type = "normal"
+        last_frame = frame_count - 1
+        max_parent_end = int(parent_blocks["end_frame"].max())
+        if max_parent_end > last_frame:
+            print(
+                f"TRUNCATED BY {max_parent_end - last_frame} FRAME(S): "
+                f"{augmented_path}"
+            )
 
-        else:
-            label = item["label"]
-            block_type = "action"
-
-        rows.append({
-            "video": item["video"],
-            "label": label,
-            "block_type": block_type,
-            "start_frame": 0,
-            "end_frame": frame_count - 1,
-            "source": "mydata"
-        })
-
-    return pd.DataFrame(rows)
-
-
-def generate_augmented_annotations(base_annotation_df):
-
-    rows = []
-    aug_root = Path("./videos/augmented")
-
-    for label_dir in aug_root.iterdir():
-
-        if not label_dir.is_dir():
-            continue
-
-        for video_path in label_dir.glob("*.mp4"):
-
-            aug_video = video_path.name
-
-            if "_aug" not in aug_video:
+        for _, parent in parent_blocks.iterrows():
+            if int(parent["start_frame"]) > last_frame:
+                print(f"BLOCK OUTSIDE AUGMENTED VIDEO: {augmented_path}")
                 continue
+            row = parent.to_dict()
+            row.update({
+                "video": augmented_name,
+                "video_path": str(augmented_path.resolve()),
+                "source": "augmented",
+                "split": "train",
+                "end_frame": min(int(parent["end_frame"]), last_frame),
+            })
+            rows.append(row)
 
-            base_video = aug_video.split("_aug")[0] + ".mp4"
-
-            base_rows = base_annotation_df[
-                base_annotation_df["video"] == base_video
-            ]
-
-            if len(base_rows) == 0:
-                print(f"원본 annotation 없음 : {base_video}")
-                continue
-
-            for _, row in base_rows.iterrows():
-
-                new_row = row.copy()
-
-                new_row["video"] = aug_video
-                new_row["source"] = "augmented"
-
-                rows.append(new_row)
-
-    return pd.DataFrame(rows)
-
-def merge_annotations(
-    aihub_df,
-    mydata_df,
-    augmented_df
-):
-
-    return pd.concat(
-        [
-            aihub_df,
-            mydata_df,
-            augmented_df
-        ],
-        ignore_index=True
-    )
+    return pd.DataFrame(rows, columns=base_annotations.columns)
 
 
-def main():
+def main() -> None:
+    aihub = pd.read_csv(AIHUB_ANNOTATION)
+    aihub = aihub[aihub["label"].isin(TARGET_LABELS)].copy()
+    aihub["normal_subtype"] = pd.NA
 
-    print("=" * 60)
-    print("Loading video infos...")
+    mydata = generate_mydata_annotations()
+    base = pd.concat([aihub, mydata], ignore_index=True)
+    augmented = generate_augmented_annotations(base)
+    final = pd.concat([base, augmented], ignore_index=True)
 
-    video_infos = load_video_infos(
-        split="train",
-        include_mydata=True,
-        include_augmented=False
-    )
+    if not set(final["label"]).issubset(TARGET_LABELS):
+        raise ValueError("Unexpected label in train manifest")
 
-    print("Reading AIHub annotations...")
-    aihub_df = read_aihub_annotations()
+    final.to_csv(OUTPUT_PATH, index=False, encoding="utf-8-sig")
 
-    print("Generating mydata annotations...")
-    mydata_df = generate_mydata_annotations(video_infos)
-
-    print("Generating augmented annotations...")
-    base_annotation_df = pd.concat(
-        [
-            aihub_df,
-            mydata_df
-        ],
-        ignore_index=True
-    )
-
-    augmented_df = generate_augmented_annotations(
-        base_annotation_df
-    )
-
-    print("Merging annotations...")
-
-    final_df = merge_annotations(
-        aihub_df,
-        mydata_df,
-        augmented_df
-    )
-
-    final_df.to_csv(
-        OUTPUT_PATH,
-        index=False,
-        encoding="utf-8-sig"
-    )
-
-    print()
-    print("=" * 60)
-    print("완료")
-
-    print(f"AIHub      : {len(aihub_df)}")
-    print(f"MyData     : {len(mydata_df)}")
-    print(f"Augmented  : {len(augmented_df)}")
-    print("--------------------------")
-    print(f"Total      : {len(final_df)}")
-
-    print()
-    print(final_df["source"].value_counts())
-
-    print()
     print(f"Saved -> {OUTPUT_PATH}")
+    print("\nRows by source")
+    print(final["source"].value_counts().to_string())
+    print("\nRows by label")
+    print(final["label"].value_counts().sort_index().to_string())
+    print("\nMydata normal subtypes")
+    print(mydata["normal_subtype"].value_counts(dropna=False).to_string())
 
 
 if __name__ == "__main__":
     main()
+

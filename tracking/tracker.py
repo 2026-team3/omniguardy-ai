@@ -1,4 +1,4 @@
-import os
+﻿import os
 from pathlib import Path
 
 import torch
@@ -18,35 +18,61 @@ if torch.cuda.is_available():
 print("=" * 50)
 
 
-# YOLO 모델
+# YOLO 사람 추적 모델을 불러온다.
 model = YOLO("./models/yolov8n.pt")
 
-# 결과 저장 폴더
+# tracking 결과를 저장할 루트 폴더
 output_dir = Path("./results/tracking")
 output_dir.mkdir(parents=True, exist_ok=True)
 
 
-# train / valid / test 모두 수행
-for split in ["train", "valid", "test"]:
+# train과 validation split을 차례대로 처리한다.
+for split in ["train", "valid"]:
+    split_dir = output_dir / split
+    split_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"\n{'=' * 60}")
     print(f"Processing {split.upper()}")
     print(f"{'=' * 60}")
 
-    video_infos = load_video_infos(split)
-
-    tracking_data = []
+    if split == "train":
+        video_infos = load_video_infos(
+            split="train",
+            include_mydata=True,
+            include_augmented=True
+        )
+    else:
+        video_infos = load_video_infos(
+            split=split,
+            include_mydata=False,
+            include_augmented=False
+        )
+    
+    print(f"Total videos : {len(video_infos)}")
+  
+    missing = 0
+    failed = 0
 
     for idx, item in enumerate(video_infos):
+        tracking_data = []
+
+        print(
+            f"[{idx+1}/{len(video_infos)}] "
+            f"{item['source']} | "  
+            f"{item['label']} | "
+            f"{item['video']}"
+        )
+        video_name = Path(item["video"]).stem
+        save_path = split_dir / f"{video_name}.csv"
+
+        if save_path.exists():
+            print("이미 존재하여 건너뜁니다.")
+            continue
 
         try:
-            print("-" * 50)
-            print(f"[{idx + 1}/{len(video_infos)}]")
-            print("video :", item["video"])
-            print("label :", item["label"])
-            print("source:", item["source"])
-
             if not os.path.exists(item["video_path"]):
+                print("영상 파일이 없습니다.")
+                missing += 1
                 continue
 
             results = model.track(
@@ -55,12 +81,13 @@ for split in ["train", "valid", "test"]:
                 persist=False,
                 save=False,
                 conf=0.3,
-                classes=[0],      # person
+                classes=[0],      # 사람 클래스만 추적
                 stream=True,
-                device=0
+                device=0,
+                verbose=False
             )
 
-            # frame별 tracking 결과 저장
+            # 프레임별 tracking 결과를 행으로 저장한다.
             for frame_idx, r in enumerate(results):
 
                 if r.boxes is None:
@@ -80,6 +107,8 @@ for split in ["train", "valid", "test"]:
                     tracking_data.append({
 
                         "video": item["video"],
+                        "video_path": item["video_path"],
+
                         "label": item["label"],
                         "source": item["source"],
                         "split": split,
@@ -96,29 +125,44 @@ for split in ["train", "valid", "test"]:
                         "class": int(box.cls[0])
                     })
 
-            print("Tracking 완료")
+            print("추적 완료")
+            # 영상별 tracking CSV를 저장한다.
+            df = pd.DataFrame(tracking_data)
+            video_name = Path(item["video"]).stem
+            save_path = split_dir / f"{video_name}.csv"
+
+            df.to_csv(
+                save_path,
+                index=False,
+                encoding="utf-8-sig"
+            )
 
         except Exception as e:
+            failed += 1
 
             print(f"\nError : {item['video']}")
             print(e)
-            continue
+       
+        finally:
 
-    # CSV 저장
-    df = pd.DataFrame(tracking_data)
+            if "results" in locals():
+                del results
 
-    save_path = output_dir / f"{split}_tracking.csv"
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
 
-    df.to_csv(
-        save_path,
-        index=False,
-        encoding="utf-8-sig"
-    )
 
-    print(f"\nSaved : {save_path}")
-    print(df.head())
-    if len(df) > 0:
-        print("Processed videos :", df["video"].nunique())
+    print("\n" + "=" * 50)
+    print(f"{split.upper()} ")
+    print("=" * 50)
 
-    print("Total rows :", len(df))
-    print("총 row :", len(df))
+    print(f"Saved              : {save_path}")
+    saved_files = len(list(split_dir.glob("*.csv")))
+    print(f"Saved CSV          : {saved_files}")
+    print(f"Total rows         : {len(df)}")
+    print(f"Missing videos     : {missing}")
+    print(f"Failed videos      : {failed}")
+
+
+print("\n전체 추적 완료")
+

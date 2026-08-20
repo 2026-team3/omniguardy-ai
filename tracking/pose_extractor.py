@@ -1,321 +1,127 @@
+﻿"""영상별 pose 프레임 특징을 추출해 블록 단위 병합에 사용한다."""
+
+from pathlib import Path
+import math
+
 import cv2
 import mediapipe as mp
-import pandas as pd
-import math
 import numpy as np
-from utils.video_loader import load_video_infos
+import pandas as pd
 from mediapipe.tasks.python import vision
-from mediapipe.tasks.python.vision import drawing_utils
-from mediapipe.tasks.python.vision import drawing_styles
 
-model_path = (
-    "./models/pose_landmarker_lite.task"
-)
-
-video_infos = load_video_infos(split="train")
-print("전체 영상 수:", len(video_infos))
-#visualize_video = video_infos[0]["video"]
-
-def draw_landmarks_on_image(rgb_image, detection_result):
-  pose_landmarks_list = detection_result.pose_landmarks
-  annotated_image = np.copy(rgb_image)
-
-  pose_landmark_style = drawing_styles.get_default_pose_landmarks_style()
-  pose_connection_style = drawing_utils.DrawingSpec(color=(0, 255, 0), thickness=2)
-
-  for pose_landmarks in pose_landmarks_list:
-    drawing_utils.draw_landmarks(
-        image=annotated_image,
-        landmark_list=pose_landmarks,
-        connections=vision.PoseLandmarksConnections.POSE_LANDMARKS,
-        landmark_drawing_spec=pose_landmark_style,
-        connection_drawing_spec=pose_connection_style)
-
-  return annotated_image
-
-# Pose Landmarker 생성
-BaseOptions = mp.tasks.BaseOptions
-PoseLandmarker = mp.tasks.vision.PoseLandmarker
-PoseLandmarkerOptions = mp.tasks.vision.PoseLandmarkerOptions
-VisionRunningMode = mp.tasks.vision.RunningMode
-
-options = PoseLandmarkerOptions(
-    base_options=BaseOptions(model_asset_path=model_path),
-    running_mode=VisionRunningMode.VIDEO,
-    num_poses=2,
-    min_pose_detection_confidence=0.5,
-    min_tracking_confidence=0.5
-)
+from utils.video_loader import load_video_infos
 
 
-# 결과 저장
-pose_features = []
+MODEL_PATH = Path("models/pose_landmarker_lite.task")
+OUTPUT_ROOT = Path("results/pose")
+SPLITS = ("train", "valid")
+FRAME_INTERVAL = 10
 
-# 영상 반복
-for item in video_infos:
-    video_name = item["video"]
-    video_path = item["video_path"]
-    label = item["label"]
-    try:
-        # 영상마다 새 landmarker 생성
-        landmarker = (
-            PoseLandmarker.create_from_options(
-                options
+
+def extract_video_features(item: dict, landmarker) -> pd.DataFrame:
+    """영상 하나에서 일정 간격의 pose 프레임 특징을 만든다."""
+    capture = cv2.VideoCapture(item["video_path"])
+    if not capture.isOpened():
+        raise ValueError(f"영상을 열 수 없습니다: {item['video_path']}")
+
+    fps = capture.get(cv2.CAP_PROP_FPS) or 30.0
+    previous: dict[int, tuple[int, float, float, float, float]] = {}
+    rows: list[dict] = []
+    frame = -1
+
+    while True:
+        ok, image = capture.read()
+        if not ok:
+            break
+        frame += 1
+        if frame % FRAME_INTERVAL != 0:
+            continue
+
+        rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb)
+        result = landmarker.detect_for_video(mp_image, int(frame / fps * 1000))
+        values = []
+
+        for pose_index, landmarks in enumerate(result.pose_landmarks):
+            left_shoulder = landmarks[11]
+            right_shoulder = landmarks[12]
+            right_wrist = landmarks[16]
+            center_x = (left_shoulder.x + right_shoulder.x) / 2
+            center_y = (left_shoulder.y + right_shoulder.y) / 2
+            arm_extension = math.dist(
+                (right_wrist.x, right_wrist.y),
+                (right_shoulder.x, right_shoulder.y),
             )
+            upper_body_angle = math.degrees(math.atan2(
+                right_shoulder.y - left_shoulder.y,
+                right_shoulder.x - left_shoulder.x,
+            ))
+            hand_motion = 0.0
+            body_motion = 0.0
+            if pose_index in previous:
+                prev_frame, prev_wrist_x, prev_wrist_y, prev_center_x, prev_center_y = previous[pose_index]
+                gap = frame - prev_frame
+                if gap > 0:
+                    hand_motion = math.dist(
+                        (right_wrist.x, right_wrist.y), (prev_wrist_x, prev_wrist_y)
+                    ) / gap
+                    body_motion = math.dist(
+                        (center_x, center_y), (prev_center_x, prev_center_y)
+                    ) / gap
+            previous[pose_index] = (frame, right_wrist.x, right_wrist.y, center_x, center_y)
+            values.append((hand_motion, body_motion, arm_extension, upper_body_angle))
+
+        if values:
+            array = np.asarray(values, dtype=float)
+            rows.append({
+                "video": item["video"],
+                "video_path": item["video_path"],
+                "source": item["source"],
+                "split": item["split"],
+                "frame": frame,
+                "pose_count": len(values),
+                "hand_motion": array[:, 0].mean(),
+                "body_motion": array[:, 1].mean(),
+                "arm_extension": array[:, 2].mean(),
+                "upper_body_angle": array[:, 3].mean(),
+            })
+
+    capture.release()
+    return pd.DataFrame(rows)
+
+
+def main() -> None:
+    if not MODEL_PATH.is_file():
+        raise FileNotFoundError(f"Pose 모델이 없습니다: {MODEL_PATH}")
+
+    base_options = mp.tasks.BaseOptions
+    options = vision.PoseLandmarkerOptions(
+        base_options=base_options(model_asset_path=str(MODEL_PATH)),
+        running_mode=vision.RunningMode.VIDEO,
+        num_poses=2,
+        min_pose_detection_confidence=0.5,
+        min_tracking_confidence=0.5,
+    )
+
+    for split in SPLITS:
+        output_dir = OUTPUT_ROOT / split
+        output_dir.mkdir(parents=True, exist_ok=True)
+        videos = load_video_infos(
+            split=split,
+            include_mydata=(split == "train"),
+            include_augmented=(split == "train"),
         )
-        print()
-        print("=" * 50)
-        print("현재 영상:")
-        print(video_name)
-        cap = cv2.VideoCapture(video_path)
-        fps = cap.get(cv2.CAP_PROP_FPS)
-        # fps 이상하면 기본값
-        if fps <= 0:
-            fps = 30
+        print(f"[{split}] pose 추출 대상: {len(videos)}개")
 
-        frame_idx = 0
-        right_hand_positions = [[] for _ in range(2)]
-        body_positions = [[] for _ in range(2)]
-        arm_lengths = [[] for _ in range(2)]
-        upper_body_angles = [[] for _ in range(2)]
-        processed_frame_count = 0
-        pose_detected_count = 0
-
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                break
-            frame_idx += 1
-
-            # 10프레임마다만 처리
-            if frame_idx % 10 != 0:
+        for index, item in enumerate(videos, start=1):
+            output_path = output_dir / f"{Path(item['video']).stem}.csv"
+            if output_path.exists():
                 continue
-            processed_frame_count += 1
+            print(f"{index}/{len(videos)}: {item['video']}")
+            with vision.PoseLandmarker.create_from_options(options) as landmarker:
+                features = extract_video_features(item, landmarker)
+            features.to_csv(output_path, index=False, encoding="utf-8-sig")
 
-            # timestamp(ms)
-            timestamp_ms = int((frame_idx / fps) * 1000)
 
-            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            mp_image = mp.Image(image_format = mp.ImageFormat.SRGB, 
-                                data=rgb_frame)
-
-            # Pose 추론
-            result = (
-                landmarker.detect_for_video(mp_image, timestamp_ms)
-            )
-
-            # Visualization
-            # if video_name == visualize_video:
-            #     annotated_image = (
-            #         draw_landmarks_on_image(
-            #             rgb_frame,
-            #             result
-            #         )
-            #     )
-            #     cv2.imshow(
-            #         "Pose Visualization",
-            #         cv2.cvtColor(annotated_image, cv2.COLOR_RGB2BGR)
-            #     )
-            #     if result.segmentation_masks:
-            #         segmentation_mask = (
-            #             result.segmentation_masks[0]
-            #             .numpy_view()
-            #         )
-            #         segmentation_mask = np.squeeze( segmentation_mask )
-            #         visualized_mask = (segmentation_mask * 255).astype(np.uint8)
-            #         visualized_mask = np.stack([visualized_mask] * 3, axis=-1)
-            #         cv2.imshow(
-            #             "Segmentation Mask",
-            #             visualized_mask
-            #         )
-            #     key = cv2.waitKey(1)
-
-            #         # ESC 누르면 종료
-            #     if key == 27:
-            #         break
-
-            if len(result.pose_landmarks) == 0:
-                continue
-            pose_detected_count += 1
-
-            for pose_idx, landmarks in enumerate(
-                result.pose_landmarks[:2]
-            ):
-                # 주요 landmark
-                left_shoulder = landmarks[11]
-                right_shoulder = landmarks[12]
-                right_wrist = landmarks[16]
-
-                # Hand Position
-                hand_x = right_wrist.x
-                hand_y = right_wrist.y
-
-                right_hand_positions[pose_idx].append(( frame_idx, hand_x, hand_y))
-
-                # Body Center
-                body_center_x = (left_shoulder.x + right_shoulder.x) / 2
-                body_center_y = (left_shoulder.y + right_shoulder.y) / 2
-
-                body_positions[pose_idx].append((frame_idx, body_center_x, body_center_y))
-
-                # Upper Body Angle
-                dx = (right_shoulder.x - left_shoulder.x)
-                dy = (right_shoulder.y - left_shoulder.y)
-
-                angle = math.degrees(math.atan2(dy, dx))
-                upper_body_angles[pose_idx].append(angle)
-
-                # Arm Extension
-                arm_length = math.sqrt((right_wrist.x - right_shoulder.x) ** 2
-                    + ( right_wrist.y - right_shoulder.y) ** 2)
-
-                arm_lengths[pose_idx].append(arm_length)
-
-        cap.release()
-        landmarker.close()
-
-        # hand motion
-        hand_motion_list = []
-
-        for pose_idx in range(2):
-
-            positions = right_hand_positions[pose_idx]
-            for i in range(1, len(positions)):
-                frame1, x1, y1 = positions[i - 1]
-                frame2, x2, y2 = positions[i]
-
-                dist = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-
-                frame_gap = frame2 - frame1
-                if frame_gap > 0:
-                    hand_motion = (dist / frame_gap)
-                    hand_motion_list.append(hand_motion)
-
-        if len(hand_motion_list):
-            hand_motion_sum = np.sum(hand_motion_list)
-            hand_motion_mean = np.mean(hand_motion_list)
-            hand_motion_std = np.std(hand_motion_list)
-            hand_motion_max = np.max(hand_motion_list)
-        else:
-            hand_motion_sum = 0
-            hand_motion_mean = 0
-            hand_motion_std = 0
-            hand_motion_max = 0
-
-        # body motion
-        body_motion_list = []
-
-        for pose_idx in range(2):
-            positions = body_positions[pose_idx]
-
-            for i in range(1, len(positions)):
-                frame1, x1, y1 = positions[i - 1]
-                frame2, x2, y2 = positions[i]
-
-                dist = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-
-                frame_gap = frame2 - frame1
-                if frame_gap > 0:
-                    body_motion = (dist / frame_gap)
-                    body_motion_list.append(body_motion)
-
-        if len(body_motion_list):
-            body_motion_sum = np.sum(body_motion_list)
-            body_motion_mean = np.mean(body_motion_list)
-            body_motion_std = np.std(body_motion_list)
-            body_motion_max = np.max(body_motion_list)
-        else:
-            body_motion_sum = 0
-            body_motion_mean = 0
-            body_motion_std = 0
-            body_motion_max = 0
-
-        # arm extension
-        all_arm_lengths = []
-
-        for pose_idx in range(2):
-            all_arm_lengths.extend(arm_lengths[pose_idx])
-
-        if len(all_arm_lengths):
-            arm_extension_mean = np.mean(all_arm_lengths)
-            arm_extension_std = np.std(all_arm_lengths)
-            arm_extension_max = np.max(all_arm_lengths)
-            arm_extension_min = np.min(all_arm_lengths)
-        else:
-            arm_extension_mean = 0
-            arm_extension_std = 0
-            arm_extension_max = 0
-            arm_extension_min = 0
-
-        # upper body angle
-        all_upper_body_angles = []
-
-        for pose_idx in range(2):
-            all_upper_body_angles.extend(upper_body_angles[pose_idx])
-
-        if len(all_upper_body_angles):
-            upper_body_angle_mean = np.mean(all_upper_body_angles)
-            upper_body_angle_std = np.std(all_upper_body_angles)
-            upper_body_angle_max = np.max(all_upper_body_angles)
-            upper_body_angle_min = np.min(all_upper_body_angles)
-        else:
-            upper_body_angle_mean = 0
-            upper_body_angle_std = 0
-            upper_body_angle_max = 0
-            upper_body_angle_min = 0
-
-        # 저장
-        pose_features.append({
-            "video": video_name,
-            "label": label,
-            "frame_count": frame_idx,
-            # Hand Motion
-            "hand_motion_sum": hand_motion_sum,
-            "hand_motion_mean": hand_motion_mean,
-            "hand_motion_std": hand_motion_std,
-            "hand_motion_max": hand_motion_max,
-
-            # Body Motion
-            "body_motion_sum": body_motion_sum,
-            "body_motion_mean": body_motion_mean,
-            "body_motion_std": body_motion_std,
-            "body_motion_max": body_motion_max,
-
-            # Upper Body Angle
-            "upper_body_angle_mean": upper_body_angle_mean,
-            "upper_body_angle_std": upper_body_angle_std,
-            "upper_body_angle_max": upper_body_angle_max,
-            "upper_body_angle_min": upper_body_angle_min,
-
-            # Arm Extension
-            "arm_extension_mean": arm_extension_mean,
-            "arm_extension_std": arm_extension_std,
-            "arm_extension_max": arm_extension_max,
-            "arm_extension_min": arm_extension_min
-        })
-
-        print("pose feature 추출 완료")
-
-    except Exception as e:
-
-        print()
-        print("에러 발생 -> skip")
-        print(video_name)
-        print(e)
-
-        continue
-
-# CSV 저장
-pose_df = pd.DataFrame( pose_features )
-pose_df.to_csv(
-    "./results/after_augmentation/pose_features(07.12).csv",
-    index=False,
-    encoding="utf-8-sig"
-)
-
-print()
-print("=" * 50)
-print("pose_features(07.12).csv 저장 완료")
-print("총 row:", len(pose_df))
-
-cv2.destroyAllWindows()
+if __name__ == "__main__":
+    main()
