@@ -8,6 +8,7 @@ import tempfile
 import os
 import tensorflow as tf
 import logging
+import shutil
 
 from feature import audio_to_mel
 
@@ -28,8 +29,6 @@ logger = logging.getLogger(__name__)
 # FastAPI
 # =============================
 
-keras = tf.keras
-
 app = FastAPI()
 
 
@@ -44,9 +43,11 @@ MODEL_PATH = os.path.join(
 
 SAMPLE_RATE = 22050
 
-# 현재 V3 기준 임시 Threshold
-# 이후 0.7 ~ 0.9 세부 실험 후 변경 가능
+# 현재 V3 기준 Threshold
 THRESHOLD = 0.7
+
+# FFmpeg
+FFMPEG_PATH = shutil.which("ffmpeg")
 
 
 # =============================
@@ -64,13 +65,21 @@ class PredictResponse(BaseModel):
 
 logger.info("Loading model...")
 
-model = keras.models.load_model(
+model = tf.keras.models.load_model(
     MODEL_PATH,
     compile=False
 )
 
 logger.info(
     f"MODEL LOADED : {MODEL_PATH}"
+)
+
+logger.info(
+    f"THRESHOLD : {THRESHOLD}"
+)
+
+logger.info(
+    f"FFMPEG PATH : {FFMPEG_PATH}"
 )
 
 
@@ -105,8 +114,8 @@ def preprocess(audio, sr):
 def predict_risk(audio, sr):
 
     """
-    하나의 3초 Audio Chunk를
-    Normal / Abnormal로 분석한다.
+    하나의 약 3초 Audio Chunk를
+    Normal / Abnormal로 분석
     """
 
     # -----------------------------
@@ -117,7 +126,6 @@ def predict_risk(audio, sr):
         audio,
         sr
     )
-
 
     logger.info(
         "========== AUDIO INFO =========="
@@ -130,7 +138,6 @@ def predict_risk(audio, sr):
     logger.info(
         f"sample rate  : {sr}"
     )
-
 
     logger.info(
         "========== MEL INFO =========="
@@ -154,11 +161,11 @@ def predict_risk(audio, sr):
 
 
     # -----------------------------
-    # CNN Input Shape
+    # CNN Input
     #
-    # (128,128)
+    # (128, 128)
     # ↓
-    # (1,128,128,1)
+    # (1, 128, 128, 1)
     # -----------------------------
 
     mel_input = np.expand_dims(
@@ -168,7 +175,7 @@ def predict_risk(audio, sr):
 
 
     # -----------------------------
-    # Model Prediction
+    # Prediction
     # -----------------------------
 
     pred = model.predict(
@@ -176,9 +183,8 @@ def predict_risk(audio, sr):
         verbose=0
     )
 
-
     score = float(
-        pred[0][0]
+        pred.reshape(-1)[0]
     )
 
 
@@ -198,11 +204,11 @@ def predict_risk(audio, sr):
     )
 
     logger.info(
-        f"raw score : {score}"
+        f"raw score  : {score}"
     )
 
     logger.info(
-        f"threshold : {THRESHOLD}"
+        f"threshold  : {THRESHOLD}"
     )
 
     logger.info(
@@ -214,10 +220,67 @@ def predict_risk(audio, sr):
     )
 
 
-    return (
-        status,
-        score
+    return status, score
+
+
+# =============================
+# Audio Conversion
+# =============================
+
+def convert_to_wav(
+    input_path,
+    output_path
+):
+
+    """
+    입력 오디오를
+    22050Hz / Mono WAV로 변환
+    """
+
+    if not FFMPEG_PATH:
+
+        raise RuntimeError(
+            "FFmpeg를 찾을 수 없습니다."
+        )
+
+
+    result = subprocess.run(
+        [
+            FFMPEG_PATH,
+            "-y",
+            "-i",
+            input_path,
+
+            "-ar",
+            str(SAMPLE_RATE),
+
+            "-ac",
+            "1",
+
+            "-c:a",
+            "pcm_s16le",
+
+            output_path
+        ],
+        capture_output=True,
+        text=True
     )
+
+
+    if result.returncode != 0:
+
+        logger.error(
+            "FFmpeg conversion failed"
+        )
+
+        logger.error(
+            result.stderr
+        )
+
+        return False
+
+
+    return True
 
 
 # =============================
@@ -233,18 +296,17 @@ async def predict(
 ):
 
     """
-    Spring에서 전달받은
-    약 3초 길이의 오디오 파일을 분석한다.
-
-    Flow
-
     Raspberry Pi
+        ↓
+    약 3초 오디오 수집
         ↓
     Spring
         ↓
     POST /predict
         ↓
-    WAV 변환
+    FastAPI
+        ↓
+    22050Hz / Mono 변환
         ↓
     Mel Spectrogram
         ↓
@@ -265,7 +327,7 @@ async def predict(
     try:
 
         # =============================
-        # Upload File Read
+        # 파일 읽기
         # =============================
 
         contents = await file.read()
@@ -284,16 +346,20 @@ async def predict(
 
 
         # =============================
-        # 임시 원본 파일 저장
+        # 확장자 확인
         # =============================
 
         suffix = (
             os.path.splitext(
                 file.filename
             )[-1]
-            or ".m4a"
+            or ".wav"
         )
 
+
+        # =============================
+        # 임시 파일 저장
+        # =============================
 
         with tempfile.NamedTemporaryFile(
             delete=False,
@@ -308,64 +374,28 @@ async def predict(
 
 
         # =============================
-        # WAV 변환 경로
+        # 변환된 WAV 경로
         # =============================
 
         wav_path = (
             os.path.splitext(
                 tmp_path
             )[0]
-            + ".wav"
+            + "_converted.wav"
         )
 
 
         # =============================
-        # FFmpeg
+        # FFmpeg 변환
         # =============================
 
-        FFMPEG_PATH = (
-            r"C:\Users\DS\Downloads"
-            r"\ffmpeg-2026-06-01-git-bf608f16fd-essentials_build"
-            r"\ffmpeg-2026-06-01-git-bf608f16fd-essentials_build"
-            r"\bin\ffmpeg.exe"
+        conversion_success = convert_to_wav(
+            tmp_path,
+            wav_path
         )
 
 
-        result = subprocess.run(
-            [
-                FFMPEG_PATH,
-                "-y",
-                "-i",
-                tmp_path,
-
-                # 학습 조건과 동일
-                "-ar",
-                str(SAMPLE_RATE),
-
-                # Mono
-                "-ac",
-                "1",
-
-                wav_path
-            ],
-            capture_output=True,
-            text=True
-        )
-
-
-        # =============================
-        # FFmpeg 실패
-        # =============================
-
-        if result.returncode != 0:
-
-            logger.error(
-                "FFmpeg conversion failed"
-            )
-
-            logger.error(
-                result.stderr
-            )
+        if not conversion_success:
 
             return {
                 "status": "error_ffmpeg",
@@ -385,7 +415,7 @@ async def predict(
 
 
         # =============================
-        # Audio 길이 확인
+        # Audio Length
         # =============================
 
         duration = (
@@ -399,7 +429,8 @@ async def predict(
         )
 
 
-        # 너무 짧은 오디오는 분석하지 않음
+        # 너무 짧으면 분석 X
+
         if duration < 1.0:
 
             logger.warning(
@@ -415,7 +446,7 @@ async def predict(
         # =============================
         # Prediction
         #
-        # Spring이 이미 약 3초 단위로
+        # Spring에서 이미 약 3초씩
         # 전달하므로 Sliding Window 없음
         # =============================
 
@@ -424,6 +455,10 @@ async def predict(
             sr
         )
 
+
+        # =============================
+        # Result
+        # =============================
 
         logger.info(
             "========== FINAL RESULT =========="
@@ -442,17 +477,9 @@ async def predict(
         )
 
 
-        # =============================
-        # Response
-        # =============================
-
         return {
-
-            "status":
-                status,
-
-            "probability":
-                probability
+            "status": status,
+            "probability": probability
         }
 
 
@@ -466,14 +493,9 @@ async def predict(
             f"API ERROR : {e}"
         )
 
-
         return {
-
-            "status":
-                "error",
-
-            "probability":
-                0.0
+            "status": "error",
+            "probability": 0.0
         }
 
 
@@ -519,5 +541,7 @@ def health():
         "model": os.path.basename(
             MODEL_PATH
         ),
-        "threshold": THRESHOLD
+        "threshold": THRESHOLD,
+        "sample_rate": SAMPLE_RATE,
+        "ffmpeg": FFMPEG_PATH
     }
