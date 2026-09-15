@@ -10,7 +10,7 @@ import tensorflow as tf
 import logging
 import shutil
 
-from feature import audio_to_mel
+from feature import audio_to_mel, audio_to_mel_windows
 
 
 # =============================
@@ -36,15 +36,19 @@ app = FastAPI()
 # 설정
 # =============================
 
-MODEL_PATH = os.path.join(
-    "models",
-    "audio_model_v3_weight_1_1.keras"
+MODEL_PATH = os.getenv(
+    "AUDIO_MODEL_PATH", "models/audio_model_v3_weight_1_1.keras"
 )
+AUDIO_PIPELINE_VERSION = os.getenv("AUDIO_PIPELINE_VERSION", "v3")
+if AUDIO_PIPELINE_VERSION not in {"v3", "v4"}:
+    raise ValueError("AUDIO_PIPELINE_VERSION must be v3 or v4")
 
 SAMPLE_RATE = 22050
 
 # 현재 V3 기준 Threshold
-THRESHOLD = 0.7
+THRESHOLD = float(os.getenv("AUDIO_THRESHOLD", "0.7"))
+if not 0.0 < THRESHOLD < 1.0:
+    raise ValueError("AUDIO_THRESHOLD must be between 0 and 1")
 
 # FFmpeg
 FFMPEG_PATH = shutil.which("ffmpeg")
@@ -122,10 +126,12 @@ def predict_risk(audio, sr):
     # Mel Spectrogram
     # -----------------------------
 
-    mel = preprocess(
-        audio,
-        sr
-    )
+    if AUDIO_PIPELINE_VERSION == "v4":
+        mel_windows = audio_to_mel_windows(audio, sr)
+    else:
+        # Preserve existing production preprocessing for the v3 model.
+        mel_windows = preprocess(audio, sr)[np.newaxis, ...]
+    mel = mel_windows[0]
 
     logger.info(
         "========== AUDIO INFO =========="
@@ -168,10 +174,7 @@ def predict_risk(audio, sr):
     # (1, 128, 128, 1)
     # -----------------------------
 
-    mel_input = np.expand_dims(
-        mel,
-        axis=(0, -1)
-    )
+    mel_input = mel_windows[..., np.newaxis]
 
 
     # -----------------------------
@@ -183,9 +186,7 @@ def predict_risk(audio, sr):
         verbose=0
     )
 
-    score = float(
-        pred.reshape(-1)[0]
-    )
+    score = float(pred.reshape(-1).max())
 
 
     # -----------------------------
