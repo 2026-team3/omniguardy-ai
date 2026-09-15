@@ -1,4 +1,4 @@
-"""Shared model/preprocessing/threshold manifest for evaluation, API and CLI."""
+"""평가·API·CLI에서 공통으로 사용하는 모델·전처리·임계치 설정을 관리합니다."""
 
 import json
 import os

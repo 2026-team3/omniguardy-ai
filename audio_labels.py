@@ -1,4 +1,4 @@
-"""Shared binary labels and ESC-50 categories considered abnormal."""
+"""공통 이진 라벨과 비정상으로 분류할 ESC-50 클래스를 정의합니다."""
 
 LABELS = {"normal": 0, "abnormal": 1}
 TARGET_CLASSES = frozenset({

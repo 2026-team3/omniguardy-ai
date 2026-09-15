@@ -1,4 +1,4 @@
-"""Label field WAV recordings by their normal/abnormal parent directory."""
+"""현장 WAV의 상위 normal/abnormal 폴더를 기준으로 라벨을 부여합니다."""
 
 from pathlib import Path
 import csv
@@ -25,11 +25,11 @@ def split_field_files(dataset_dir: Path, validation_size=0.2, seed=42):
 
 
 def split_field_three_way(dataset_dir: Path, split_csv=None, seed=42):
-    """Return original-file train/validation/test splits before windowing.
+    """윈도우를 만들기 전에 원본 파일을 학습·검증·테스트로 분리합니다.
 
-    A manifest with filename,split,group_id is the safe way to keep a session
-    or source recording in one split. Without it, file-level separation only
-    is possible and a warning is emitted.
+    filename,split,group_id 목록을 제공하면 같은 세션이나 원본 녹음을
+    한 분할에 묶을 수 있습니다. 목록이 없으면 파일 단위로만 분리하고
+    세션 누수 가능성을 경고합니다.
     """
     files = [(path, label)
              for folder, label in (("normal", 0), ("abnormal", 1))

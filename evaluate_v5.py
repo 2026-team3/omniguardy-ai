@@ -1,4 +1,4 @@
-"""Choose a V5 threshold on validation, then test ESC and field separately."""
+"""검증셋에서 V5 임계치를 선택한 뒤 ESC와 현장 데이터를 따로 테스트합니다."""
 
 import argparse
 import json
@@ -47,7 +47,7 @@ def choose_threshold(esc_y, esc_scores, field_y, field_scores, min_recall=None):
         rows = [row for row in rows if row[2]["recall"] >= min_recall]
         if not rows:
             raise ValueError("No threshold meets field validation recall target")
-        # Among thresholds meeting field recall, reduce field false alarms.
+        # 현장 재현율 조건을 만족하는 후보 중 현장 오탐을 줄이는 임계치를 선택합니다.
         return max(rows, key=lambda row: (row[2]["precision"],
                                           row[2]["f1"], row[3]["f1"]))
     return max(rows, key=lambda row: (row[3]["f1"], row[2]["recall"]))

@@ -14,7 +14,7 @@ from audio_runtime import load_config, model_input, predict_label
 
 
 # =============================
-# Logging
+# 로깅
 # =============================
 
 logging.basicConfig(
@@ -46,7 +46,7 @@ FFMPEG_PATH = shutil.which("ffmpeg")
 
 
 # =============================
-# Response Schema
+# 응답 형식
 # =============================
 
 class PredictResponse(BaseModel):
@@ -55,7 +55,7 @@ class PredictResponse(BaseModel):
 
 
 # =============================
-# Model Load
+# 모델 로드
 # =============================
 
 logger.info("Loading model...")
@@ -79,11 +79,11 @@ logger.info(
 
 
 # =============================
-# Preprocess
+# 전처리
 # =============================
 
 # =============================
-# Prediction
+# 예측
 # =============================
 
 def predict_risk(audio, sr):
@@ -93,7 +93,7 @@ def predict_risk(audio, sr):
     """
 
     # -----------------------------
-    # Mel Spectrogram
+    # Mel 스펙트로그램
     # -----------------------------
 
     mel_input = model_input(audio, sr, CONFIG)
@@ -133,7 +133,7 @@ def predict_risk(audio, sr):
 
 
     # -----------------------------
-    # CNN Input
+    # CNN 입력
     #
     # (128, 128)
     # ↓
@@ -141,7 +141,7 @@ def predict_risk(audio, sr):
     # -----------------------------
 
     # -----------------------------
-    # Prediction
+    # 예측
     # -----------------------------
 
     pred = model.predict(
@@ -153,7 +153,7 @@ def predict_risk(audio, sr):
 
 
     # -----------------------------
-    # Threshold
+    # 임계치
     # -----------------------------
 
     status = predict_label(score, CONFIG)
@@ -184,7 +184,7 @@ def predict_risk(audio, sr):
 
 
 # =============================
-# Audio Conversion
+# 오디오 변환
 # =============================
 
 def convert_to_wav(
@@ -364,7 +364,7 @@ async def predict(
 
 
         # =============================
-        # WAV Load
+        # WAV 로드
         # =============================
 
         audio, sr = librosa.load(
@@ -375,7 +375,7 @@ async def predict(
 
 
         # =============================
-        # Audio Length
+        # 오디오 길이
         # =============================
 
         duration = (
@@ -404,7 +404,7 @@ async def predict(
 
 
         # =============================
-        # Prediction: V5 uses the same bounded window bag as training.
+        # 예측: V5는 학습 때와 같은 제한된 윈도우 묶음을 사용합니다.
         # =============================
 
         status, probability = predict_risk(
@@ -414,7 +414,7 @@ async def predict(
 
 
         # =============================
-        # Result
+        # 결과
         # =============================
 
         logger.info(
@@ -441,7 +441,7 @@ async def predict(
 
 
     # =============================
-    # Exception
+    # 예외 처리
     # =============================
 
     except Exception as e:
@@ -487,7 +487,7 @@ async def predict(
 
 
 # =============================
-# Health Check
+# 상태 확인
 # =============================
 
 @app.get("/health")

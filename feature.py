@@ -9,14 +9,14 @@ WINDOW_HOP_SECONDS = 1.0
 def audio_to_mel(audio, sr):
 
     """
-    Audio waveform
+    오디오 파형
     ->
-    Mel Spectrogram
+    Mel 스펙트로그램
     ->
     (128,128)
     """
 
-    # Mel Spectrogram 생성
+    # Mel 스펙트로그램 생성
     mel = librosa.feature.melspectrogram(
         y=audio,
         sr=sr,
@@ -65,14 +65,14 @@ def audio_to_mel(audio, sr):
 
 
 def load_audio(path):
-    """Use the same sample rate and mono conversion for training and evaluation."""
+    """학습과 평가에서 같은 샘플레이트와 모노 변환을 사용합니다."""
     audio, sr = librosa.load(path, sr=SAMPLE_RATE, mono=True)
     return audio.astype(np.float32), sr
 
 
 def audio_windows(audio, sr, window_seconds=WINDOW_SECONDS,
                   hop_seconds=WINDOW_HOP_SECONDS):
-    """Cover the whole clip, including an event near its end."""
+    """끝부분 이벤트까지 포함하도록 클립 전체를 윈도우로 나눕니다."""
     window_samples = int(round(window_seconds * sr))
     hop_samples = int(round(hop_seconds * sr))
     if window_samples <= 0 or hop_samples <= 0:
@@ -97,7 +97,7 @@ def audio_to_mel_windows(audio, sr):
 
 
 def audio_to_mel_v5(audio, sr):
-    """New-model feature: retain the full 3-second interval in 128 columns."""
+    """새 모델의 3초 구간 전체를 128열 특징으로 유지합니다."""
     mel = librosa.feature.melspectrogram(
         y=np.asarray(audio, dtype=np.float32), sr=sr,
         n_mels=128, n_fft=2048, hop_length=512,
@@ -112,7 +112,7 @@ def audio_to_mel_v5(audio, sr):
 
 
 def audio_to_mel_bag(audio, sr, max_windows=8):
-    """One recording is one bag; cap its windows to limit length bias."""
+    """녹음 하나를 묶음 하나로 처리하고 길이 편향을 막도록 윈도우 수를 제한합니다."""
     if max_windows < 1:
         raise ValueError("max_windows must be positive")
     windows = list(audio_windows(audio, sr))
@@ -120,6 +120,6 @@ def audio_to_mel_bag(audio, sr, max_windows=8):
         indexes = np.linspace(0, len(windows) - 1, max_windows)
         windows = [windows[int(round(index))] for index in indexes]
     features = [audio_to_mel_v5(window, sr) for window in windows]
-    # Repeating a real window avoids inventing a high-energy padded window.
+    # 실제 윈도우를 반복해 인위적인 고에너지 패딩 윈도우가 생기지 않도록 합니다.
     features.extend([features[-1]] * (max_windows - len(features)))
     return np.asarray(features, dtype=np.float32)

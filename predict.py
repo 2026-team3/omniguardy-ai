@@ -1,4 +1,4 @@
-"""CLI audio inference using the same manifest as the FastAPI service."""
+"""FastAPI와 동일한 설정을 읽어 CLI에서 오디오를 추론합니다."""
 
 import argparse
 from pathlib import Path

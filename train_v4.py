@@ -1,4 +1,4 @@
-"""Train on ESC-50 and labeled field door-lock recordings without file leakage."""
+"""파일 누수 없이 ESC-50과 라벨링된 현장 도어락 녹음으로 학습합니다."""
 
 import argparse
 from pathlib import Path

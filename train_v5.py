@@ -1,4 +1,4 @@
-"""File-label multiple-instance training with bounded 3-second audio bags."""
+"""3초 윈도우 수를 제한한 묶음으로 파일 단위 MIL 학습을 수행합니다."""
 
 import argparse
 from pathlib import Path

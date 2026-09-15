@@ -1,4 +1,4 @@
-"""Select a threshold on fold 4; report untouched fold 5 results separately."""
+"""Fold 4에서 임계치를 선택하고 사용하지 않은 fold 5 결과를 따로 출력합니다."""
 
 import argparse
 from pathlib import Path
@@ -19,7 +19,7 @@ def predict_fold(model, df, audio_dir, fold):
         audio, sr = load_audio(audio_dir / row.filename)
         windows = audio_to_mel_windows(audio, sr)[..., None]
         window_scores = model.predict(windows, verbose=0).reshape(-1)
-        # A clip is abnormal if one of its windows contains the event.
+        # 윈도우 하나라도 이상 이벤트를 포함하면 해당 클립을 비정상으로 판정합니다.
         scores.append(float(window_scores.max()))
         labels.append(int(row.category in TARGET_CLASSES))
         categories.append(row.category)
@@ -67,8 +67,8 @@ def main():
     val_scores = np.concatenate([val_scores, field_scores])
     candidates = [metrics(val_y, val_scores, float(t))
                   for t in np.arange(0.05, 0.951, 0.05)]
-    # Use validation only for threshold selection; safety constraints can be
-    # introduced here if a minimum recall is required by the product.
+    # 임계치는 검증 데이터에서만 선택합니다. 제품의 최소 재현율 기준이
+    # 필요하다면 이 단계에 안전 조건을 추가할 수 있습니다.
     selected = max(candidates, key=lambda item: item["f1"])
     print("validation threshold sweep:")
     print(pd.DataFrame(candidates).to_string(index=False))

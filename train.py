@@ -41,13 +41,13 @@ for _, row in df.iterrows():
 
     audio, sr = sf.read(audio_path)
 
-    # mono
+    # 모노 변환
     if audio.ndim > 1:
         audio = np.mean(audio, axis=1)
 
     mel = audio_to_mel(audio, sr)
 
-    # shape 고정
+    # 입력 크기 고정
     mel = np.resize(mel, (128, 128))
 
     X.append(mel)
@@ -64,7 +64,7 @@ print("Negative:", len(y) - np.sum(y))
 
 
 # -----------------------
-# train/test split
+# 학습·테스트 데이터 분할
 # -----------------------
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,
@@ -75,7 +75,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 
 # -----------------------
-# class weight
+# 클래스 가중치
 # -----------------------
 weights = compute_class_weight(
     class_weight="balanced",
@@ -87,7 +87,7 @@ class_weights = {i: w for i, w in enumerate(weights)}
 
 
 # -----------------------
-# CNN model
+# CNN 모델
 # -----------------------
 model = models.Sequential([
     layers.Input(shape=(128, 128, 1)),
