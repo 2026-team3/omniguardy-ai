@@ -17,10 +17,10 @@ training and held-out testing.
    FP alongside the old system's results before deployment.
    Run `python -m unittest test_feature_windows.py test_field_dataset.py` for
    the windowing and directory-label checks.
-4. Deploy the new model only after validation: set `AUDIO_MODEL_PATH` to the
-   v4 model, `AUDIO_PIPELINE_VERSION=v4`, and `AUDIO_THRESHOLD` to the selected
-   threshold. The API defaults to the existing v3 model, v3 preprocessing, and
-   0.7 threshold until explicitly changed.
+4. V4 is retained as a historical window-label experiment. Use V5 for new
+   training and evaluation. The API and CLI now read `audio_config.json` by
+   default, preserving the existing V3 model and 0.7 threshold. Set
+   `AUDIO_CONFIG_PATH` to a validated model manifest to deploy a new model.
 
 The field validation has only a few original recordings and must not be treated
 as a reliable field test. Verify that different takes from the same recording

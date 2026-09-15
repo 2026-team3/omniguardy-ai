@@ -1,0 +1,9 @@
+{
+  "model_path": "models/audio_model_v3_weight_1_1.keras",
+  "pipeline": "v3",
+  "sample_rate": 22050,
+  "labels": {"normal": 0, "abnormal": 1},
+  "esc_abnormal_categories": ["door_wood_knock", "door_wood_creaks", "glass_breaking", "siren", "chainsaw", "footsteps"],
+  "threshold": 0.7,
+  "max_windows": 8
+}

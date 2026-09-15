@@ -10,11 +10,7 @@ from sklearn.utils.class_weight import compute_class_weight
 
 from feature import audio_to_mel_windows, load_audio
 from field_dataset import split_field_files
-
-TARGET_CLASSES = {
-    "door_wood_knock", "door_wood_creaks", "glass_breaking",
-    "siren", "chainsaw", "footsteps",
-}
+from audio_labels import TARGET_CLASSES
 
 
 def load_fold(df, audio_dir, folds):

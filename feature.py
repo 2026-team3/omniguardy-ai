@@ -94,3 +94,32 @@ def audio_windows(audio, sr, window_seconds=WINDOW_SECONDS,
 def audio_to_mel_windows(audio, sr):
     return np.stack([audio_to_mel(window, sr)
                      for window in audio_windows(audio, sr)])
+
+
+def audio_to_mel_v5(audio, sr):
+    """New-model feature: retain the full 3-second interval in 128 columns."""
+    mel = librosa.feature.melspectrogram(
+        y=np.asarray(audio, dtype=np.float32), sr=sr,
+        n_mels=128, n_fft=2048, hop_length=512,
+    )
+    mel = librosa.power_to_db(mel, ref=np.max, top_db=80)
+    if mel.shape[1] == 1:
+        return np.repeat(mel, 128, axis=1).astype(np.float32)
+    positions = np.linspace(0, mel.shape[1] - 1, 128)
+    source = np.arange(mel.shape[1])
+    resized = np.stack([np.interp(positions, source, row) for row in mel])
+    return resized.astype(np.float32)
+
+
+def audio_to_mel_bag(audio, sr, max_windows=8):
+    """One recording is one bag; cap its windows to limit length bias."""
+    if max_windows < 1:
+        raise ValueError("max_windows must be positive")
+    windows = list(audio_windows(audio, sr))
+    if len(windows) > max_windows:
+        indexes = np.linspace(0, len(windows) - 1, max_windows)
+        windows = [windows[int(round(index))] for index in indexes]
+    features = [audio_to_mel_v5(window, sr) for window in windows]
+    # Repeating a real window avoids inventing a high-energy padded window.
+    features.extend([features[-1]] * (max_windows - len(features)))
+    return np.asarray(features, dtype=np.float32)

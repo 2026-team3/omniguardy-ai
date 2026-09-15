@@ -10,7 +10,7 @@ from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_
 
 from feature import audio_to_mel_windows, load_audio
 from field_dataset import split_field_files
-from train_v4 import TARGET_CLASSES
+from audio_labels import TARGET_CLASSES
 
 
 def predict_fold(model, df, audio_dir, fold):

@@ -10,7 +10,7 @@ import tensorflow as tf
 import logging
 import shutil
 
-from feature import audio_to_mel, audio_to_mel_windows
+from audio_runtime import load_config, model_input, predict_label
 
 
 # =============================
@@ -36,19 +36,10 @@ app = FastAPI()
 # 설정
 # =============================
 
-MODEL_PATH = os.getenv(
-    "AUDIO_MODEL_PATH", "models/audio_model_v3_weight_1_1.keras"
-)
-AUDIO_PIPELINE_VERSION = os.getenv("AUDIO_PIPELINE_VERSION", "v3")
-if AUDIO_PIPELINE_VERSION not in {"v3", "v4"}:
-    raise ValueError("AUDIO_PIPELINE_VERSION must be v3 or v4")
-
-SAMPLE_RATE = 22050
-
-# 현재 V3 기준 Threshold
-THRESHOLD = float(os.getenv("AUDIO_THRESHOLD", "0.7"))
-if not 0.0 < THRESHOLD < 1.0:
-    raise ValueError("AUDIO_THRESHOLD must be between 0 and 1")
+CONFIG = load_config()
+MODEL_PATH = CONFIG["model_path"]
+SAMPLE_RATE = CONFIG["sample_rate"]
+THRESHOLD = CONFIG["threshold"]
 
 # FFmpeg
 FFMPEG_PATH = shutil.which("ffmpeg")
@@ -91,26 +82,6 @@ logger.info(
 # Preprocess
 # =============================
 
-def preprocess(audio, sr):
-
-    """
-    Audio waveform
-        ↓
-    Mel Spectrogram
-        ↓
-    (128, 128)
-    """
-
-    mel = audio_to_mel(
-        audio,
-        sr
-    )
-
-    return mel.astype(
-        np.float32
-    )
-
-
 # =============================
 # Prediction
 # =============================
@@ -118,20 +89,15 @@ def preprocess(audio, sr):
 def predict_risk(audio, sr):
 
     """
-    하나의 약 3초 Audio Chunk를
-    Normal / Abnormal로 분석
+    설정된 모델과 전처리로 Audio를 Normal / Abnormal로 분석
     """
 
     # -----------------------------
     # Mel Spectrogram
     # -----------------------------
 
-    if AUDIO_PIPELINE_VERSION == "v4":
-        mel_windows = audio_to_mel_windows(audio, sr)
-    else:
-        # Preserve existing production preprocessing for the v3 model.
-        mel_windows = preprocess(audio, sr)[np.newaxis, ...]
-    mel = mel_windows[0]
+    mel_input = model_input(audio, sr, CONFIG)
+    mel = mel_input.reshape(-1, 128, 128)[0]
 
     logger.info(
         "========== AUDIO INFO =========="
@@ -174,9 +140,6 @@ def predict_risk(audio, sr):
     # (1, 128, 128, 1)
     # -----------------------------
 
-    mel_input = mel_windows[..., np.newaxis]
-
-
     # -----------------------------
     # Prediction
     # -----------------------------
@@ -193,11 +156,7 @@ def predict_risk(audio, sr):
     # Threshold
     # -----------------------------
 
-    status = (
-        "abnormal"
-        if score >= THRESHOLD
-        else "normal"
-    )
+    status = predict_label(score, CONFIG)
 
 
     logger.info(
@@ -311,7 +270,7 @@ async def predict(
         ↓
     Mel Spectrogram
         ↓
-    Audio CNN V3
+        Configured Audio CNN
         ↓
     Normal / Abnormal
     """
@@ -445,10 +404,7 @@ async def predict(
 
 
         # =============================
-        # Prediction
-        #
-        # Spring에서 이미 약 3초씩
-        # 전달하므로 Sliding Window 없음
+        # Prediction: V5 uses the same bounded window bag as training.
         # =============================
 
         status, probability = predict_risk(
@@ -542,6 +498,7 @@ def health():
         "model": os.path.basename(
             MODEL_PATH
         ),
+        "pipeline": CONFIG["pipeline"],
         "threshold": THRESHOLD,
         "sample_rate": SAMPLE_RATE,
         "ffmpeg": FFMPEG_PATH
