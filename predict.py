@@ -6,7 +6,7 @@ from pathlib import Path
 import tensorflow as tf
 
 from audio_runtime import load_config, predict_label, predict_score
-from feature import load_audio
+from audio_guard.infrastructure.audio.librosa_loader import load_audio
 
 
 def predict_audio(audio_path, config_path=None):

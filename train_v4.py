@@ -8,7 +8,8 @@ import pandas as pd
 import tensorflow as tf
 from sklearn.utils.class_weight import compute_class_weight
 
-from feature import audio_to_mel_windows, load_audio
+from audio_guard.domain.pipeline.v4_windowed import audio_to_mel_windows
+from audio_guard.infrastructure.audio.librosa_loader import load_audio
 from field_dataset import split_field_files
 from audio_labels import TARGET_CLASSES
 

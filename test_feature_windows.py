@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from feature import audio_windows
+from audio_guard.domain.pipeline.v4_windowed import audio_windows
 
 
 class AudioWindowsTest(unittest.TestCase):

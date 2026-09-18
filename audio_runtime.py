@@ -6,8 +6,9 @@ from pathlib import Path
 
 import numpy as np
 
-from feature import SAMPLE_RATE, audio_to_mel, audio_to_mel_bag, audio_to_mel_windows
 from audio_labels import LABELS, TARGET_CLASSES
+from audio_guard.domain.pipeline import create_pipeline
+from audio_guard.domain.pipeline.base import SAMPLE_RATE
 
 DEFAULT_CONFIG = Path(__file__).parent / "configs" / "audio_config.json"
 
@@ -40,11 +41,8 @@ def load_config(path=None):
 def model_input(audio, sr, config):
     if sr != config["sample_rate"]:
         raise ValueError("Audio must be resampled before inference")
-    if config["pipeline"] == "v5":
-        return audio_to_mel_bag(audio, sr, config["max_windows"])[None, ..., None]
-    if config["pipeline"] == "v4":
-        return audio_to_mel_windows(audio, sr)[..., None]
-    return audio_to_mel(audio, sr)[None, ..., None]
+    pipeline = create_pipeline(config["pipeline"], config["max_windows"])
+    return pipeline.transform(audio, sr)
 
 
 def predict_score(model, audio, sr, config):

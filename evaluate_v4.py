@@ -8,7 +8,8 @@ import pandas as pd
 import tensorflow as tf
 from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score
 
-from feature import audio_to_mel_windows, load_audio
+from audio_guard.domain.pipeline.v4_windowed import audio_to_mel_windows
+from audio_guard.infrastructure.audio.librosa_loader import load_audio
 from field_dataset import split_field_files
 from audio_labels import TARGET_CLASSES
 

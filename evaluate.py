@@ -12,7 +12,7 @@ from sklearn.metrics import (
     confusion_matrix
 )
 
-from feature import audio_to_mel
+from audio_guard.domain.pipeline.v3_pipeline import audio_to_mel
 
 
 # ============================

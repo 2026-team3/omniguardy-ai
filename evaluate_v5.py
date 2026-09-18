@@ -9,7 +9,8 @@ import tensorflow as tf
 from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score
 
 from audio_runtime import LABELS, TARGET_CLASSES, predict_score
-from feature import SAMPLE_RATE, load_audio
+from audio_guard.domain.pipeline.base import SAMPLE_RATE
+from audio_guard.infrastructure.audio.librosa_loader import load_audio
 from field_dataset import split_field_three_way
 from train_v5 import examples_from_esc
 

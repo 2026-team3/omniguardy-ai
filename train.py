@@ -11,7 +11,7 @@ from sklearn.utils.class_weight import compute_class_weight
 import tensorflow as tf
 from tensorflow.keras import layers, models
 
-from feature import audio_to_mel
+from audio_guard.domain.pipeline.v3_pipeline import audio_to_mel
 
 
 # -----------------------

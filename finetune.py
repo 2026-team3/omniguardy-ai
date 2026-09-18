@@ -8,7 +8,7 @@ import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.utils.class_weight import compute_class_weight
 
-from feature import audio_to_mel
+from audio_guard.domain.pipeline.v3_pipeline import audio_to_mel
 
 
 # =====================================
