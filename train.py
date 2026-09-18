@@ -1,3 +1,5 @@
+import argparse
+
 import pandas as pd
 import numpy as np
 import soundfile as sf
@@ -24,7 +26,16 @@ TARGET_CLASSES = [
     "footsteps"
 ]
 
-BASE_DIR = Path(r"C:\Users\DS\Downloads\omniguardy-ai-audio\ESC-50")
+parser = argparse.ArgumentParser(description="ESC-50 오디오 모델을 학습합니다.")
+parser.add_argument(
+    "--esc50-dir",
+    type=Path,
+    default=Path("data/ESC-50"),
+    help="ESC-50 데이터셋 루트 경로 (기본값: data/ESC-50)",
+)
+args = parser.parse_args()
+
+BASE_DIR = args.esc50_dir
 CSV_PATH = BASE_DIR / "meta" / "esc50.csv"
 AUDIO_DIR = BASE_DIR / "audio"
 

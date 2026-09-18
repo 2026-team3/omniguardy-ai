@@ -1,5 +1,5 @@
 {
-  "model_path": "models/audio_model_v3_weight_1_1.keras",
+  "model_path": "../models/audio_model_v3_weight_1_1.keras",
   "pipeline": "v3",
   "sample_rate": 22050,
   "labels": {"normal": 0, "abnormal": 1},

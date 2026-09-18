@@ -9,7 +9,7 @@ import numpy as np
 from feature import SAMPLE_RATE, audio_to_mel, audio_to_mel_bag, audio_to_mel_windows
 from audio_labels import LABELS, TARGET_CLASSES
 
-DEFAULT_CONFIG = Path(__file__).with_name("audio_config.json")
+DEFAULT_CONFIG = Path(__file__).parent / "configs" / "audio_config.json"
 
 
 def load_config(path=None):
