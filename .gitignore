@@ -28,3 +28,7 @@ Thumbs.db
 # logs (선택)
 logs/
 *.log
+
+# 원본 오디오 데이터와 실험 산출물
+data/
+results/
