@@ -6,9 +6,9 @@ from pathlib import Path
 
 import numpy as np
 
-from audio_labels import LABELS, TARGET_CLASSES
 from audio_guard.domain.pipeline import create_pipeline
 from audio_guard.domain.pipeline.base import SAMPLE_RATE
+from audio_guard.labels import LABELS, TARGET_CLASSES
 
 DEFAULT_CONFIG = Path(__file__).parent / "configs" / "audio_config.json"
 

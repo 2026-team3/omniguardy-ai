@@ -4,7 +4,10 @@ from pathlib import Path
 
 import numpy as np
 
-from field_dataset import split_field_files, split_field_three_way
+from audio_guard.infrastructure.dataset.field_dataset import (
+    split_field_files,
+    split_field_three_way,
+)
 
 
 class FieldDatasetTest(unittest.TestCase):

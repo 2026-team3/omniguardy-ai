@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 
 from audio_runtime import load_config, model_input, predict_label
-from evaluate_v5 import choose_threshold
+from audio_guard.application.evaluate_model import choose_threshold
 from audio_guard.domain.pipeline.v5_bag import audio_to_mel_bag
 
 
