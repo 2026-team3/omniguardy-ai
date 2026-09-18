@@ -5,8 +5,10 @@ from pathlib import Path
 
 import numpy as np
 
-from audio_runtime import load_config, model_input, predict_label
 from audio_guard.application.evaluate_model import choose_threshold
+from audio_guard.config import load_config
+from audio_guard.domain.pipeline import create_pipeline
+from audio_guard.domain.risk_policy import predict_label
 from audio_guard.domain.pipeline.v5_bag import audio_to_mel_bag
 
 
@@ -30,9 +32,10 @@ class AudioV5Test(unittest.TestCase):
             }), encoding="utf-8")
             config = load_config(config_file)
             self.assertEqual(config["model_path"], str(root / "model.keras"))
-            self.assertEqual(predict_label(0.41, config), "normal")
-            self.assertEqual(predict_label(0.42, config), "abnormal")
-            features = model_input(np.zeros(22050 * 3), 22050, config)
+            self.assertEqual(predict_label(0.41, config["threshold"]), "normal")
+            self.assertEqual(predict_label(0.42, config["threshold"]), "abnormal")
+            pipeline = create_pipeline(config["pipeline"], config["max_windows"])
+            features = pipeline.transform(np.zeros(22050 * 3), 22050)
             self.assertEqual(features.shape, (1, 4, 128, 128, 1))
 
     def test_threshold_uses_validation_scores_and_field_recall_goal(self):

@@ -1,16 +1,13 @@
-"""평가·API·CLI에서 공통으로 사용하는 모델·전처리·임계치 설정을 관리합니다."""
+"""오디오 런타임 설정을 읽고 검증합니다."""
 
 import json
 import os
 from pathlib import Path
 
-import numpy as np
-
-from audio_guard.domain.pipeline import create_pipeline
 from audio_guard.domain.pipeline.base import SAMPLE_RATE
 from audio_guard.labels import LABELS, TARGET_CLASSES
 
-DEFAULT_CONFIG = Path(__file__).parent / "configs" / "audio_config.json"
+DEFAULT_CONFIG = Path(__file__).parents[2] / "configs" / "audio_config.json"
 
 
 def load_config(path=None):
@@ -30,25 +27,9 @@ def load_config(path=None):
     model_path = Path(config["model_path"])
     if not model_path.is_absolute():
         model_path = config_path.parent / model_path
-    config["model_path"] = str(model_path)
+    config["model_path"] = str(model_path.resolve())
     config["threshold"] = float(config["threshold"])
     config["max_windows"] = int(config.get("max_windows", 8))
     if config["max_windows"] < 1:
         raise ValueError("max_windows must be positive")
     return config
-
-
-def model_input(audio, sr, config):
-    if sr != config["sample_rate"]:
-        raise ValueError("Audio must be resampled before inference")
-    pipeline = create_pipeline(config["pipeline"], config["max_windows"])
-    return pipeline.transform(audio, sr)
-
-
-def predict_score(model, audio, sr, config):
-    scores = np.asarray(model.predict(model_input(audio, sr, config), verbose=0))
-    return float(scores.reshape(-1).max())
-
-
-def predict_label(score, config):
-    return "abnormal" if score >= config["threshold"] else "normal"
