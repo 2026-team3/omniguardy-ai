@@ -1,133 +1,143 @@
-# omniguardy-ai (audio)
+# omniguardy-ai audio
 
-Raspberry Pi에서 상시 수집되는 오디오를 분석해 **정상(normal) / 비정상(abnormal)** 을 판정하는 FastAPI 기반 오디오 이상탐지 서버입니다. `omniguardy-backend`(Spring Boot)로부터 3초 내외의 오디오 클립을 받아 Mel 스펙트로그램 CNN으로 추론하고, 결과를 반환합니다.
+FastAPI와 TensorFlow를 사용하는 오디오 이상 탐지 서버입니다. 오디오를 `normal` 또는 `abnormal`로 분류하며, v3·v4·v5 전처리 전략을 동일한 application 계층에서 선택해 사용할 수 있습니다.
 
-```
-Raspberry Pi → (오디오 수집) → Spring Boot → POST /predict → FastAPI
-    → 22050Hz/Mono 변환 → Mel Spectrogram → CNN 추론 → normal / abnormal
-```
+## 설치와 실행
 
-## 프로젝트 구조
-
-```
-src/audio_guard/
-├── domain/            # 프레임워크 의존 없는 순수 규칙
-│   ├── risk_policy.py     # threshold 기반 normal/abnormal 판정
-│   └── pipeline/           # 전처리 파이프라인 전략 (v3 / v4 / v5)
-├── application/        # 유스케이스 오케스트레이션
-│   ├── analyze_clip.py     # 추론 유스케이스
-│   ├── train_model.py      # 학습 유스케이스 (pipeline 인자로 v3/v4/v5 선택)
-│   ├── evaluate_model.py
-│   └── finetune_model.py
-├── infrastructure/     # 외부 기술 세부사항
-│   ├── ml/                 # Keras 모델 로딩·추론
-│   ├── audio/              # ffmpeg 변환, librosa 로딩
-│   └── dataset/            # ESC-50 / 현장 데이터셋 로딩
-├── interfaces/
-│   ├── api/                 # FastAPI 라우터
-│   └── cli/                 # predict / train / evaluate CLI
-├── config.py
-└── labels.py
-
-main.py          # FastAPI 앱 조립
-configs/          # audio_config.json
-tests/            # pytest
-data/             # 원본 오디오 (git 추적 X)
-results/          # 실험 산출물 csv (git 추적 X)
-docs/experiments/ # 버전별 실험 기록
-```
-
-> 위 구조는 리팩터링 진행 중입니다. 현재 브랜치가 아직 이 구조로 완전히 이전되지 않았다면, 루트의 `main.py` / `feature.py` / `train*.py` 등을 참고하세요.
-
-## 요구 사항
-
-- Python 3.10+
-- [FFmpeg](https://ffmpeg.org/) (시스템 PATH에 설치되어 있어야 함 — 업로드된 오디오를 22050Hz/Mono WAV로 변환하는 데 사용)
+Python 3.10 또는 3.11과 FFmpeg가 필요합니다.
 
 ```bash
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-```
-
-## 실행
-
-```bash
+pip install -e .
 uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-### API
-
-| Method | Path | 설명 |
-|---|---|---|
-| `POST` | `/predict` | 오디오 파일(`multipart/form-data`, key: `file`)을 받아 `{"status": "normal" \| "abnormal" \| "error_*", "probability": float}` 반환 |
-| `GET` | `/health` | 로드된 모델, 파이프라인 버전, threshold, sample rate, ffmpeg 경로 확인 |
+기본 설정 파일은 `configs/audio_config.json`입니다. 다른 설정은 `AUDIO_CONFIG_PATH` 환경 변수로 지정할 수 있습니다.
 
 ```bash
-curl -X POST http://localhost:8000/predict \
-  -F "file=@sample.wav"
+AUDIO_CONFIG_PATH=configs/audio_config.json uvicorn main:app
 ```
 
-### CLI 추론
+## 구조
 
-```bash
-python -m audio_guard.interfaces.cli.predict_cli sample.wav --config configs/audio_config.json
+```text
+src/audio_guard/
+├── domain/                  # 값 객체, 위험 판정 정책, 전처리 전략
+│   └── pipeline/            # v3/v4/v5 특징 추출
+├── application/             # 분석, 학습, 평가, 파인튜닝 유스케이스
+├── infrastructure/          # Keras, FFmpeg, librosa, 데이터셋 구현
+├── interfaces/
+│   ├── api/                 # FastAPI 라우터와 스키마
+│   └── cli/                 # 예측, 학습, 평가, 파인튜닝 CLI
+├── config.py
+└── labels.py
+
+configs/                     # 런타임 설정
+data/                        # 로컬 원본 데이터, Git 추적 제외
+results/                     # 평가·실험 산출물, Git 추적 제외
+docs/experiments/            # 버전별 실험 기록
+tests/                       # pytest 테스트
+main.py                      # FastAPI 의존성 조립
 ```
 
-## 설정 (`configs/audio_config.json`)
+## API
+
+### `POST /predict`
+
+multipart/form-data의 `file` 필드로 오디오 파일을 전송합니다. 서버는 FFmpeg로 22,050Hz 모노 WAV로 변환한 뒤 설정된 파이프라인과 모델로 분석합니다.
+
+정상 응답:
 
 ```json
 {
-  "model_path": "models/audio_model_v3_weight_1_1.keras",
-  "pipeline": "v3",
-  "sample_rate": 22050,
-  "labels": {"normal": 0, "abnormal": 1},
-  "esc_abnormal_categories": ["door_wood_knock", "door_wood_creaks", "glass_breaking", "siren", "chainsaw", "footsteps"],
-  "threshold": 0.7,
-  "max_windows": 8
+  "status": "normal",
+  "probability": 0.12
 }
 ```
 
-- `pipeline`: 사용할 전처리·모델 입력 전략 (`v3` / `v4` / `v5`). API·학습·평가 코드가 모두 이 값 하나로 동작을 분기합니다.
-- `threshold`: 이 값 이상의 점수를 abnormal로 판정합니다.
-- `labels`, `esc_abnormal_categories`, `sample_rate`는 학습 시점과 반드시 일치해야 하며, 불일치 시 기동 시점에 에러가 발생합니다.
+`status`는 `normal`, `abnormal` 또는 다음 오류 값입니다.
 
-## 파이프라인 버전
+- `error_empty_file`: 빈 파일
+- `error_ffmpeg`: 오디오 변환 실패
+- `error_short_audio`: 1초 미만 오디오
+- `error`: 그 밖의 처리 오류
 
-| 버전 | 특징 | 상세 |
-|---|---|---|
-| v3 | 클립 전체를 하나의 (128,128) Mel로 변환 | 최초 버전 |
-| v4 | 3초 윈도우로 클립을 분할해 각각 추론, 최대 점수로 판정 | 자세한 내용은 `docs/experiments/v4.md` |
-| v5 | 윈도우를 최대 `max_windows`개로 제한한 묶음(bag) 단위 MIL 학습 | 자세한 내용은 `docs/experiments/v5.md` |
+### `GET /health`
 
-## 학습 / 평가 / 파인튜닝
+현재 모델 이름, 파이프라인, 임계치, 샘플레이트와 FFmpeg 경로를 반환합니다.
+
+## 설정
+
+`configs/audio_config.json`의 필드는 다음과 같습니다.
+
+| 필드 | 설명 |
+| --- | --- |
+| `model_path` | 설정 파일을 기준으로 한 Keras 모델 경로 |
+| `pipeline` | `v3`, `v4`, `v5` 중 하나 |
+| `sample_rate` | 모델 입력 샘플레이트. 현재 22050 |
+| `labels` | `normal`, `abnormal` 라벨 번호 |
+| `esc_abnormal_categories` | ESC-50에서 비정상으로 취급할 카테고리 |
+| `threshold` | abnormal 판정 임계치 |
+| `max_windows` | v5 녹음 한 건에 포함할 최대 윈도우 수 |
+
+## 파이프라인
+
+| 버전 | 입력 단위 | 특징 및 판정 방식 | 기본 모델 출력 |
+| --- | --- | --- | --- |
+| v3 | 오디오 한 건 | 앞부분을 고정 폭 Mel `(128, 128)`로 변환 | 단일 점수 |
+| v4 | 3초 슬라이딩 윈도우 | 끝 구간까지 포함하고 윈도우 최대 점수 사용 | 윈도우별 점수 |
+| v5 | 제한된 윈도우 묶음 | 전체 녹음을 하나의 bag으로 처리하는 MIL | 녹음별 점수 |
+
+세부 실험 기록은 [v4](docs/experiments/v4.md), [v5](docs/experiments/v5.md)를 참고합니다.
+
+## 명령행 사용법
+
+모든 학습·평가·파인튜닝 명령은 `--pipeline v3|v4|v5`를 받습니다.
 
 ```bash
-# 학습 (pipeline은 v3 / v4 / v5 중 선택)
-python -m audio_guard.interfaces.cli.train_cli --pipeline v5 --field-splits field_splits.csv
+# 학습
+python -m audio_guard.interfaces.cli.train_cli \
+  --pipeline v5 \
+  --esc50-dir data/ESC-50 \
+  --field-data-dir data/dataset \
+  --model-out models/audio_model_v5.keras
 
 # 평가
-python -m audio_guard.interfaces.cli.evaluate_cli --pipeline v5 --config configs/audio_config.json
+python -m audio_guard.interfaces.cli.evaluate_cli \
+  --pipeline v5 \
+  --esc50-dir data/ESC-50 \
+  --field-data-dir data/dataset \
+  --model models/audio_model_v5.keras
+
+# 파인튜닝
+python -m audio_guard.interfaces.cli.finetune_cli \
+  --pipeline v5 \
+  --field-data-dir data/dataset \
+  --base-model models/audio_model_v5.keras \
+  --model-out models/audio_model_v5_finetuned.keras
+
+# 단일 파일 예측
+python -m audio_guard.interfaces.cli.predict_cli sample.wav \
+  --config configs/audio_config.json
 ```
 
-- ESC-50 fold 1~3은 학습, fold 4는 threshold 선택(검증), fold 5는 최종 테스트에 사용합니다.
-- 현장 녹음(`data/normal/`, `data/abnormal/`)은 파일 단위 누수를 막기 위해 원본 WAV를 먼저 train/validation/test로 분리한 뒤 윈도우를 생성합니다. 같은 녹음 세션에서 파생된 파일은 `field_splits.csv`의 `group_id`로 묶어 같은 분할에 배정하세요.
-
-```csv
-filename,split,group_id
-normal/example_correct.wav,train,session_01
-abnormal/example_wrong.wav,validation,session_02
-```
+현장 녹음의 세션 누수를 막으려면 v5 학습·평가에 `--field-splits` CSV를 지정합니다. CSV는 `filename,split,group_id` 열과 `train`, `validation`, `test` 분할을 사용합니다.
 
 ## 테스트
 
 ```bash
-pytest tests/
+pip install pytest
+pytest -q
 ```
 
-## 데이터 / 산출물 관리
+GitHub Actions도 Python 3.11, FFmpeg와 동일한 pytest 명령을 사용합니다.
 
-- `data/`(원본 오디오)와 `results/`(평가 csv 등 실험 산출물)는 git에 커밋하지 않습니다. 대용량 오디오는 git-lfs나 별도 스토리지에 보관하세요.
-- 모델 가중치(`models/*.keras`)도 저장소에 직접 커밋하지 않는 것을 권장합니다.
+## 데이터와 산출물 정책
 
-## 관련 저장소
-
-- [`omniguardy-backend`](https://github.com/2026-team3/omniguardy-backend) — Spring Boot 백엔드. Audio/Vision 분석 결과를 통합해 `SecurityEvent`를 관리하고 Agent AI 위험도 판단을 수행합니다.
+- ESC-50은 `data/ESC-50/`에 둡니다.
+- 현장 녹음은 `data/dataset/normal/`, `data/dataset/abnormal/`에 둡니다.
+- 평가 CSV와 오류 분석 파일은 `results/`에 생성합니다.
+- `data/`, `results/`, `models/`는 Git에 커밋하지 않습니다.
+- 재현에 필요한 설정, 코드, 데이터 분할 manifest와 실험 설명만 Git으로 관리합니다.
