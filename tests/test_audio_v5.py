@@ -10,6 +10,7 @@ from audio_guard.config import load_config
 from audio_guard.domain.pipeline import create_pipeline
 from audio_guard.domain.risk_policy import predict_label
 from audio_guard.domain.pipeline.v5_bag import audio_to_mel_bag
+from audio_guard.labels import TARGET_CLASSES
 
 
 class AudioV5Test(unittest.TestCase):
@@ -38,15 +39,22 @@ class AudioV5Test(unittest.TestCase):
             features = pipeline.transform(np.zeros(22050 * 3), 22050)
             self.assertEqual(features.shape, (1, 4, 128, 128, 1))
 
-    def test_threshold_uses_validation_scores_and_field_recall_goal(self):
-        esc_y = np.array([0, 0, 1, 1])
-        esc_scores = np.array([0.1, 0.2, 0.7, 0.9])
-        field_y = np.array([0, 0, 1, 1])
-        field_scores = np.array([0.2, 0.3, 0.4, 0.8])
-        threshold, _, field, _ = choose_threshold(
-            esc_y, esc_scores, field_y, field_scores, min_recall=1.0)
-        self.assertLessEqual(threshold, 0.4)
-        self.assertEqual(field["recall"], 1.0)
+    def test_threshold_uses_esc_validation_scores_and_recall_goal(self):
+        labels = np.array([0, 0, 1, 1])
+        scores = np.array([0.2, 0.3, 0.4, 0.8])
+        selected = choose_threshold(labels, scores, min_recall=1.0)
+        self.assertLessEqual(selected["threshold"], 0.4)
+        self.assertEqual(selected["recall"], 1.0)
+
+    def test_all_existing_esc_target_classes_are_preserved(self):
+        self.assertEqual(TARGET_CLASSES, frozenset({
+            "door_wood_knock",
+            "door_wood_creaks",
+            "glass_breaking",
+            "siren",
+            "chainsaw",
+            "footsteps",
+        }))
 
 
 if __name__ == "__main__":

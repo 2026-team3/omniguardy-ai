@@ -14,10 +14,6 @@ from audio_guard.infrastructure.dataset.esc50_dataset import (
     examples_for_folds,
     load_metadata,
 )
-from audio_guard.infrastructure.dataset.field_dataset import (
-    split_field_files,
-    split_field_three_way,
-)
 from audio_guard.labels import TARGET_CLASSES
 
 
@@ -83,12 +79,9 @@ def build_bag_model(max_windows):
 def train_model(
     pipeline_name: str,
     esc50_dir: Path,
-    field_data_dir: Path,
     model_out: Path,
     epochs=None,
     max_windows=8,
-    field_weight=5.0,
-    field_splits=None,
 ):
     """선택한 전처리 전략으로 모델을 학습하고 저장합니다."""
     np.random.seed(42)
@@ -110,12 +103,8 @@ def train_model(
     elif pipeline_name == "v4":
         esc_train = examples_for_folds(metadata, audio_dir, {1, 2, 3}, TARGET_CLASSES)
         esc_val = examples_for_folds(metadata, audio_dir, {4}, TARGET_CLASSES)
-        field_train, field_val, field_train_y, field_val_y = split_field_files(
-            field_data_dir)
-        x_train, y_train = features_from_files(
-            esc_train + list(zip(field_train, field_train_y)), pipeline)
-        x_val, y_val = features_from_files(
-            esc_val + list(zip(field_val, field_val_y)), pipeline)
+        x_train, y_train = features_from_files(esc_train, pipeline)
+        x_val, y_val = features_from_files(esc_val, pipeline)
         sample_weight = None
         validation_data = (x_val, y_val)
         batch_size = 16
@@ -123,15 +112,11 @@ def train_model(
     else:
         esc_train = examples_for_folds(metadata, audio_dir, {1, 2, 3}, TARGET_CLASSES)
         esc_val = examples_for_folds(metadata, audio_dir, {4}, TARGET_CLASSES)
-        field = split_field_three_way(field_data_dir, field_splits)
-        x_train, y_train = features_from_files(esc_train + field["train"], pipeline)
-        x_val, y_val = features_from_files(esc_val + field["validation"], pipeline)
+        x_train, y_train = features_from_files(esc_train, pipeline)
+        x_val, y_val = features_from_files(esc_val, pipeline)
         balanced = compute_class_weight("balanced", classes=np.array([0, 1]), y=y_train)
         sample_weight = balanced[y_train]
-        sample_weight[len(esc_train):] *= field_weight
-        validation_weight = np.ones(len(y_val), dtype=np.float32)
-        validation_weight[len(esc_val):] *= field_weight
-        validation_data = (x_val, y_val, validation_weight)
+        validation_data = (x_val, y_val)
         batch_size = 8
         epochs = epochs or 30
 

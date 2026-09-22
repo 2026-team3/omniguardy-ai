@@ -10,7 +10,7 @@ from pathlib import Path
 API_URL = "http://127.0.0.1:8000/predict"
 
 # 테스트할 오디오가 들어있는 폴더
-TEST_DIR = Path("data/dataset/abnormal")
+TEST_DIR = Path("data/ESC-50/audio")
 
 # Spring이 전송할 주기와 동일하게 테스트
 INTERVAL_SECONDS = 3

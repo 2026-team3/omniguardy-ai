@@ -10,18 +10,15 @@ def main():
     parser = argparse.ArgumentParser(description="오디오 이상 탐지 모델을 평가합니다.")
     parser.add_argument("--pipeline", choices=("v3", "v4", "v5"), required=True)
     parser.add_argument("--esc50-dir", type=Path, default=Path("data/ESC-50"))
-    parser.add_argument("--field-data-dir", type=Path, default=Path("data/dataset"))
-    parser.add_argument("--field-splits", type=Path)
     parser.add_argument("--model", type=Path)
     parser.add_argument("--results-dir", type=Path, default=Path("results"))
     parser.add_argument("--max-windows", type=int, default=8)
-    parser.add_argument("--min-field-recall", type=float)
+    parser.add_argument("--min-recall", type=float)
     args = parser.parse_args()
     model = args.model or Path(f"models/audio_model_{args.pipeline}.keras")
     result = evaluate_model(
-        args.pipeline, args.esc50_dir, args.field_data_dir, model,
-        args.results_dir, args.max_windows, args.field_splits,
-        args.min_field_recall)
+        args.pipeline, args.esc50_dir, model, args.results_dir,
+        args.max_windows, args.min_recall)
     print(result)
 
 

@@ -59,6 +59,10 @@ multipart/form-data의 `file` 필드로 오디오 파일을 전송합니다. 서
 
 `status`는 `normal`, `abnormal` 또는 다음 오류 값입니다.
 
+`abnormal`은 `esc_abnormal_categories`에 속하는 비전 트리거 이벤트가
+임계치 이상으로 검출됐다는 뜻입니다. Spring은 `status == "abnormal"`인
+경우에만 비전을 실행하고 `normal` 및 모든 오류 값에서는 실행하지 않습니다.
+
 - `error_empty_file`: 빈 파일
 - `error_ffmpeg`: 오디오 변환 실패
 - `error_short_audio`: 1초 미만 오디오
@@ -94,36 +98,31 @@ multipart/form-data의 `file` 필드로 오디오 파일을 전송합니다. 서
 
 ## 명령행 사용법
 
-모든 학습·평가·파인튜닝 명령은 `--pipeline v3|v4|v5`를 받습니다.
+모든 학습·평가 명령은 `--pipeline v3|v4|v5`를 받습니다. 학습과 평가는
+ESC-50만 사용하며, `esc_abnormal_categories`에 포함된 클래스만
+`abnormal`로 취급합니다.
 
 ```bash
 # 학습
 python -m audio_guard.interfaces.cli.train_cli \
   --pipeline v5 \
   --esc50-dir data/ESC-50 \
-  --field-data-dir data/dataset \
   --model-out models/audio_model_v5.keras
 
 # 평가
 python -m audio_guard.interfaces.cli.evaluate_cli \
   --pipeline v5 \
   --esc50-dir data/ESC-50 \
-  --field-data-dir data/dataset \
   --model models/audio_model_v5.keras
-
-# 파인튜닝
-python -m audio_guard.interfaces.cli.finetune_cli \
-  --pipeline v5 \
-  --field-data-dir data/dataset \
-  --base-model models/audio_model_v5.keras \
-  --model-out models/audio_model_v5_finetuned.keras
 
 # 단일 파일 예측
 python -m audio_guard.interfaces.cli.predict_cli sample.wav \
   --config configs/audio_config.json
 ```
 
-현장 녹음의 세션 누수를 막으려면 v5 학습·평가에 `--field-splits` CSV를 지정합니다. CSV는 `filename,split,group_id` 열과 `train`, `validation`, `test` 분할을 사용합니다.
+v4와 v5는 ESC-50 fold 1~3으로 학습하고 fold 4에서 threshold를 선택한 뒤
+fold 5로 최종 평가합니다. 기존 도어락 `normal/abnormal` 현장 데이터와 그
+데이터로 만든 파인튜닝 모델은 사용하지 않습니다.
 
 ## 테스트
 
@@ -137,7 +136,6 @@ GitHub Actions도 Python 3.11, FFmpeg와 동일한 pytest 명령을 사용합니
 ## 데이터와 산출물 정책
 
 - ESC-50은 `data/ESC-50/`에 둡니다.
-- 현장 녹음은 `data/dataset/normal/`, `data/dataset/abnormal/`에 둡니다.
 - 평가 CSV와 오류 분석 파일은 `results/`에 생성합니다.
 - `data/`, `results/`, `models/`는 Git에 커밋하지 않습니다.
-- 재현에 필요한 설정, 코드, 데이터 분할 manifest와 실험 설명만 Git으로 관리합니다.
+- 재현에 필요한 설정, 코드와 실험 설명만 Git으로 관리합니다.
