@@ -1,4 +1,4 @@
-"""v3/v4/v5 모델을 ESC-50으로 평가하고 판정 임계치를 선택합니다."""
+"""v3/v4 모델을 ESC-50으로 평가하고 판정 임계치를 선택합니다."""
 
 import json
 from pathlib import Path
@@ -113,14 +113,13 @@ def evaluate_model(
     esc50_dir: Path,
     model_path: Path,
     results_dir=Path("results"),
-    max_windows=8,
     min_recall=None,
 ):
     """선택한 파이프라인의 모델을 ESC-50 검증 및 테스트 fold로 평가합니다."""
     metadata = load_metadata(esc50_dir)
     audio_dir = esc50_dir / "audio"
     model = tf.keras.models.load_model(model_path, compile=False)
-    pipeline = create_pipeline(pipeline_name, max_windows)
+    pipeline = create_pipeline(pipeline_name)
     results_dir.mkdir(parents=True, exist_ok=True)
 
     if pipeline_name == "v3":
@@ -132,9 +131,6 @@ def evaluate_model(
         labels, scores = scores_for_files(model, examples, pipeline)
         return _write_v3_analysis(metadata, labels, scores, results_dir)
 
-    if pipeline_name == "v5" and model.input_shape[1] != max_windows:
-        raise ValueError("--max-windows must match the trained model input")
-
     validation = examples_for_folds(metadata, audio_dir, {4}, TARGET_CLASSES)
     validation_y, validation_scores = scores_for_files(model, validation, pipeline)
     selected = choose_threshold(validation_y, validation_scores, min_recall)
@@ -143,19 +139,17 @@ def evaluate_model(
     test_y, test_scores = scores_for_files(model, test, pipeline)
     test_metrics = metrics(test_y, test_scores, selected["threshold"])
 
-    if pipeline_name == "v5":
-        manifest = {
-            "model_path": model_path.name,
-            "pipeline": "v5",
-            "sample_rate": SAMPLE_RATE,
-            "labels": LABELS,
-            "esc_abnormal_categories": sorted(TARGET_CLASSES),
-            "threshold": selected["threshold"],
-            "max_windows": max_windows,
-        }
-        with model_path.with_suffix(".config.json").open(
-            "w", encoding="utf-8"
-        ) as output:
-            json.dump(manifest, output, ensure_ascii=False, indent=2)
+    manifest = {
+        "model_path": model_path.name,
+        "pipeline": "v4",
+        "sample_rate": SAMPLE_RATE,
+        "labels": LABELS,
+        "esc_abnormal_categories": sorted(TARGET_CLASSES),
+        "threshold": selected["threshold"],
+    }
+    with model_path.with_suffix(".config.json").open(
+        "w", encoding="utf-8"
+    ) as output:
+        json.dump(manifest, output, ensure_ascii=False, indent=2)
 
     return {"validation": selected, "test": test_metrics}

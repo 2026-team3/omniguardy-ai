@@ -22,7 +22,6 @@ analyze_clip = AnalyzeClip(
     model_repository,
     config["pipeline"],
     config["threshold"],
-    config["max_windows"],
 )
 
 app = FastAPI()

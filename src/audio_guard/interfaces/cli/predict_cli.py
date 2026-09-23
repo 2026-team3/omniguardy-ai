@@ -13,9 +13,7 @@ from audio_guard.infrastructure.ml.keras_model_repository import KerasModelRepos
 def predict_audio(audio_path, config_path=None):
     config = load_config(config_path)
     repository = KerasModelRepository(config["model_path"])
-    analyzer = AnalyzeClip(
-        repository, config["pipeline"], config["threshold"],
-        config["max_windows"])
+    analyzer = AnalyzeClip(repository, config["pipeline"], config["threshold"])
     audio, sample_rate = load_audio(audio_path, config["sample_rate"])
     return analyzer.execute(AudioClip(audio, sample_rate))
 

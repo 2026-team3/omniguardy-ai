@@ -1,4 +1,4 @@
-"""v3/v4/v5 모델 학습을 하나의 파이프라인 진입점으로 제공합니다."""
+"""v3/v4 모델 학습을 하나의 파이프라인 진입점으로 제공합니다."""
 
 from pathlib import Path
 
@@ -53,40 +53,16 @@ def build_cnn_model():
     ])
 
 
-def build_bag_model(max_windows):
-    layers = tf.keras.layers
-    window_input = layers.Input(shape=(128, 128, 1))
-    value = layers.Conv2D(32, 3, activation="relu")(window_input)
-    value = layers.MaxPooling2D()(value)
-    value = layers.Conv2D(64, 3, activation="relu")(value)
-    value = layers.MaxPooling2D()(value)
-    value = layers.Conv2D(128, 3, activation="relu")(value)
-    value = layers.MaxPooling2D()(value)
-    value = layers.GlobalAveragePooling2D()(value)
-    value = layers.Dense(128, activation="relu")(value)
-    value = layers.Dropout(0.5)(value)
-    window_score = layers.Dense(1, activation="sigmoid")(value)
-    encoder = tf.keras.Model(window_input, window_score, name="window_encoder")
-    bag_input = layers.Input(shape=(max_windows, 128, 128, 1))
-    scores = layers.TimeDistributed(encoder)(bag_input)
-    return tf.keras.Model(
-        bag_input,
-        layers.GlobalMaxPooling1D()(scores),
-        name="audio_mil_v5",
-    )
-
-
 def train_model(
     pipeline_name: str,
     esc50_dir: Path,
     model_out: Path,
     epochs=None,
-    max_windows=8,
 ):
     """선택한 전처리 전략으로 모델을 학습하고 저장합니다."""
     np.random.seed(42)
     tf.random.set_seed(42)
-    pipeline = create_pipeline(pipeline_name, max_windows)
+    pipeline = create_pipeline(pipeline_name)
     metadata = load_metadata(esc50_dir)
     audio_dir = esc50_dir / "audio"
 
@@ -100,7 +76,7 @@ def train_model(
         validation_data = (x_val, y_val)
         batch_size = 16
         epochs = epochs or 20
-    elif pipeline_name == "v4":
+    else:
         esc_train = examples_for_folds(metadata, audio_dir, {1, 2, 3}, TARGET_CLASSES)
         esc_val = examples_for_folds(metadata, audio_dir, {4}, TARGET_CLASSES)
         x_train, y_train = features_from_files(esc_train, pipeline)
@@ -109,18 +85,7 @@ def train_model(
         validation_data = (x_val, y_val)
         batch_size = 16
         epochs = epochs or 30
-    else:
-        esc_train = examples_for_folds(metadata, audio_dir, {1, 2, 3}, TARGET_CLASSES)
-        esc_val = examples_for_folds(metadata, audio_dir, {4}, TARGET_CLASSES)
-        x_train, y_train = features_from_files(esc_train, pipeline)
-        x_val, y_val = features_from_files(esc_val, pipeline)
-        balanced = compute_class_weight("balanced", classes=np.array([0, 1]), y=y_train)
-        sample_weight = balanced[y_train]
-        validation_data = (x_val, y_val)
-        batch_size = 8
-        epochs = epochs or 30
-
-    model = build_bag_model(max_windows) if pipeline_name == "v5" else build_cnn_model()
+    model = build_cnn_model()
     learning_rate = 1e-3 if pipeline_name == "v3" else 1e-4
     metrics = ["accuracy"] if pipeline_name == "v3" else [
         tf.keras.metrics.AUC(curve="PR", name="pr_auc"),
@@ -147,14 +112,14 @@ def train_model(
         class_weight=class_weight,
         callbacks=[] if pipeline_name == "v3" else [
             tf.keras.callbacks.EarlyStopping(
-                monitor="val_pr_auc" if pipeline_name == "v4" else "val_loss",
-                mode="max" if pipeline_name == "v4" else "auto",
+                monitor="val_pr_auc",
+                mode="max",
                 patience=5,
                 restore_best_weights=True,
             ),
             tf.keras.callbacks.ReduceLROnPlateau(
-                monitor="val_pr_auc" if pipeline_name == "v4" else "val_loss",
-                mode="max" if pipeline_name == "v4" else "auto",
+                monitor="val_pr_auc",
+                mode="max",
                 factor=0.5,
                 patience=3,
             ),

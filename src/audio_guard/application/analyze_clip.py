@@ -11,9 +11,9 @@ logger = logging.getLogger(__name__)
 class AnalyzeClip:
     """전처리, 모델 추론, 위험도 판정을 오케스트레이션합니다."""
 
-    def __init__(self, model_repository, pipeline_name, threshold, max_windows=8):
+    def __init__(self, model_repository, pipeline_name, threshold):
         self.model_repository = model_repository
-        self.pipeline = create_pipeline(pipeline_name, max_windows)
+        self.pipeline = create_pipeline(pipeline_name)
         self.threshold = threshold
 
     def execute(self, clip):

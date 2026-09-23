@@ -1,6 +1,8 @@
 # omniguardy-ai audio
 
-FastAPI와 TensorFlow를 사용하는 오디오 이상 탐지 서버입니다. 오디오를 `normal` 또는 `abnormal`로 분류하며, v3·v4·v5 전처리 전략을 동일한 application 계층에서 선택해 사용할 수 있습니다.
+FastAPI와 TensorFlow를 사용하는 오디오 이상 탐지 서버입니다. Spring이 전송한
+오디오 파일을 요청마다 독립적으로 분석해 `normal` 또는 `abnormal`로 분류하며,
+v3·v4 전처리 전략을 선택해 사용할 수 있습니다.
 
 ## 설치와 실행
 
@@ -25,12 +27,12 @@ AUDIO_CONFIG_PATH=configs/audio_config.json uvicorn main:app
 ```text
 src/audio_guard/
 ├── domain/                  # 값 객체, 위험 판정 정책, 전처리 전략
-│   └── pipeline/            # v3/v4/v5 특징 추출
-├── application/             # 분석, 학습, 평가, 파인튜닝 유스케이스
+│   └── pipeline/            # v3/v4 특징 추출
+├── application/             # 분석, 학습, 평가 유스케이스
 ├── infrastructure/          # Keras, FFmpeg, librosa, 데이터셋 구현
 ├── interfaces/
 │   ├── api/                 # FastAPI 라우터와 스키마
-│   └── cli/                 # 예측, 학습, 평가, 파인튜닝 CLI
+│   └── cli/                 # 예측, 학습, 평가 CLI
 ├── config.py
 └── labels.py
 
@@ -79,12 +81,11 @@ multipart/form-data의 `file` 필드로 오디오 파일을 전송합니다. 서
 | 필드 | 설명 |
 | --- | --- |
 | `model_path` | 설정 파일을 기준으로 한 Keras 모델 경로 |
-| `pipeline` | `v3`, `v4`, `v5` 중 하나 |
+| `pipeline` | `v3`, `v4` 중 하나 |
 | `sample_rate` | 모델 입력 샘플레이트. 현재 22050 |
 | `labels` | `normal`, `abnormal` 라벨 번호 |
 | `esc_abnormal_categories` | ESC-50에서 비정상으로 취급할 카테고리 |
 | `threshold` | abnormal 판정 임계치 |
-| `max_windows` | v5 녹음 한 건에 포함할 최대 윈도우 수 |
 
 ## 파이프라인
 
@@ -92,37 +93,39 @@ multipart/form-data의 `file` 필드로 오디오 파일을 전송합니다. 서
 | --- | --- | --- | --- |
 | v3 | 오디오 한 건 | 앞부분을 고정 폭 Mel `(128, 128)`로 변환 | 단일 점수 |
 | v4 | 3초 슬라이딩 윈도우 | 끝 구간까지 포함하고 윈도우 최대 점수 사용 | 윈도우별 점수 |
-| v5 | 제한된 윈도우 묶음 | 전체 녹음을 하나의 bag으로 처리하는 MIL | 녹음별 점수 |
 
-세부 실험 기록은 [v4](docs/experiments/v4.md), [v5](docs/experiments/v5.md)를 참고합니다.
+실시간 분석에는 v4를 사용합니다. 파일을 3초 윈도우로 나누어 각 윈도우를
+독립적으로 추론하고, 가장 높은 점수를 파일의 최종 점수로 사용합니다. 세부
+실험 기록은 [v4](docs/experiments/v4.md)를 참고합니다.
 
 ## 명령행 사용법
 
-모든 학습·평가 명령은 `--pipeline v3|v4|v5`를 받습니다. 학습과 평가는
+모든 학습·평가 명령은 `--pipeline v3|v4`를 받습니다. 학습과 평가는
 ESC-50만 사용하며, `esc_abnormal_categories`에 포함된 클래스만
 `abnormal`로 취급합니다.
 
 ```bash
 # 학습
 python -m audio_guard.interfaces.cli.train_cli \
-  --pipeline v5 \
+  --pipeline v4 \
   --esc50-dir data/ESC-50 \
-  --model-out models/audio_model_v5.keras
+  --model-out models/audio_model_v4.keras
 
 # 평가
 python -m audio_guard.interfaces.cli.evaluate_cli \
-  --pipeline v5 \
+  --pipeline v4 \
   --esc50-dir data/ESC-50 \
-  --model models/audio_model_v5.keras
+  --model models/audio_model_v4.keras
 
 # 단일 파일 예측
 python -m audio_guard.interfaces.cli.predict_cli sample.wav \
   --config configs/audio_config.json
 ```
 
-v4와 v5는 ESC-50 fold 1~3으로 학습하고 fold 4에서 threshold를 선택한 뒤
-fold 5로 최종 평가합니다. 기존 도어락 `normal/abnormal` 현장 데이터와 그
-데이터로 만든 파인튜닝 모델은 사용하지 않습니다.
+v4는 ESC-50 fold 1~3으로 학습하고 fold 4에서 threshold를 선택한 뒤 fold 5로
+최종 평가합니다. 평가가 생성한 `audio_model_v4.config.json`을 런타임의
+`AUDIO_CONFIG_PATH`로 사용합니다. 기존 도어락 `normal/abnormal` 현장 데이터와
+그 데이터로 만든 파인튜닝 모델은 사용하지 않습니다.
 
 ## 테스트
 
