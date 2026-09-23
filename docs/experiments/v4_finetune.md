@@ -9,7 +9,6 @@
 
 ```text
 data/dataset/
-├── normal/
 ├── abnormal/
 └── field_splits.csv
 ```
@@ -21,11 +20,13 @@ filename,split,group_id
 abnormal/handle_pull_near_001.wav,train,door_a_day_01
 abnormal/handle_pull_far_001.wav,validation,door_b_night_01
 abnormal/handle_pull_far_002.wav,test,door_c_day_01
-normal/room_noise_001.wav,train,room_a_day_01
 ```
 
-같은 `group_id`는 하나의 split에만 존재해야 합니다. augmentation은 train split에만
-적용되며 validation/test 원본 WAV에는 적용되지 않습니다.
+field 데이터는 직접 수집한 abnormal WAV만 사용하며 normal WAV는 요구하지
+않습니다. 같은 `group_id`는 하나의 split에만 존재해야 합니다. train,
+validation, test에는 각각 abnormal 파일이 최소 하나 이상 필요합니다.
+augmentation은 train split에만 적용되며 validation/test 원본 WAV에는 적용되지
+않습니다.
 
 ## Fine-tuning
 
@@ -41,8 +42,9 @@ python -m audio_guard.interfaces.cli.finetune_cli \
   --abnormal-weight-multiplier 1.2
 ```
 
-fine-tuning은 ESC-50 fold 1~3과 현장 train을 함께 사용합니다. 현장 train에는 약한
-background noise, 0.8배/1.2배 volume 변형을 적용합니다.
+fine-tuning은 ESC-50 fold 1~3의 normal/abnormal 데이터와 field abnormal train을
+함께 사용합니다. field validation/test는 학습에 포함하지 않습니다. field train에는
+약한 background noise, 0.8배/1.2배 volume 변형을 적용합니다.
 
 `--abnormal-weight-multiplier`는 기존 balanced class weight의 abnormal 항목에만
 곱합니다. `1.0`, `1.2`, `1.5`를 각각 실험하고 validation 결과로 모델 하나를
@@ -62,7 +64,9 @@ python -m audio_guard.interfaces.cli.evaluate_cli \
   --min-field-recall 0.65
 ```
 
-`threshold_comparison.csv`에는 ESC-50 및 현장 validation/test의 threshold별
-accuracy, precision, recall, F1, TP, FN, FP, TN이 저장됩니다. 현장 데이터를
-지정하면 threshold는 field validation에서 선택하며, test 결과는 최종 보고에만
-사용합니다.
+`threshold_comparison.csv`에는 ESC-50 validation/test의 threshold별 Accuracy,
+Precision, Recall, F1, TP, FN, FP, TN이 저장됩니다.
+`field_recall_comparison.csv`에는 field abnormal validation/test의 threshold별
+Recall, TP, FN이 별도로 저장됩니다. `--min-field-recall`을 지정하면 field
+validation Recall 조건을 만족하는 후보 중 ESC-50 validation F1이 가장 높은
+threshold를 선택합니다. ESC-50 test와 field test는 최종 보고에만 사용합니다.

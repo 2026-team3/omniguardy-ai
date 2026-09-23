@@ -33,6 +33,22 @@ def metrics(labels, scores, threshold):
     }
 
 
+def field_recall_metrics(labels, scores, threshold):
+    """abnormal-only 현장 데이터에서 의미 있는 탐지 지표만 계산합니다."""
+    if len(labels) == 0 or not np.all(labels == 1):
+        raise ValueError("Field evaluation requires abnormal-only labels")
+    predictions = (scores >= threshold).astype(int)
+    tp = int(np.sum(predictions == 1))
+    fn = int(np.sum(predictions == 0))
+    return {
+        "threshold": float(threshold),
+        "recall": float(tp / len(labels)),
+        "tp": tp,
+        "fn": fn,
+        "total": int(len(labels)),
+    }
+
+
 def choose_threshold(labels, scores, min_recall=None, candidates=None):
     """Recall 제약을 만족하는 후보 중 F1이 가장 높은 threshold를 선택합니다."""
     if candidates is None:
@@ -64,11 +80,12 @@ def _threshold_rows(dataset, split, labels, scores, thresholds):
     ]
 
 
-def _combine(labels_and_scores):
-    return (
-        np.concatenate([labels for labels, _ in labels_and_scores]),
-        np.concatenate([scores for _, scores in labels_and_scores]),
-    )
+def _field_threshold_rows(split, labels, scores, thresholds):
+    return [
+        {"dataset": "field", "split": split,
+         **field_recall_metrics(labels, scores, threshold)}
+        for threshold in thresholds
+    ]
 
 
 def _validate_thresholds(thresholds):
@@ -123,6 +140,8 @@ def evaluate_model(
     thresholds = _validate_thresholds(thresholds)
     if (field_data_dir is None) != (field_splits is None):
         raise ValueError("field_data_dir and field_splits must be supplied together")
+    if field_data_dir is None and min_field_recall is not None:
+        raise ValueError("min_field_recall requires field data")
 
     metadata = load_metadata(esc50_dir)
     audio_dir = Path(esc50_dir) / "audio"
@@ -147,32 +166,46 @@ def evaluate_model(
     rows.extend(_threshold_rows("esc50", "test", esc_test_y, esc_test_scores, thresholds))
 
     field_data = None
+    field_csv_path = None
     if field_data_dir is not None:
         field = split_field_three_way(field_data_dir, field_splits)
         field_validation_y, field_validation_scores = scores_for_files(
             model, field["validation"], pipeline)
         field_test_y, field_test_scores = scores_for_files(model, field["test"], pipeline)
-        rows.extend(_threshold_rows("field", "validation", field_validation_y,
-                                    field_validation_scores, thresholds))
-        rows.extend(_threshold_rows("field", "test", field_test_y,
-                                    field_test_scores, thresholds))
-        validation_y, validation_scores = field_validation_y, field_validation_scores
-        recall_goal = min_field_recall if min_field_recall is not None else min_recall
-        selected_from = "field_validation"
+        field_rows = _field_threshold_rows(
+            "validation", field_validation_y, field_validation_scores, thresholds)
+        field_rows.extend(_field_threshold_rows(
+            "test", field_test_y, field_test_scores, thresholds))
+        field_csv_path = results_dir / "field_recall_comparison.csv"
+        pd.DataFrame(field_rows).to_csv(
+            field_csv_path, index=False, encoding="utf-8-sig")
+
+        eligible_thresholds = thresholds
+        if min_field_recall is not None:
+            eligible_thresholds = [
+                row["threshold"] for row in field_rows
+                if row["split"] == "validation"
+                and row["recall"] >= min_field_recall
+            ]
+            if not eligible_thresholds:
+                raise ValueError("No threshold meets field validation recall target")
+        selected = choose_threshold(
+            esc_validation_y, esc_validation_scores, min_recall,
+            candidates=eligible_thresholds)
+        selected_from = "esc50_validation_with_field_recall_constraint"
         field_data = {
             "validation": (field_validation_y, field_validation_scores),
             "test": (field_test_y, field_test_scores),
         }
     else:
-        validation_y, validation_scores = esc_validation_y, esc_validation_scores
-        recall_goal = min_recall
+        selected = choose_threshold(
+            esc_validation_y, esc_validation_scores, min_recall,
+            candidates=thresholds)
         selected_from = "esc50_validation"
 
-    selected = choose_threshold(
-        validation_y, validation_scores, recall_goal, candidates=thresholds)
     selected_threshold = selected["threshold"]
-    rows.extend(_threshold_rows("selected", selected_from, validation_y,
-                                validation_scores, [selected_threshold]))
+    rows.extend(_threshold_rows("selected", selected_from, esc_validation_y,
+                                esc_validation_scores, [selected_threshold]))
     csv_path = results_dir / "threshold_comparison.csv"
     pd.DataFrame(rows).to_csv(csv_path, index=False, encoding="utf-8-sig")
 
@@ -183,14 +216,10 @@ def evaluate_model(
         "esc50": metrics(esc_test_y, esc_test_scores, selected_threshold),
     }
     if field_data is not None:
-        validation_result["field"] = metrics(*field_data["validation"], selected_threshold)
-        test_result["field"] = metrics(*field_data["test"], selected_threshold)
-        validation_result["combined"] = metrics(
-            *_combine([(esc_validation_y, esc_validation_scores), field_data["validation"]]),
-            selected_threshold)
-        test_result["combined"] = metrics(
-            *_combine([(esc_test_y, esc_test_scores), field_data["test"]]),
-            selected_threshold)
+        validation_result["field"] = field_recall_metrics(
+            *field_data["validation"], selected_threshold)
+        test_result["field"] = field_recall_metrics(
+            *field_data["test"], selected_threshold)
 
     manifest = {
         "model_path": Path(model_path).name,
@@ -208,4 +237,5 @@ def evaluate_model(
         "validation": validation_result,
         "test": test_result,
         "threshold_csv": str(csv_path),
+        "field_recall_csv": str(field_csv_path) if field_csv_path else None,
     }

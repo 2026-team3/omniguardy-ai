@@ -12,31 +12,41 @@ class FieldDatasetTest(unittest.TestCase):
             "filename,split,group_id\n" + "\n".join(rows), encoding="utf-8")
         return manifest
 
-    def test_manifest_assigns_each_file_once_without_group_leakage(self):
+    def test_abnormal_only_manifest_assigns_each_file_once(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
+            (root / "abnormal").mkdir()
             rows = []
-            for label in ("normal", "abnormal"):
-                (root / label).mkdir()
-                for index, split in enumerate(("train", "validation", "test")):
-                    path = root / label / f"take_{index}.wav"
-                    path.touch()
-                    rows.append(f"{label}/{path.name},{split},{label}_session_{index}")
+            for index, split in enumerate(("train", "validation", "test")):
+                path = root / "abnormal" / f"take_{index}.wav"
+                path.touch()
+                rows.append(f"abnormal/{path.name},{split},session_{index}")
             splits = split_field_three_way(root, self._create_manifest(root, rows))
-            self.assertEqual({len(items) for items in splits.values()}, {2})
-            self.assertTrue(all({label for _, label in items} == {0, 1}
+            self.assertEqual({len(items) for items in splits.values()}, {1})
+            self.assertTrue(all({label for _, label in items} == {1}
                                 for items in splits.values()))
 
     def test_manifest_rejects_a_recording_group_in_multiple_splits(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
+            (root / "abnormal").mkdir()
             rows = []
-            for label in ("normal", "abnormal"):
-                (root / label).mkdir()
-                for index, split in enumerate(("train", "validation", "test")):
-                    path = root / label / f"take_{index}.wav"
-                    path.touch()
-                    group = "shared" if index < 2 else f"{label}_test"
-                    rows.append(f"{label}/{path.name},{split},{group}")
+            for index, split in enumerate(("train", "validation", "test")):
+                path = root / "abnormal" / f"take_{index}.wav"
+                path.touch()
+                group = "shared" if index < 2 else "test_session"
+                rows.append(f"abnormal/{path.name},{split},{group}")
             with self.assertRaises(ValueError):
+                split_field_three_way(root, self._create_manifest(root, rows))
+
+    def test_each_split_requires_at_least_one_abnormal_file(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "abnormal").mkdir()
+            rows = []
+            for index, split in enumerate(("train", "validation")):
+                path = root / "abnormal" / f"take_{index}.wav"
+                path.touch()
+                rows.append(f"abnormal/{path.name},{split},session_{index}")
+            with self.assertRaisesRegex(ValueError, "test split"):
                 split_field_three_way(root, self._create_manifest(root, rows))

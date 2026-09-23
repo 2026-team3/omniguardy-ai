@@ -57,7 +57,7 @@ def finetune_model(
     field_weight=1.0,
     noise_std=0.002,
 ):
-    """v4 base model을 ESC-50 및 현장 데이터로 낮은 학습률에서 fine-tuning합니다."""
+    """ESC-50 양 클래스와 field abnormal train으로 v4를 fine-tuning합니다."""
     if epochs < 1:
         raise ValueError("epochs must be positive")
     if learning_rate <= 0:

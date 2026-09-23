@@ -5,7 +5,7 @@ from pathlib import Path
 
 import numpy as np
 
-from audio_guard.application.evaluate_model import choose_threshold
+from audio_guard.application.evaluate_model import choose_threshold, field_recall_metrics
 from audio_guard.config import load_config
 from audio_guard.domain.pipeline import create_pipeline
 from audio_guard.domain.risk_policy import predict_label
@@ -48,6 +48,23 @@ class AudioPipelineTest(unittest.TestCase):
             labels, scores, min_recall=1.0, candidates=(0.3, 0.4, 0.8))
         self.assertEqual(selected["threshold"], 0.4)
         self.assertEqual(selected["recall"], 1.0)
+
+    def test_field_abnormal_reports_recall_and_false_negatives_only(self):
+        result = field_recall_metrics(
+            np.ones(3, dtype=np.int32),
+            np.array([0.9, 0.7, 0.2]),
+            threshold=0.5,
+        )
+        self.assertEqual(result, {
+            "threshold": 0.5,
+            "recall": 2 / 3,
+            "tp": 2,
+            "fn": 1,
+            "total": 3,
+        })
+        self.assertNotIn("accuracy", result)
+        self.assertNotIn("precision", result)
+        self.assertNotIn("f1", result)
 
     def test_all_existing_esc_target_classes_are_preserved(self):
         self.assertEqual(TARGET_CLASSES, frozenset({

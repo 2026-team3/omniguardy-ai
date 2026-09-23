@@ -1,21 +1,17 @@
-"""현장 normal/abnormal WAV와 녹음 세션 단위 분할을 읽습니다."""
+"""현장에서 수집한 abnormal WAV의 녹음 세션 단위 분할을 읽습니다."""
 
 import csv
 from pathlib import Path
 
 
-LABELS_BY_DIRECTORY = {"normal": 0, "abnormal": 1}
 SPLITS = frozenset({"train", "validation", "test"})
 
 
 def _field_files(dataset_dir: Path):
-    files = []
-    for directory, label in LABELS_BY_DIRECTORY.items():
-        files.extend(
-            (path, label)
-            for path in sorted((dataset_dir / directory).rglob("*.wav"))
-        )
-    return files
+    return [
+        (path, 1)
+        for path in sorted((dataset_dir / "abnormal").rglob("*.wav"))
+    ]
 
 
 def split_field_three_way(dataset_dir: Path, split_csv: Path):
@@ -29,7 +25,7 @@ def split_field_three_way(dataset_dir: Path, split_csv: Path):
     split_csv = Path(split_csv)
     files = _field_files(dataset_dir)
     if not files:
-        raise ValueError("No field WAV files found in normal/ or abnormal/")
+        raise ValueError("No field WAV files found in abnormal/")
 
     with split_csv.open(newline="", encoding="utf-8-sig") as source:
         rows = list(csv.DictReader(source))
@@ -71,7 +67,6 @@ def split_field_three_way(dataset_dir: Path, split_csv: Path):
         splits[split_by_name[filename]].append((path, label))
 
     for name, examples in splits.items():
-        labels = {label for _, label in examples}
-        if labels != {0, 1}:
-            raise ValueError(f"Field {name} split must contain normal and abnormal WAVs")
+        if not examples:
+            raise ValueError(f"Field {name} split must contain abnormal WAVs")
     return splits

@@ -134,10 +134,13 @@ python -m audio_guard.interfaces.cli.predict_cli sample.wav \
   --config configs/audio_config.json
 ```
 
-v4는 ESC-50 fold 1~3으로 학습하고 fold 4에서 threshold를 선택한 뒤 fold 5로
-최종 평가합니다. 현장 데이터를 사용하는 fine-tuning은 원본 WAV를 녹음 세션
-단위로 train/validation/test로 분리한 `field_splits.csv`를 사용합니다. 평가가
-생성한 `audio_model_v5.config.json`을 런타임의 `AUDIO_CONFIG_PATH`로 사용합니다.
+v4는 ESC-50 fold 1~3의 target class를 abnormal, 나머지를 normal로 학습합니다.
+현장 fine-tuning은 `dataset/abnormal`의 위험음만 추가하며, 원본 WAV를 녹음 세션
+단위로 train/validation/test로 분리한 `field_splits.csv`를 사용합니다. 전체 분류
+성능은 ESC-50 validation/test의 Accuracy, Precision, Recall, F1로 평가하고, 현장
+적응 성능은 field abnormal validation/test의 Recall과 FN으로 따로 평가합니다.
+평가가 생성한 `audio_model_v5.config.json`을 런타임의 `AUDIO_CONFIG_PATH`로
+사용합니다.
 
 ## 테스트
 
@@ -151,8 +154,10 @@ GitHub Actions도 Python 3.11, FFmpeg와 동일한 pytest 명령을 사용합니
 ## 데이터와 산출물 정책
 
 - ESC-50은 `data/ESC-50/`에 둡니다.
-- 현장 WAV는 `data/dataset/normal/`, `data/dataset/abnormal/`에 두고,
-  `field_splits.csv`로 녹음 세션 단위 분할을 관리합니다.
+- 직접 수집한 현장 위험음은 `data/dataset/abnormal/`에 두고,
+  `field_splits.csv`로 train/validation/test 녹음 세션 분할을 관리합니다.
+- 직접 수집한 normal 데이터는 필요하지 않으며 ESC-50의 normal 데이터를
+  fine-tuning에서도 유지합니다.
 - 평가 CSV와 오류 분석 파일은 `results/`에 생성합니다.
 - `data/`, `results/`, `models/`는 Git에 커밋하지 않습니다.
 - 재현에 필요한 설정, 코드와 실험 설명만 Git으로 관리합니다.
