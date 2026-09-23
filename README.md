@@ -118,16 +118,16 @@ python -m audio_guard.interfaces.cli.evaluate_cli \
   --esc50-dir data/ESC-50 \
   --model models/audio_model_v4.keras
 
-# 현장 데이터로 v4 fine-tuning (모델 파일 버전은 v5)
+# 현장 데이터로 v4 fine-tuning (각 실험은 동일한 v4에서 시작)
 python -m audio_guard.interfaces.cli.finetune_cli \
   --esc50-dir data/ESC-50 \
   --field-data-dir data/dataset \
   --field-splits data/dataset/field_splits.csv \
   --base-model models/audio_model_v4.keras \
-  --model-out models/audio_model_v5.keras \
-  --epochs 10 \
-  --learning-rate 1e-5 \
-  --abnormal-weight-multiplier 1.2
+  --model-out models/audio_model_v5_general_w1_0.keras \
+  --epochs 5 \
+  --learning-rate 5e-6 \
+  --abnormal-weight-multiplier 1.0
 
 # 단일 파일 예측
 python -m audio_guard.interfaces.cli.predict_cli sample.wav \
@@ -136,11 +136,12 @@ python -m audio_guard.interfaces.cli.predict_cli sample.wav \
 
 v4는 ESC-50 fold 1~3의 target class를 abnormal, 나머지를 normal로 학습합니다.
 현장 fine-tuning은 `dataset/abnormal`의 위험음만 추가하며, 원본 WAV를 녹음 세션
-단위로 train/validation/test로 분리한 `field_splits.csv`를 사용합니다. 전체 분류
-성능은 ESC-50 validation/test의 Accuracy, Precision, Recall, F1로 평가하고, 현장
-적응 성능은 field abnormal validation/test의 Recall과 FN으로 따로 평가합니다.
-평가가 생성한 `audio_model_v5.config.json`을 런타임의 `AUDIO_CONFIG_PATH`로
-사용합니다.
+단위로 train/validation/test로 분리한 `field_splits.csv`를 사용합니다. 초인종은
+`event_type=doorbell`, `split=ignored`로 지정하여 학습과 평가에서 제외합니다.
+전체 분류 성능은 ESC-50 validation/test의 Accuracy, Precision, Recall, F1로
+평가하고, 현장 적응 성능은 field abnormal validation/test의 전체 및 event type별
+Recall과 FN으로 따로 평가합니다. 평가가 생성한 모델별 `.config.json`을 런타임의
+`AUDIO_CONFIG_PATH`로 사용합니다.
 
 ## 테스트
 
@@ -155,7 +156,8 @@ GitHub Actions도 Python 3.11, FFmpeg와 동일한 pytest 명령을 사용합니
 
 - ESC-50은 `data/ESC-50/`에 둡니다.
 - 직접 수집한 현장 위험음은 `data/dataset/abnormal/`에 두고,
-  `field_splits.csv`로 train/validation/test 녹음 세션 분할을 관리합니다.
+  `field_splits.csv`로 train/validation/test/ignored 녹음 세션과 event type을
+  관리합니다.
 - 직접 수집한 normal 데이터는 필요하지 않으며 ESC-50의 normal 데이터를
   fine-tuning에서도 유지합니다.
 - 평가 CSV와 오류 분석 파일은 `results/`에 생성합니다.

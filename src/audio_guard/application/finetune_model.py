@@ -17,12 +17,27 @@ from audio_guard.infrastructure.dataset.field_dataset import split_field_three_w
 from audio_guard.labels import TARGET_CLASSES
 
 
-def _features_from_files(examples, pipeline, augment=False, noise_std=0.002, rng=None):
+def _features_from_files(
+    examples,
+    pipeline,
+    augment=False,
+    noise_std=0.001,
+    gain_range=(0.9, 1.1),
+    max_time_shift_ms=50,
+    rng=None,
+):
     features, labels = [], []
     for path, label in examples:
         audio, sample_rate = load_audio(path)
         variants = (
-            augment_audio(audio, noise_std=noise_std, rng=rng)
+            augment_audio(
+                audio,
+                sample_rate,
+                noise_std=noise_std,
+                gain_range=gain_range,
+                max_time_shift_ms=max_time_shift_ms,
+                rng=rng,
+            )
             if augment else [audio]
         )
         for variant in variants:
@@ -35,11 +50,11 @@ def _features_from_files(examples, pipeline, augment=False, noise_std=0.002, rng
     )
 
 
-def _class_sample_weights(labels, abnormal_weight_multiplier):
+def _class_sample_weights(labels, reference_labels, abnormal_weight_multiplier):
     if abnormal_weight_multiplier <= 0:
         raise ValueError("abnormal_weight_multiplier must be positive")
     balanced = compute_class_weight(
-        "balanced", classes=np.array([0, 1]), y=labels)
+        "balanced", classes=np.array([0, 1]), y=reference_labels)
     weights = balanced[labels].astype(np.float32)
     weights[labels == 1] *= abnormal_weight_multiplier
     return weights
@@ -51,11 +66,14 @@ def finetune_model(
     field_splits: Path,
     base_model: Path,
     model_out: Path,
-    epochs=10,
-    learning_rate=1e-5,
+    epochs=5,
+    learning_rate=5e-6,
     abnormal_weight_multiplier=1.0,
     field_weight=1.0,
-    noise_std=0.002,
+    noise_std=0.001,
+    gain_min=0.9,
+    gain_max=1.1,
+    max_time_shift_ms=50,
 ):
     """ESC-50 양 클래스와 field abnormal train으로 v4를 fine-tuning합니다."""
     if epochs < 1:
@@ -64,6 +82,12 @@ def finetune_model(
         raise ValueError("learning_rate must be positive")
     if field_weight <= 0:
         raise ValueError("field_weight must be positive")
+    if Path(base_model).name != "audio_model_v4.keras":
+        raise ValueError("base_model must be models/audio_model_v4.keras")
+    if Path(base_model).resolve() == Path(model_out).resolve():
+        raise ValueError("model_out must not overwrite the v4 base model")
+    if Path(model_out).exists():
+        raise FileExistsError(f"model_out already exists: {model_out}")
 
     np.random.seed(42)
     tf.random.set_seed(42)
@@ -77,17 +101,24 @@ def finetune_model(
     esc_validation = examples_for_folds(metadata, audio_dir, {4}, TARGET_CLASSES)
 
     esc_x, esc_y = _features_from_files(esc_train, pipeline)
+    field_train_examples = [
+        (example.path, example.label) for example in field["train"]
+    ]
     field_train_x, field_train_y = _features_from_files(
-        field["train"], pipeline, augment=True, noise_std=noise_std, rng=rng)
+        field_train_examples,
+        pipeline,
+        augment=True,
+        noise_std=noise_std,
+        gain_range=(gain_min, gain_max),
+        max_time_shift_ms=max_time_shift_ms,
+        rng=rng,
+    )
     validation_esc_x, validation_esc_y = _features_from_files(esc_validation, pipeline)
-    validation_field_x, validation_field_y = _features_from_files(
-        field["validation"], pipeline)
 
     x_train = np.concatenate([esc_x, field_train_x])
     y_train = np.concatenate([esc_y, field_train_y])
-    x_validation = np.concatenate([validation_esc_x, validation_field_x])
-    y_validation = np.concatenate([validation_esc_y, validation_field_y])
-    sample_weight = _class_sample_weights(y_train, abnormal_weight_multiplier)
+    sample_weight = _class_sample_weights(
+        y_train, esc_y, abnormal_weight_multiplier)
     sample_weight[len(esc_x):] *= field_weight
 
     model = tf.keras.models.load_model(base_model, compile=False)
@@ -106,15 +137,15 @@ def finetune_model(
         x_train,
         y_train,
         sample_weight=sample_weight,
-        validation_data=(x_validation, y_validation),
+        validation_data=(validation_esc_x, validation_esc_y),
         epochs=epochs,
         batch_size=16,
         callbacks=[
             tf.keras.callbacks.EarlyStopping(
-                monitor="val_pr_auc", mode="max", patience=3,
+                monitor="val_pr_auc", mode="max", patience=2,
                 restore_best_weights=True),
             tf.keras.callbacks.ReduceLROnPlateau(
-                monitor="val_pr_auc", mode="max", factor=0.5, patience=2),
+                monitor="val_pr_auc", mode="max", factor=0.5, patience=1),
         ],
     )
     model_out.parent.mkdir(parents=True, exist_ok=True)

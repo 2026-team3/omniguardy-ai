@@ -5,7 +5,11 @@ from pathlib import Path
 
 import numpy as np
 
-from audio_guard.application.evaluate_model import choose_threshold, field_recall_metrics
+from audio_guard.application.evaluate_model import (
+    _field_threshold_rows,
+    choose_threshold,
+    field_recall_metrics,
+)
 from audio_guard.config import load_config
 from audio_guard.domain.pipeline import create_pipeline
 from audio_guard.domain.risk_policy import predict_label
@@ -65,6 +69,26 @@ class AudioPipelineTest(unittest.TestCase):
         self.assertNotIn("accuracy", result)
         self.assertNotIn("precision", result)
         self.assertNotIn("f1", result)
+
+    def test_field_metrics_are_grouped_by_event_type(self):
+        rows = _field_threshold_rows(
+            "validation",
+            np.ones(3, dtype=np.int32),
+            np.array([0.9, 0.4, 0.8]),
+            np.array(["knock", "door_handle", "knock"]),
+            thresholds=(0.5,),
+        )
+        by_type = {row["event_type"]: row for row in rows}
+        self.assertEqual(by_type["all"]["fn"], 1)
+        self.assertEqual(by_type["knock"]["recall"], 1.0)
+        self.assertEqual(by_type["door_handle"]["recall"], 0.0)
+
+    def test_threshold_selection_prioritizes_recall_before_f1(self):
+        labels = np.array([0, 0, 0, 1, 1])
+        scores = np.array([0.45, 0.55, 0.65, 0.55, 0.9])
+        selected = choose_threshold(labels, scores, candidates=(0.5, 0.7))
+        self.assertEqual(selected["threshold"], 0.5)
+        self.assertEqual(selected["recall"], 1.0)
 
     def test_all_existing_esc_target_classes_are_preserved(self):
         self.assertEqual(TARGET_CLASSES, frozenset({

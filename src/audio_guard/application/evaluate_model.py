@@ -50,7 +50,7 @@ def field_recall_metrics(labels, scores, threshold):
 
 
 def choose_threshold(labels, scores, min_recall=None, candidates=None):
-    """Recall 제약을 만족하는 후보 중 F1이 가장 높은 threshold를 선택합니다."""
+    """Recall 제약을 만족하는 후보를 Recall, FN, F1 순으로 선택합니다."""
     if candidates is None:
         candidates = np.unique(np.clip(np.concatenate([
             scores, np.array([0.001, 0.999])]), 0.001, 0.999))
@@ -59,7 +59,13 @@ def choose_threshold(labels, scores, min_recall=None, candidates=None):
         rows = [row for row in rows if row["recall"] >= min_recall]
         if not rows:
             raise ValueError("No threshold meets validation recall target")
-    return max(rows, key=lambda row: (row["f1"], row["recall"], row["precision"]))
+    return max(rows, key=lambda row: (
+        row["recall"],
+        -row["fn"],
+        row["f1"],
+        row["precision"],
+        -row["fp"],
+    ))
 
 
 def scores_for_files(model, examples, pipeline):
@@ -73,6 +79,13 @@ def scores_for_files(model, examples, pipeline):
     return np.asarray(labels, dtype=np.int32), np.asarray(scores, dtype=np.float32)
 
 
+def scores_for_field_files(model, examples, pipeline):
+    pairs = [(example.path, example.label) for example in examples]
+    labels, scores = scores_for_files(model, pairs, pipeline)
+    event_types = np.asarray([example.event_type for example in examples])
+    return labels, scores, event_types
+
+
 def _threshold_rows(dataset, split, labels, scores, thresholds):
     return [
         {"dataset": dataset, "split": split, **metrics(labels, scores, threshold)}
@@ -80,12 +93,20 @@ def _threshold_rows(dataset, split, labels, scores, thresholds):
     ]
 
 
-def _field_threshold_rows(split, labels, scores, thresholds):
-    return [
-        {"dataset": "field", "split": split,
-         **field_recall_metrics(labels, scores, threshold)}
-        for threshold in thresholds
-    ]
+def _field_threshold_rows(split, labels, scores, event_types, thresholds):
+    rows = []
+    groups = [("all", np.ones(len(labels), dtype=bool))]
+    groups.extend(
+        (event_type, event_types == event_type)
+        for event_type in sorted(set(event_types))
+    )
+    for event_type, mask in groups:
+        rows.extend({
+            "split": split,
+            "event_type": event_type,
+            **field_recall_metrics(labels[mask], scores[mask], threshold),
+        } for threshold in thresholds)
+    return rows
 
 
 def _validate_thresholds(thresholds):
@@ -169,13 +190,16 @@ def evaluate_model(
     field_csv_path = None
     if field_data_dir is not None:
         field = split_field_three_way(field_data_dir, field_splits)
-        field_validation_y, field_validation_scores = scores_for_files(
-            model, field["validation"], pipeline)
-        field_test_y, field_test_scores = scores_for_files(model, field["test"], pipeline)
+        field_validation_y, field_validation_scores, field_validation_types = (
+            scores_for_field_files(model, field["validation"], pipeline)
+        )
+        field_test_y, field_test_scores, field_test_types = scores_for_field_files(
+            model, field["test"], pipeline)
         field_rows = _field_threshold_rows(
-            "validation", field_validation_y, field_validation_scores, thresholds)
+            "validation", field_validation_y, field_validation_scores,
+            field_validation_types, thresholds)
         field_rows.extend(_field_threshold_rows(
-            "test", field_test_y, field_test_scores, thresholds))
+            "test", field_test_y, field_test_scores, field_test_types, thresholds))
         field_csv_path = results_dir / "field_recall_comparison.csv"
         pd.DataFrame(field_rows).to_csv(
             field_csv_path, index=False, encoding="utf-8-sig")
@@ -185,6 +209,7 @@ def evaluate_model(
             eligible_thresholds = [
                 row["threshold"] for row in field_rows
                 if row["split"] == "validation"
+                and row["event_type"] == "all"
                 and row["recall"] >= min_field_recall
             ]
             if not eligible_thresholds:
@@ -231,7 +256,7 @@ def evaluate_model(
     }
     with Path(model_path).with_suffix(".config.json").open("w", encoding="utf-8") as output:
         json.dump(manifest, output, ensure_ascii=False, indent=2)
-    return {
+    result = {
         "selected_from": selected_from,
         "selected_threshold": selected,
         "validation": validation_result,
@@ -239,3 +264,8 @@ def evaluate_model(
         "threshold_csv": str(csv_path),
         "field_recall_csv": str(field_csv_path) if field_csv_path else None,
     }
+    summary_path = results_dir / "evaluation_summary.json"
+    result["summary_json"] = str(summary_path)
+    with summary_path.open("w", encoding="utf-8") as output:
+        json.dump(result, output, ensure_ascii=False, indent=2)
+    return result
