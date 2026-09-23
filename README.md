@@ -28,11 +28,11 @@ AUDIO_CONFIG_PATH=configs/audio_config.json uvicorn main:app
 src/audio_guard/
 ├── domain/                  # 값 객체, 위험 판정 정책, 전처리 전략
 │   └── pipeline/            # v3/v4 특징 추출
-├── application/             # 분석, 학습, 평가 유스케이스
+├── application/             # 분석, 학습, fine-tuning, 평가 유스케이스
 ├── infrastructure/          # Keras, FFmpeg, librosa, 데이터셋 구현
 ├── interfaces/
 │   ├── api/                 # FastAPI 라우터와 스키마
-│   └── cli/                 # 예측, 학습, 평가 CLI
+│   └── cli/                 # 예측, 학습, fine-tuning, 평가 CLI
 ├── config.py
 └── labels.py
 
@@ -96,13 +96,14 @@ multipart/form-data의 `file` 필드로 오디오 파일을 전송합니다. 서
 
 실시간 분석에는 v4를 사용합니다. 파일을 3초 윈도우로 나누어 각 윈도우를
 독립적으로 추론하고, 가장 높은 점수를 파일의 최종 점수로 사용합니다. 세부
-실험 기록은 [v4](docs/experiments/v4.md)를 참고합니다.
+실험 기록은 [v4](docs/experiments/v4.md),
+[v4 기반 fine-tuning](docs/experiments/v4_finetune.md)을 참고합니다.
 
 ## 명령행 사용법
 
-모든 학습·평가 명령은 `--pipeline v3|v4`를 받습니다. 학습과 평가는
-ESC-50만 사용하며, `esc_abnormal_categories`에 포함된 클래스만
-`abnormal`로 취급합니다.
+기본 학습은 ESC-50을 사용하며, `esc_abnormal_categories`에 포함된 클래스만
+`abnormal`로 취급합니다. 현장 데이터는 아래 fine-tuning과 평가 명령에서
+선택적으로 추가합니다.
 
 ```bash
 # 학습
@@ -117,15 +118,26 @@ python -m audio_guard.interfaces.cli.evaluate_cli \
   --esc50-dir data/ESC-50 \
   --model models/audio_model_v4.keras
 
+# 현장 데이터로 v4 fine-tuning (모델 파일 버전은 v5)
+python -m audio_guard.interfaces.cli.finetune_cli \
+  --esc50-dir data/ESC-50 \
+  --field-data-dir data/dataset \
+  --field-splits data/dataset/field_splits.csv \
+  --base-model models/audio_model_v4.keras \
+  --model-out models/audio_model_v5.keras \
+  --epochs 10 \
+  --learning-rate 1e-5 \
+  --abnormal-weight-multiplier 1.2
+
 # 단일 파일 예측
 python -m audio_guard.interfaces.cli.predict_cli sample.wav \
   --config configs/audio_config.json
 ```
 
 v4는 ESC-50 fold 1~3으로 학습하고 fold 4에서 threshold를 선택한 뒤 fold 5로
-최종 평가합니다. 평가가 생성한 `audio_model_v4.config.json`을 런타임의
-`AUDIO_CONFIG_PATH`로 사용합니다. 기존 도어락 `normal/abnormal` 현장 데이터와
-그 데이터로 만든 파인튜닝 모델은 사용하지 않습니다.
+최종 평가합니다. 현장 데이터를 사용하는 fine-tuning은 원본 WAV를 녹음 세션
+단위로 train/validation/test로 분리한 `field_splits.csv`를 사용합니다. 평가가
+생성한 `audio_model_v5.config.json`을 런타임의 `AUDIO_CONFIG_PATH`로 사용합니다.
 
 ## 테스트
 
@@ -139,6 +151,8 @@ GitHub Actions도 Python 3.11, FFmpeg와 동일한 pytest 명령을 사용합니
 ## 데이터와 산출물 정책
 
 - ESC-50은 `data/ESC-50/`에 둡니다.
+- 현장 WAV는 `data/dataset/normal/`, `data/dataset/abnormal/`에 두고,
+  `field_splits.csv`로 녹음 세션 단위 분할을 관리합니다.
 - 평가 CSV와 오류 분석 파일은 `results/`에 생성합니다.
 - `data/`, `results/`, `models/`는 Git에 커밋하지 않습니다.
 - 재현에 필요한 설정, 코드와 실험 설명만 Git으로 관리합니다.

@@ -44,8 +44,9 @@ class AudioPipelineTest(unittest.TestCase):
     def test_threshold_uses_esc_validation_scores_and_recall_goal(self):
         labels = np.array([0, 0, 1, 1])
         scores = np.array([0.2, 0.3, 0.4, 0.8])
-        selected = choose_threshold(labels, scores, min_recall=1.0)
-        self.assertLessEqual(selected["threshold"], 0.4)
+        selected = choose_threshold(
+            labels, scores, min_recall=1.0, candidates=(0.3, 0.4, 0.8))
+        self.assertEqual(selected["threshold"], 0.4)
         self.assertEqual(selected["recall"], 1.0)
 
     def test_all_existing_esc_target_classes_are_preserved(self):

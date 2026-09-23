@@ -13,11 +13,26 @@ def main():
     parser.add_argument("--model", type=Path)
     parser.add_argument("--results-dir", type=Path, default=Path("results"))
     parser.add_argument("--min-recall", type=float)
+    parser.add_argument("--field-data-dir", type=Path)
+    parser.add_argument("--field-splits", type=Path)
+    parser.add_argument("--min-field-recall", type=float)
+    parser.add_argument(
+        "--thresholds", type=float, nargs="+",
+        default=(0.50, 0.60, 0.70, 0.75, 0.80, 0.85, 0.90),
+    )
     args = parser.parse_args()
     model = args.model or Path(f"models/audio_model_{args.pipeline}.keras")
     result = evaluate_model(
-        args.pipeline, args.esc50_dir, model, args.results_dir,
-        args.min_recall)
+        pipeline_name=args.pipeline,
+        esc50_dir=args.esc50_dir,
+        model_path=model,
+        results_dir=args.results_dir,
+        min_recall=args.min_recall,
+        field_data_dir=args.field_data_dir,
+        field_splits=args.field_splits,
+        thresholds=args.thresholds,
+        min_field_recall=args.min_field_recall,
+    )
     print(result)
 
 
