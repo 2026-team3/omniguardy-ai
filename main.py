@@ -1,6 +1,7 @@
 """FastAPI 애플리케이션 의존성을 조립합니다."""
 
 import logging
+from pathlib import Path
 
 from fastapi import FastAPI
 
@@ -14,8 +15,16 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(message)s",
 )
+logger = logging.getLogger(__name__)
 
 config = load_config()
+logger.info(
+    "오디오 런타임 설정: model=%s pipeline=%s sample_rate=%s threshold=%s",
+    Path(config["model_path"]).name,
+    config["pipeline"],
+    config["sample_rate"],
+    config["threshold"],
+)
 model_repository = KerasModelRepository(config["model_path"])
 converter = FfmpegConverter(config["sample_rate"])
 analyze_clip = AnalyzeClip(
