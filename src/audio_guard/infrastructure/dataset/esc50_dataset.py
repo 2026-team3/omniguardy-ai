@@ -1,4 +1,4 @@
-"""ESC-50 메타데이터와 오디오 파일 목록을 제공합니다."""
+"""ESC-50을 Door Event class 후보로 변환합니다."""
 
 from pathlib import Path
 
@@ -9,9 +9,10 @@ def load_metadata(root: Path):
     return pd.read_csv(root / "meta" / "esc50.csv")
 
 
-def examples_for_folds(metadata, audio_dir: Path, folds, abnormal_categories):
-    """지정 fold의 ``(경로, 이진 라벨)`` 목록을 반환합니다."""
+def examples_for_folds(metadata, audio_dir: Path, folds):
+    """door knock은 knock, 나머지는 hard-negative background로 반환합니다."""
     return [
-        (audio_dir / row.filename, int(row.category in abnormal_categories))
+        (audio_dir / row.filename,
+         "knock" if row.category == "door_wood_knock" else "background")
         for row in metadata[metadata["fold"].isin(folds)].itertuples()
     ]

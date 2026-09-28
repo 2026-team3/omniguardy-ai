@@ -5,8 +5,8 @@ from typing import Protocol
 import numpy as np
 
 SAMPLE_RATE = 22050
-WINDOW_SECONDS = 3.0
-WINDOW_HOP_SECONDS = 1.0
+WINDOW_SECONDS = 1.0
+WINDOW_HOP_SECONDS = 0.2
 
 
 class PreprocessingPipeline(Protocol):

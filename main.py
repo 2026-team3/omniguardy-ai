@@ -19,18 +19,23 @@ logger = logging.getLogger(__name__)
 
 config = load_config()
 logger.info(
-    "오디오 런타임 설정: model=%s pipeline=%s sample_rate=%s threshold=%s",
+    "Door Event runtime: model=%s sample_rate=%s thresholds=%s window=%s hop=%s cooldown=%s",
     Path(config["model_path"]).name,
-    config["pipeline"],
     config["sample_rate"],
-    config["threshold"],
+    config["thresholds"],
+    config["window_seconds"],
+    config["hop_seconds"],
+    config["cooldown_seconds"],
 )
 model_repository = KerasModelRepository(config["model_path"])
 converter = FfmpegConverter(config["sample_rate"])
 analyze_clip = AnalyzeClip(
     model_repository,
     config["pipeline"],
-    config["threshold"],
+    config["thresholds"],
+    config["window_seconds"],
+    config["hop_seconds"],
+    config["cooldown_seconds"],
 )
 
 app = FastAPI()

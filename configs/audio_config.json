@@ -1,8 +1,17 @@
 {
-  "model_path": "../models/audio_model_v3_weight_1_1.keras",
-  "pipeline": "v3",
+  "model_path": "../models/door_event_model.keras",
+  "pipeline": "door_event",
   "sample_rate": 22050,
-  "labels": {"normal": 0, "abnormal": 1},
-  "esc_abnormal_categories": ["door_wood_knock", "door_wood_creaks", "glass_breaking", "siren", "chainsaw", "footsteps"],
-  "threshold": 0.7
+  "labels": {
+    "background": 0,
+    "knock": 1,
+    "handle": 2
+  },
+  "thresholds": {
+    "knock": 0.7,
+    "handle": 0.7
+  },
+  "window_seconds": 1.0,
+  "hop_seconds": 0.2,
+  "cooldown_seconds": 1.0
 }

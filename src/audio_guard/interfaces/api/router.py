@@ -24,23 +24,29 @@ def create_router(analyze_clip, converter, config):
         try:
             contents = await file.read()
             if not contents:
-                return {"status": "error_empty_file", "probability": 0.0}
+                return {"status": "error_empty_file"}
             suffix = os.path.splitext(file.filename or "")[1] or ".wav"
             with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temporary:
                 temporary.write(contents)
                 tmp_path = temporary.name
             wav_path = os.path.splitext(tmp_path)[0] + "_converted.wav"
             if not converter.convert_to_wav(tmp_path, wav_path):
-                return {"status": "error_ffmpeg", "probability": 0.0}
+                return {"status": "error_ffmpeg"}
             audio, sample_rate = load_audio(wav_path, config["sample_rate"])
             clip = AudioClip(audio, sample_rate)
             if clip.duration < 1.0:
-                return {"status": "error_short_audio", "probability": 0.0}
-            status, probability = analyze_clip.execute(clip)
-            return {"status": status, "probability": probability}
+                return {"status": "error_short_audio"}
+            result = analyze_clip.execute(clip)
+            return {
+                "status": result.status,
+                "predicted_class": result.predicted_class,
+                "probabilities": result.probabilities,
+                "window_start_seconds": result.window_start_seconds,
+                "cooldown_suppressed": result.cooldown_suppressed,
+            }
         except Exception as error:
             logger.exception("API ERROR : %s", error)
-            return {"status": "error", "probability": 0.0}
+            return {"status": "error"}
         finally:
             for path in (tmp_path, wav_path):
                 if path and os.path.exists(path):
@@ -52,8 +58,11 @@ def create_router(analyze_clip, converter, config):
             "status": "ok",
             "model": os.path.basename(config["model_path"]),
             "pipeline": config["pipeline"],
-            "threshold": config["threshold"],
+            "thresholds": config["thresholds"],
             "sample_rate": config["sample_rate"],
+            "window_seconds": config["window_seconds"],
+            "hop_seconds": config["hop_seconds"],
+            "cooldown_seconds": config["cooldown_seconds"],
             "ffmpeg": converter.executable,
         }
 

@@ -13,7 +13,14 @@ from audio_guard.infrastructure.ml.keras_model_repository import KerasModelRepos
 def predict_audio(audio_path, config_path=None):
     config = load_config(config_path)
     repository = KerasModelRepository(config["model_path"])
-    analyzer = AnalyzeClip(repository, config["pipeline"], config["threshold"])
+    analyzer = AnalyzeClip(
+        repository,
+        config["pipeline"],
+        config["thresholds"],
+        config["window_seconds"],
+        config["hop_seconds"],
+        config["cooldown_seconds"],
+    )
     audio, sample_rate = load_audio(audio_path, config["sample_rate"])
     return analyzer.execute(AudioClip(audio, sample_rate))
 
@@ -23,9 +30,11 @@ def main():
     parser.add_argument("audio_path", type=Path)
     parser.add_argument("--config", type=Path)
     args = parser.parse_args()
-    label, score = predict_audio(args.audio_path, args.config)
-    print("라벨:", label)
-    print("이상 확률:", score)
+    result = predict_audio(args.audio_path, args.config)
+    print("이벤트:", result.status)
+    print("클래스:", result.predicted_class)
+    print("확률:", result.probabilities)
+    print("검출 window 시작:", result.window_start_seconds)
 
 
 if __name__ == "__main__":

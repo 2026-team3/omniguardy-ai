@@ -1,10 +1,24 @@
 # omniguardy-ai audio
 
-FastAPI와 TensorFlow를 사용하는 오디오 이상 탐지 서버입니다. Spring이 전송한
-오디오 파일을 요청마다 독립적으로 분석해 `normal` 또는 `abnormal`로 분류하며,
-v3·v4 전처리 전략을 선택해 사용할 수 있습니다.
+실시간 문 소리를 `background`, `knock`, `handle`로 분류하는 TensorFlow/FastAPI
+서비스입니다. Spring은 `KNOCK_EVENT` 또는 `HANDLE_EVENT`를 받으면 카메라를
+켜고, `NO_EVENT`에는 반응하지 않습니다.
 
-## 설치와 실행
+## 런타임 동작
+
+- 입력은 FFmpeg로 22,050 Hz mono PCM WAV로 변환합니다.
+- 1초 window와 0.2초 hop으로 Mel spectrogram `(128, 128, 1)`을 만듭니다.
+- CNN은 window마다 3-class softmax 확률을 반환합니다.
+- Knock/Handle 확률을 class별 threshold와 비교합니다.
+- 하나라도 threshold를 넘은 첫 window에서 즉시 이벤트를 반환합니다.
+- 이벤트가 발생한 뒤에만 cooldown을 적용해 겹치는 window의 중복 이벤트를 막습니다.
+- 누적 risk, voting, 연속 검출 조건은 사용하지 않습니다.
+
+두 event class가 같은 window에서 모두 threshold를 넘으면 확률이 높은 class가
+선택됩니다. Background 확률이 가장 높더라도 Knock/Handle이 해당 threshold를
+넘으면 이벤트가 발생합니다.
+
+## 설치와 API 실행
 
 Python 3.10 또는 3.11과 FFmpeg가 필요합니다.
 
@@ -16,132 +30,87 @@ pip install -e .
 uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-기본 설정 파일은 `configs/audio_config.json`입니다. 다른 설정은 `AUDIO_CONFIG_PATH` 환경 변수로 지정할 수 있습니다.
-
-```bash
-AUDIO_CONFIG_PATH=configs/audio_config.json uvicorn main:app
-```
-
-## 구조
-
-```text
-src/audio_guard/
-├── domain/                  # 값 객체, 위험 판정 정책, 전처리 전략
-│   └── pipeline/            # v3/v4 특징 추출
-├── application/             # 분석, 학습, fine-tuning, 평가 유스케이스
-├── infrastructure/          # Keras, FFmpeg, librosa, 데이터셋 구현
-├── interfaces/
-│   ├── api/                 # FastAPI 라우터와 스키마
-│   └── cli/                 # 예측, 학습, fine-tuning, 평가 CLI
-├── config.py
-└── labels.py
-
-configs/                     # 런타임 설정
-data/                        # 로컬 원본 데이터, Git 추적 제외
-results/                     # 평가·실험 산출물, Git 추적 제외
-docs/experiments/            # 버전별 실험 기록
-tests/                       # pytest 테스트
-main.py                      # FastAPI 의존성 조립
-```
-
-## API
+기본 설정은 `configs/audio_config.json`이며 `AUDIO_CONFIG_PATH`로 다른 runtime
+config를 지정할 수 있습니다.
 
 ### `POST /predict`
 
-multipart/form-data의 `file` 필드로 오디오 파일을 전송합니다. 서버는 FFmpeg로 22,050Hz 모노 WAV로 변환한 뒤 설정된 파이프라인과 모델로 분석합니다.
-
-정상 응답:
+`multipart/form-data`의 `file`로 오디오를 전송합니다.
 
 ```json
 {
-  "status": "normal",
-  "probability": 0.12
+  "status": "KNOCK_EVENT",
+  "predicted_class": "knock",
+  "probabilities": {
+    "background": 0.03,
+    "knock": 0.94,
+    "handle": 0.03
+  },
+  "window_start_seconds": 0.4,
+  "cooldown_suppressed": false
 }
 ```
 
-`status`는 `normal`, `abnormal` 또는 다음 오류 값입니다.
+`status`는 `KNOCK_EVENT`, `HANDLE_EVENT`, `NO_EVENT` 또는 `error_*`입니다.
 
-`abnormal`은 `esc_abnormal_categories`에 속하는 비전 트리거 이벤트가
-임계치 이상으로 검출됐다는 뜻입니다. Spring은 `status == "abnormal"`인
-경우에만 비전을 실행하고 `normal` 및 모든 오류 값에서는 실행하지 않습니다.
+## 데이터 manifest
 
-- `error_empty_file`: 빈 파일
-- `error_ffmpeg`: 오디오 변환 실패
-- `error_short_audio`: 1초 미만 오디오
-- `error`: 그 밖의 처리 오류
+Clip random split은 금지됩니다. 먼저 다음 열을 가진 CSV를 준비합니다.
 
-### `GET /health`
-
-현재 모델 이름, 파이프라인, 임계치, 샘플레이트와 FFmpeg 경로를 반환합니다.
-
-## 설정
-
-`configs/audio_config.json`의 필드는 다음과 같습니다.
-
-| 필드 | 설명 |
-| --- | --- |
-| `model_path` | 설정 파일을 기준으로 한 Keras 모델 경로 |
-| `pipeline` | `v3`, `v4` 중 하나 |
-| `sample_rate` | 모델 입력 샘플레이트. 현재 22050 |
-| `labels` | `normal`, `abnormal` 라벨 번호 |
-| `esc_abnormal_categories` | ESC-50에서 비정상으로 취급할 카테고리 |
-| `threshold` | abnormal 판정 임계치 |
-
-## 파이프라인
-
-| 버전 | 입력 단위 | 특징 및 판정 방식 | 기본 모델 출력 |
-| --- | --- | --- | --- |
-| v3 | 오디오 한 건 | 앞부분을 고정 폭 Mel `(128, 128)`로 변환 | 단일 점수 |
-| v4 | 3초 슬라이딩 윈도우 | 끝 구간까지 포함하고 윈도우 최대 점수 사용 | 윈도우별 점수 |
-
-실시간 분석에는 v4를 사용합니다. 파일을 3초 윈도우로 나누어 각 윈도우를
-독립적으로 추론하고, 가장 높은 점수를 파일의 최종 점수로 사용합니다. 세부
-실험 기록은 [v4](docs/experiments/v4.md),
-[v4 기반 fine-tuning](docs/experiments/v4_finetune.md)을 참고합니다.
-
-## 명령행 사용법
-
-기본 학습은 ESC-50을 사용하며, `esc_abnormal_categories`에 포함된 클래스만
-`abnormal`로 취급합니다. 현장 데이터는 아래 fine-tuning과 평가 명령에서
-선택적으로 추가합니다.
-
-```bash
-# 학습
-python -m audio_guard.interfaces.cli.train_cli \
-  --pipeline v4 \
-  --esc50-dir data/ESC-50 \
-  --model-out models/audio_model_v4.keras
-
-# 평가
-python -m audio_guard.interfaces.cli.evaluate_cli \
-  --pipeline v4 \
-  --esc50-dir data/ESC-50 \
-  --model models/audio_model_v4.keras
-
-# 현장 데이터로 v4 fine-tuning (각 실험은 동일한 v4에서 시작)
-python -m audio_guard.interfaces.cli.finetune_cli \
-  --esc50-dir data/ESC-50 \
-  --field-data-dir data/dataset \
-  --field-splits data/dataset/field_splits.csv \
-  --base-model models/audio_model_v4.keras \
-  --model-out models/audio_model_v5_general_w1_0.keras \
-  --epochs 5 \
-  --learning-rate 5e-6 \
-  --abnormal-weight-multiplier 1.0
-
-# 단일 파일 예측
-python -m audio_guard.interfaces.cli.predict_cli sample.wav \
-  --config configs/audio_config.json
+```text
+path,class_name,dataset,source_id,session_id,group_id,event_start_seconds,event_end_seconds
 ```
 
-v4는 ESC-50 fold 1~3의 target class를 abnormal, 나머지를 normal로 학습합니다.
-현장 fine-tuning은 `dataset/abnormal`의 위험음만 추가하며, 원본 WAV를 녹음 세션
-단위로 train/validation/test로 분리한 `field_splits.csv`를 사용합니다. 초인종은
-`event_type=doorbell`, `split=ignored`로 지정하여 학습과 평가에서 제외합니다.
-전체 분류 성능은 ESC-50 validation/test의 Accuracy, Precision, Recall, F1로
-평가하고, 현장 적응 성능은 field abnormal validation/test의 전체 및 event type별
-Recall과 FN으로 따로 평가합니다. 평가가 생성한 모델별 `.config.json`을 런타임의
-`AUDIO_CONFIG_PATH`로 사용합니다.
+같은 원본, 녹음 세션 또는 그룹에서 파생된 파일은 동일한 ID를 사용해야 합니다.
+70/15/15 split은 이 연결 관계를 하나의 component로 묶은 뒤 생성합니다.
+
+```bash
+python -m audio_guard.interfaces.cli.prepare_dataset_cli \
+  --input data/metadata.csv \
+  --output data/dataset_manifest.csv
+```
+
+최종 manifest에는 `split` 열이 추가됩니다. Loader는 `source_id`, `session_id`,
+`group_id` 중 하나라도 여러 split에 걸치면 실패합니다. Augmentation은 split 완료
+후 train에만 적용됩니다.
+
+직접 수집한 문고리 소리를 Handle의 중심 데이터로 사용합니다. ESC-50의
+`door_wood_knock`은 Knock 후보이며, 그 밖의 생활소음은 Background/hard negative로
+사용할 수 있습니다. DCASE task별 metadata는 `filename,event_label` 형식으로 먼저
+정규화합니다. Door slam/close, 책상·벽 노크, 열쇠, 물체 낙하 등은 Background에
+명시적으로 포함해야 합니다.
+
+긴 positive 녹음에는 `event_start_seconds`, `event_end_seconds`를 기록하십시오.
+이 구간과 겹치지 않는 window는 Background로 학습됩니다. 시간 annotation이 없는
+positive clip은 모든 window가 해당 event class로 처리되므로 event 중심으로 잘라야
+합니다.
+
+## 학습, threshold 확정, 최종 평가
+
+```bash
+# Adam 1e-3, batch 32, max epoch 50
+# EarlyStopping patience 7 + ReduceLROnPlateau
+python -m audio_guard.interfaces.cli.train_cli \
+  --manifest data/dataset_manifest.csv \
+  --model-out models/door_event_model.keras
+
+# validation만 사용해 Knock/Handle threshold를 각각 확정
+python -m audio_guard.interfaces.cli.calibrate_cli \
+  --manifest data/dataset_manifest.csv \
+  --model models/door_event_model.keras \
+  --config-out models/door_event_model.config.json
+
+# 모델과 threshold를 고정한 뒤 test를 한 번만 평가
+python -m audio_guard.interfaces.cli.evaluate_cli \
+  --manifest data/dataset_manifest.csv \
+  --model models/door_event_model.keras \
+  --config models/door_event_model.config.json
+```
+
+최종 평가는 Accuracy, class별 Precision/Recall/F1, Macro F1, Confusion Matrix와
+Background→Knock/Handle false positive를 기록합니다. 실제 환경 평가는 timestamp가
+있는 연속 녹음으로 Event Precision/Recall, false trigger/hour와 detection latency를
+추가 측정합니다.
 
 ## 테스트
 
@@ -150,16 +119,4 @@ pip install pytest
 pytest -q
 ```
 
-GitHub Actions도 Python 3.11, FFmpeg와 동일한 pytest 명령을 사용합니다.
-
-## 데이터와 산출물 정책
-
-- ESC-50은 `data/ESC-50/`에 둡니다.
-- 직접 수집한 현장 위험음은 `data/dataset/abnormal/`에 두고,
-  `field_splits.csv`로 train/validation/test/ignored 녹음 세션과 event type을
-  관리합니다.
-- 직접 수집한 normal 데이터는 필요하지 않으며 ESC-50의 normal 데이터를
-  fine-tuning에서도 유지합니다.
-- 평가 CSV와 오류 분석 파일은 `results/`에 생성합니다.
-- `data/`, `results/`, `models/`는 Git에 커밋하지 않습니다.
-- 재현에 필요한 설정, 코드와 실험 설명만 Git으로 관리합니다.
+원본 데이터, 학습 모델과 평가 결과는 Git에 포함하지 않습니다.

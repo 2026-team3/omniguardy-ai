@@ -1,4 +1,4 @@
-"""모델 학습 명령행 인터페이스입니다."""
+"""3-class Door Event 모델 학습 CLI입니다."""
 
 import argparse
 from pathlib import Path
@@ -7,19 +7,24 @@ from audio_guard.application.train_model import train_model
 
 
 def main():
-    parser = argparse.ArgumentParser(description="오디오 이상 탐지 모델을 학습합니다.")
-    parser.add_argument("--pipeline", choices=("v3", "v4"), required=True)
-    parser.add_argument("--esc50-dir", type=Path, default=Path("data/ESC-50"))
-    parser.add_argument("--model-out", type=Path)
-    parser.add_argument("--epochs", type=int)
+    parser = argparse.ArgumentParser(description="Door Event CNN을 학습합니다.")
+    parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--model-out", type=Path, default=Path("models/door_event_model.keras"))
+    parser.add_argument("--epochs", type=int, default=50)
+    parser.add_argument("--batch-size", type=int, default=32)
+    parser.add_argument("--learning-rate", type=float, default=1e-3)
+    parser.add_argument("--window-seconds", type=float, default=1.0)
+    parser.add_argument("--hop-seconds", type=float, default=0.2)
     args = parser.parse_args()
-    default_names = {
-        "v3": "audio_model.keras",
-        "v4": "audio_model_v4.keras",
-    }
-    model_out = args.model_out or Path("models") / default_names[args.pipeline]
     saved = train_model(
-        args.pipeline, args.esc50_dir, model_out, args.epochs)
+        manifest_path=args.manifest,
+        model_out=args.model_out,
+        epochs=args.epochs,
+        batch_size=args.batch_size,
+        learning_rate=args.learning_rate,
+        window_seconds=args.window_seconds,
+        hop_seconds=args.hop_seconds,
+    )
     print("저장 완료:", saved)
 
 
