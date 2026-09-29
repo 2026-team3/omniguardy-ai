@@ -1,4 +1,4 @@
-"""Validation set만 사용해 Knock/Handle threshold를 독립적으로 확정합니다."""
+#Validation set만 사용해 Knock/Handle threshold를 독립적으로 확정
 
 import json
 from pathlib import Path
@@ -12,19 +12,69 @@ from audio_guard.infrastructure.audio.librosa_loader import load_audio
 from audio_guard.infrastructure.dataset.manifest_dataset import examples_for_split, load_manifest
 from audio_guard.labels import EVENT_CLASSES, LABELS
 
-
+ #녹음 단위 실제 클래스와 최대 class probability를 반환
 def clip_probabilities(model, examples, pipeline):
+   
+
     labels, scores = [], []
+
     for example in examples:
         audio, sample_rate = load_audio(example.path)
-        model_input = pipeline.transform(audio, sample_rate)
-        probabilities = np.asarray(model.predict(model_input, verbose=0))
-        if probabilities.ndim != 2 or probabilities.shape[1] != len(LABELS):
-            raise ValueError("Door Event model must return three probabilities per window")
-        labels.append(example.label)
-        scores.append(probabilities.max(axis=0))
-    return np.asarray(labels, dtype=np.int32), np.asarray(scores, dtype=np.float32)
 
+        model_input = pipeline.transform(
+            audio,
+            sample_rate,
+        )
+
+        probabilities = np.asarray(
+            model.predict(
+                model_input,
+                verbose=0,
+            )
+        )
+
+        if (
+            probabilities.ndim != 2
+            or probabilities.shape[1] != len(LABELS)
+        ):
+            raise ValueError(
+                "Door Event model must return "
+                "three probabilities per window"
+            )
+
+        event_labels = {
+            event.label
+            for event in example.events
+        }
+
+        if not event_labels:
+            actual_label = LABELS["background"]
+
+        elif len(event_labels) == 1:
+            actual_label = next(iter(event_labels))
+
+        else:
+            raise ValueError(
+                f"Recording contains multiple event classes: "
+                f"{example.recording_id}"
+            )
+
+        labels.append(actual_label)
+
+        scores.append(
+            probabilities.max(axis=0)
+        )
+
+    return (
+        np.asarray(
+            labels,
+            dtype=np.int32,
+        ),
+        np.asarray(
+            scores,
+            dtype=np.float32,
+        ),
+    )
 
 def threshold_metrics(labels, class_scores, class_index, threshold):
     actual = labels == class_index
@@ -72,6 +122,7 @@ def choose_class_threshold(
 
 def calibrate_thresholds(
     manifest_path: Path,
+    events_path: Path,
     model_path: Path,
     config_out: Path,
     min_precision=None,
@@ -80,7 +131,10 @@ def calibrate_thresholds(
     hop_seconds=0.2,
     cooldown_seconds=1.0,
 ):
-    examples = load_manifest(manifest_path)
+    examples = load_manifest(
+    manifest_path,
+    events_path,
+)
     validation = examples_for_split(examples, "validation")
     model = tf.keras.models.load_model(model_path, compile=False)
     pipeline = create_pipeline("door_event", window_seconds, hop_seconds)

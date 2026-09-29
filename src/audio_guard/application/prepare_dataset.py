@@ -1,4 +1,4 @@
-"""원본 recording 관계를 보존하며 70/15/15 split을 생성합니다."""
+#원본 recording 관계를 보존하며 70/15/15 split을 생성
 
 import csv
 from collections import Counter
@@ -10,7 +10,13 @@ from audio_guard.labels import LABELS
 
 RATIOS = {"train": 0.70, "validation": 0.15, "test": 0.15}
 INPUT_COLUMNS = {
-    "path", "class_name", "dataset", "source_id", "session_id", "group_id"
+    "recording_id",
+    "path",
+    "class_name",
+    "dataset",
+    "source_id",
+    "session_id",
+    "group_id",
 }
 
 

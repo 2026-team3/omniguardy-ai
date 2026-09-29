@@ -18,15 +18,24 @@ from audio_guard.labels import LABELS
 SEED = 42
 
 
-def _window_labels(example, offsets, window_seconds):
-    if example.event_start_seconds is None:
-        return np.full(len(offsets), example.label, dtype=np.int32)
-    labels = np.full(len(offsets), LABELS["background"], dtype=np.int32)
-    overlaps = (
-        (offsets < example.event_end_seconds)
-        & (offsets + window_seconds > example.event_start_seconds)
+ #녹음 파일의 여러 이벤트 구간을 각 오디오 window의 라벨로 변환
+def _window_labels(recording, offsets, window_seconds):
+   
+
+    labels = np.full(
+        len(offsets),
+        LABELS["background"],
+        dtype=np.int32,
     )
-    labels[overlaps] = example.label
+
+    for event in recording.events:
+        overlaps = (
+            (offsets < event.end_seconds)
+            & (offsets + window_seconds > event.start_seconds)
+        )
+
+        labels[overlaps] = event.label
+
     return labels
 
 
@@ -61,6 +70,7 @@ def build_cnn_model():
 
 def train_model(
     manifest_path: Path,
+    events_path: Path,
     model_out: Path,
     epochs=50,
     batch_size=32,
@@ -74,7 +84,10 @@ def train_model(
     tf.random.set_seed(SEED)
     rng = np.random.default_rng(SEED)
 
-    examples = load_manifest(manifest_path)
+    examples = load_manifest(
+    manifest_path,
+    events_path,
+)
     pipeline = create_pipeline("door_event", window_seconds, hop_seconds)
     train_examples = examples_for_split(examples, "train")
     validation_examples = examples_for_split(examples, "validation")

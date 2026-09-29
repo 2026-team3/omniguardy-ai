@@ -1,4 +1,4 @@
-"""확정된 모델과 threshold로 잠긴 test split을 최종 평가합니다."""
+#확정된 모델과 threshold로 잠긴 test split을 최종 평가
 
 import json
 from pathlib import Path
@@ -23,24 +23,84 @@ def predictions_from_probabilities(probabilities, thresholds):
     return np.asarray(predictions, dtype=np.int32)
 
 
-def runtime_predictions(model, examples, pipeline, thresholds):
-    """Cooldown 없이 각 clip의 첫 threshold 초과 window를 재현합니다."""
+def runtime_predictions(
+    model,
+    examples,
+    pipeline,
+    thresholds,
+):
+    #각 녹음의 실제 클래스와 runtime 예측 클래스를 반환
+
     policy = EventPolicy(thresholds)
-    labels, predictions = [], []
+
+    labels = []
+    predictions = []
+
     for example in examples:
-        audio, sample_rate = load_audio(example.path)
-        model_input = pipeline.transform(audio, sample_rate)
-        probabilities = np.asarray(model.predict(model_input, verbose=0))
+        audio, sample_rate = load_audio(
+            example.path
+        )
+
+        model_input = pipeline.transform(
+            audio,
+            sample_rate,
+        )
+
+        probabilities = np.asarray(
+            model.predict(
+                model_input,
+                verbose=0,
+            )
+        )
+
+        event_labels = {
+            event.label
+            for event in example.events
+        }
+
+        if not event_labels:
+            actual_label = LABELS["background"]
+
+        elif len(event_labels) == 1:
+            actual_label = next(
+                iter(event_labels)
+            )
+
+        else:
+            raise ValueError(
+                f"Recording contains multiple event classes: "
+                f"{example.recording_id}"
+            )
+
         predicted_class = "background"
+
         for window_probabilities in probabilities:
-            candidate, _ = policy.decide(window_probabilities)
+            candidate, _ = policy.decide(
+                window_probabilities
+            )
+
             if candidate != "background":
                 predicted_class = candidate
                 break
-        labels.append(example.label)
-        predictions.append(LABELS[predicted_class])
-    return np.asarray(labels, dtype=np.int32), np.asarray(predictions, dtype=np.int32)
 
+        labels.append(
+            actual_label
+        )
+
+        predictions.append(
+            LABELS[predicted_class]
+        )
+
+    return (
+        np.asarray(
+            labels,
+            dtype=np.int32,
+        ),
+        np.asarray(
+            predictions,
+            dtype=np.int32,
+        ),
+    )
 
 def classification_metrics(labels, predictions):
     precision, recall, f1, support = precision_recall_fscore_support(
@@ -79,6 +139,7 @@ def classification_metrics(labels, predictions):
 
 def evaluate_model(
     manifest_path: Path,
+    events_path: Path,
     model_path: Path,
     runtime_config: Path,
     results_dir=Path("results"),
@@ -87,7 +148,10 @@ def evaluate_model(
         config = json.load(source)
     if config.get("calibration", {}).get("split") != "validation":
         raise ValueError("Runtime config must come from validation calibration")
-    examples = load_manifest(manifest_path)
+    examples = load_manifest(
+    manifest_path,
+    events_path,
+    )
     test = examples_for_split(examples, "test")
     model = tf.keras.models.load_model(model_path, compile=False)
     pipeline = create_pipeline(

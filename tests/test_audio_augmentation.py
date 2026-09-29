@@ -13,7 +13,6 @@ class AudioAugmentationTest(unittest.TestCase):
             sample_rate=22050,
             noise_std=0,
             gain_range=(0.8, 0.8),
-            max_time_shift_ms=0,
             rng=np.random.default_rng(42),
         )
         self.assertEqual(len(variants), 2)
