@@ -6,11 +6,11 @@ from utils.video_loader import load_video_infos
 
 OUTPUT_ROOT = "./videos/augmented"
 AUG_COUNT = {
-    "A17": 2,
+    "A17": 3,
     "A18": 0,
-    "A19": 1,
+    "A19": 4,
     "A20": 0,          # AIHub용
-    "A21": 1,
+    "A21": 6,
     "delivery": 8,
     "normal": 4,
 }

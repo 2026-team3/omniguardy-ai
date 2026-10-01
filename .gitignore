@@ -5,7 +5,6 @@ videos/
 results/
 runs/
 outputs/
-evaluation/
 
 # 로컬 절대경로를 포함하는 자동 생성 annotation manifest
 splits/annotations/
