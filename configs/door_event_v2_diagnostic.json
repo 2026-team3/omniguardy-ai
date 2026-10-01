@@ -1,0 +1,38 @@
+{
+  "model_path": "door_event_model_v2.keras",
+  "pipeline": "door_event",
+  "sample_rate": 22050,
+  "labels": {
+    "background": 0,
+    "knock": 1,
+    "handle": 2
+  },
+  "thresholds": {
+    "knock": 0.8999999999999999,
+    "handle": 0.9299999999999999
+  },
+  "window_seconds": 1.0,
+  "hop_seconds": 0.2,
+  "cooldown_seconds": 0.0,
+  "calibration": {
+    "split": "validation",
+    "metrics": {
+      "knock": {
+        "threshold": 0.8999999999999999,
+        "precision": 0.5714285714285714,
+        "recall": 1.0,
+        "f1": 0.7272727272727273,
+        "false_positives": 3,
+        "background_false_positives": 1
+      },
+      "handle": {
+        "threshold": 0.9299999999999999,
+        "precision": 0.8,
+        "recall": 1.0,
+        "f1": 0.8888888888888888,
+        "false_positives": 1,
+        "background_false_positives": 0
+      }
+    }
+  }
+}

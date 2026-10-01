@@ -20,20 +20,18 @@ SEED = 42
 
  #녹음 파일의 여러 이벤트 구간을 각 오디오 window의 라벨로 변환
 def _window_labels(recording, offsets, window_seconds):
-   
+    labels = np.full(len(offsets), LABELS["background"], dtype=np.int32)
 
-    labels = np.full(
-        len(offsets),
-        LABELS["background"],
-        dtype=np.int32,
-    )
+    min_overlap_seconds = 0.2
 
     for event in recording.events:
-        overlaps = (
-            (offsets < event.end_seconds)
-            & (offsets + window_seconds > event.start_seconds)
+        overlap_seconds = np.maximum(
+            0.0,
+            np.minimum(offsets + window_seconds, event.end_seconds)
+            - np.maximum(offsets, event.start_seconds),
         )
 
+        overlaps = overlap_seconds >= min_overlap_seconds
         labels[overlaps] = event.label
 
     return labels
