@@ -19,7 +19,7 @@ import tempfile
 from typing import Any, Literal
 
 import cv2
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 import joblib
 import mediapipe as mp
 import numpy as np
@@ -35,6 +35,20 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from tracking.extract_behavior_features import summarize_block
 from tracking.merge_features import POSE_COLUMNS, pose_summary
+from tracking.keypad_rules import (
+    ENABLE_WEAPON_DETECTION,
+    detect_rear_approach,
+    detect_weapon_proximity,
+)
+
+# hand_motion_desktop/src는 gesture_rules.py/model_loader.py를 상대 import가 아니라
+# 최상위 모듈처럼(from gesture_rules import ...) 작성해뒀기 때문에, 패키지로 import하지
+# 않고 sys.path에 그 폴더 자체를 추가해서 detector 모듈을 바로 불러온다.
+HAND_MOTION_SRC = PROJECT_ROOT / "hand_motion_desktop" / "src"
+if str(HAND_MOTION_SRC) not in sys.path:
+    sys.path.insert(0, str(HAND_MOTION_SRC))
+
+from detector import analyze_video_for_silent_signal  # noqa: E402  (경로 삽입 후 import)
 
 
 MODEL_BUNDLE_PATH = PROJECT_ROOT / "results/evaluation/fixed_10s_model/xgboost_fixed_10s.pkl"
@@ -50,6 +64,9 @@ LABEL_DETAILS = {
     "A20": "attempting_to_look_inside",
     "A21": "long_or_repeated_door_knocking",
 }
+# REAR_CLOSE_APPROACH_SUSPECTED / WEAPON_PROXIMITY_SUSPECTED(실험적) 판정 로직과
+# 그 임계값들은 tracking/keypad_rules.py에 있다 (학습이 필요 없는 순수 규칙 기반이라
+# 모델 로딩 담당인 InferenceService와는 분리해뒀다).
 
 
 class KeypadTriggerRequest(BaseModel):
@@ -78,10 +95,25 @@ class InferenceService:
         self.encoder = bundle["label_encoder"]
         self.feature_columns = bundle["feature_columns"]
         self.yolo = YOLO(str(YOLO_PATH))
-        # 기본값은 학습 때의 frame-level 결과와 같은 모든 프레임 처리다.
-        # 운영 환경에서는 환경변수로 속도/정확도 trade-off를 실험할 수 있다.
-        self.yolo_vid_stride = max(1, int(os.getenv("VISION_YOLO_VID_STRIDE", "1")))
+        # vid_stride는 절대 1보다 크게 쓰지 않는다. BoT-SORT는 상태를 유지하는
+        # tracker라 프레임을 건너뛰면 track이 끊기거나 ID가 바뀌어서, 학습 시
+        # "매 프레임 연속 추적" 기준으로 만든 속도/이동거리 feature 분포가 추론
+        # 시 분포와 달라진다 (실측: stride3에서 91.7%->58.3%로 폭락).
+        # 속도를 올려야 하면 yolo_imgsz(입력 해상도)로만 조절한다 — 프레임을
+        # 안 건너뛰므로 tracking 연속성과 feature 분포가 학습 때와 동일하게 유지된다.
+        configured_stride = int(os.getenv("VISION_YOLO_VID_STRIDE", "1"))
+        if configured_stride != 1:
+            print(
+                f"[vision_api] WARNING: VISION_YOLO_VID_STRIDE={configured_stride}는 "
+                "무시하고 1로 강제합니다 (tracking 기반 feature 불일치 방지)."
+            )
+        self.yolo_vid_stride = 1
+        # 640 -> 480 정도로 낮추면 tracking 연속성은 유지한 채 추론 속도를 올릴 수
+        # 있다. 낮추기 전/후로 반드시 evaluation/test_vision_api_validation.py로
+        # 정확도 재확인할 것.
         self.yolo_imgsz = max(160, int(os.getenv("VISION_YOLO_IMGSZ", "640")))
+        device_name = "cuda" if torch.cuda.is_available() else "cpu"
+        print(f"[vision_api] YOLO device={device_name}, imgsz={self.yolo_imgsz}, vid_stride={self.yolo_vid_stride}")
 
     def _tracking_features(self, video_path: Path) -> pd.DataFrame:
         rows: list[dict[str, Any]] = []
@@ -188,6 +220,7 @@ class InferenceService:
             "confidence": probability_map[label], "classProbabilities": probability_map,
             "videoMetadata": {"durationSeconds": round(duration, 3), "fps": round(fps, 3), "frameCount": frame_count, "width": width, "height": height},
             "featureAvailability": {"hasTracking": bool(behavior["has_tracking"]), "hasPose": bool(pose_values["has_pose"])},
+            "trackedPersonCount": int(behavior.get("tracked_person_count", 0)),
             "inferenceConfiguration": {"yoloVidStride": self.yolo_vid_stride, "yoloImageSize": self.yolo_imgsz, "poseFrameInterval": FRAME_INTERVAL},
             "warnings": warnings,
         }
@@ -236,10 +269,39 @@ def latest_keypad_trigger() -> dict:
     return {"status": "ok", "trigger": _recent_keypad_triggers[-1]}
 
 
+def _video_metadata(video_path: Path, file_name: str) -> dict[str, Any]:
+    """팀 스키마의 video 필드(fileName/durationSeconds/fps/frameCount)를 채운다."""
+    capture = cv2.VideoCapture(str(video_path))
+    fps = capture.get(cv2.CAP_PROP_FPS) or 0.0
+    frame_count = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
+    width = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    capture.release()
+    if fps <= 0 or frame_count <= 0:
+        raise ValueError("Invalid MP4 metadata.")
+    return {
+        "fileName": file_name,
+        "durationSeconds": round(frame_count / fps, 3),
+        "fps": round(fps, 3),
+        "frameCount": frame_count,
+        "width": width,
+        "height": height,
+    }
+
+
 @app.post("/analyze/vision")
-async def analyze_vision(file: UploadFile = File(...)) -> dict[str, Any]:
+async def analyze_vision(
+    file: UploadFile = File(...),
+    triggerId: str = Form(...),
+    triggerType: Literal["AUDIO", "KEYPAD"] = Form(...),
+    securityEventId: str | None = Form(default=None),
+    triggeredAt: datetime = Form(...),
+) -> dict[str, Any]:
+    """팀이 확정한 공통 응답 스키마(trigger/video/behavior/visionEvents/observations)로
+    응답한다. AUDIO면 XGBoost 행동분류, KEYPAD면 Silent Signal 규칙 판정을 태운다."""
     if not (file.filename or "").lower().endswith(".mp4"):
         raise HTTPException(status_code=415, detail="Only .mp4 files are supported.")
+
     temporary_path: Path | None = None
     try:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temporary_file:
@@ -247,9 +309,88 @@ async def analyze_vision(file: UploadFile = File(...)) -> dict[str, Any]:
             shutil.copyfileobj(file.file, temporary_file)
         if temporary_path.stat().st_size > MAX_UPLOAD_BYTES:
             raise HTTPException(status_code=413, detail="Video exceeds 100 MB limit.")
-        if app.state.service is None:
-            app.state.service = InferenceService()
-        result = app.state.service.analyze(temporary_path)
+
+        video = _video_metadata(temporary_path, file.filename)
+
+        behavior: dict[str, Any] | None = None
+        vision_events: list[dict[str, Any]] = []
+        observations = {"trackedPersonCount": 0, "hasTracking": False, "hasPose": False}
+
+        if triggerType == "AUDIO":
+            if app.state.service is None:
+                app.state.service = InferenceService()
+            analysis = app.state.service.analyze(temporary_path)
+            behavior = {
+                "prediction": analysis["prediction"],
+                "label": analysis["event"],
+                "confidence": analysis["confidence"],
+                "classProbabilities": analysis["classProbabilities"],
+            }
+            observations = {
+                "trackedPersonCount": analysis["trackedPersonCount"],
+                "hasTracking": analysis["featureAvailability"]["hasTracking"],
+                "hasPose": analysis["featureAvailability"]["hasPose"],
+            }
+            # A17/A19는 위험도 정책 매핑 대상이 아니라서 Agent가 알아서 무시하지만,
+            # 확인용으로 서버 로그에는 남겨둔다.
+            if analysis["prediction"] in ("A17", "A19"):
+                print(f"[vision_api] AUDIO prediction={analysis['prediction']} (시연 매핑 대상 아님, 로그만)")
+
+        else:  # KEYPAD
+            if app.state.service is None:
+                app.state.service = InferenceService()
+            service = app.state.service
+
+            signal = analyze_video_for_silent_signal(temporary_path)
+            # SILENT_SIGNAL(손동작)뿐 아니라 REAR_CLOSE_APPROACH_SUSPECTED(후방 접근)와
+            # 실험적 흉기 근접 감지도 같은 person tracking 결과를 공유해서 쓴다.
+            tracking = service._tracking_features(temporary_path)
+            # 정규화 ROI를 실제 프레임 좌표로 바꾸기 위한 원본 크기다.
+            tracking.attrs["frame_width"] = video["width"]
+            tracking.attrs["frame_height"] = video["height"]
+
+            observations["hasPose"] = signal.hand_present_frames > 0
+            observations["hasTracking"] = not tracking.empty
+            observations["trackedPersonCount"] = (
+                int(tracking["track_id"].nunique()) if not tracking.empty else 0
+            )
+
+            if signal.detected:
+                vision_events.append({
+                    "eventType": "SILENT_SIGNAL",
+                    "confidence": signal.confidence,
+                    "detectedFrame": signal.detected_frame,
+                    "details": {
+                        "signalCode": signal.signal_code,
+                        "signalName": signal.signal_name,
+                    },
+                })
+
+            rear_approach_event = detect_rear_approach(tracking, video["fps"])
+            if rear_approach_event is not None:
+                vision_events.append(rear_approach_event)
+
+            if ENABLE_WEAPON_DETECTION:
+                device: int | str = 0 if torch.cuda.is_available() else "cpu"
+                weapon_event = detect_weapon_proximity(
+                    temporary_path, service.yolo, service.yolo_imgsz, tracking, device,
+                )
+                if weapon_event is not None:
+                    vision_events.append(weapon_event)
+
+        result = {
+            "trigger": {
+                "triggerId": triggerId,
+                "triggerType": triggerType,
+                "securityEventId": securityEventId,
+                "triggeredAt": triggeredAt.isoformat(),
+            },
+            "analyzedAt": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "video": video,
+            "behavior": behavior,
+            "visionEvents": vision_events,
+            "observations": observations,
+        }
         return {"status": "success", "result": result}
     except HTTPException:
         raise
