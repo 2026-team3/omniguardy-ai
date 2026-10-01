@@ -1,4 +1,4 @@
-"""Recording group 단위 70/15/15 manifest 생성 CLI입니다."""
+#Recording group 단위 70/15/15 manifest 생성 CLI
 
 import argparse
 from pathlib import Path
