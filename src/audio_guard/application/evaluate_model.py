@@ -3,9 +3,11 @@
 import json
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 from sklearn.metrics import (
+    ConfusionMatrixDisplay,
     accuracy_score,
     confusion_matrix,
     precision_recall_fscore_support,
@@ -133,6 +135,60 @@ def print_confusion_matrix(split, metrics):
     )
 
 
+def save_confusion_matrix_image(
+    split,
+    labels,
+    predictions,
+    results_dir,
+):
+    matrix = confusion_matrix(
+        labels,
+        predictions,
+        labels=list(range(len(CLASS_NAMES))),
+    )
+
+    display = ConfusionMatrixDisplay(
+        confusion_matrix=matrix,
+        display_labels=CLASS_NAMES,
+    )
+
+    fig, ax = plt.subplots(
+        figsize=(7, 6)
+    )
+
+    display.plot(
+        ax=ax,
+        values_format="d",
+    )
+
+    ax.set_title(
+        f"{split.capitalize()} Confusion Matrix"
+    )
+    ax.set_xlabel(
+        "Predicted Label"
+    )
+    ax.set_ylabel(
+        "True Label"
+    )
+
+    fig.tight_layout()
+
+    output_path = (
+        results_dir
+        / f"{split}_confusion_matrix.png"
+    )
+
+    fig.savefig(
+        output_path,
+        dpi=200,
+        bbox_inches="tight",
+    )
+
+    plt.close(fig)
+
+    return output_path
+
+
 def evaluate_split(
     split,
     examples,
@@ -145,7 +201,7 @@ def evaluate_split(
         split,
     )
 
-    # train_model.py와 동일한 전처리 사용
+    # 기존 학습/평가와 동일한 전처리
     # Validation/Test에는 augmentation을 적용하지 않음
     features, labels = features_from_examples(
         split_examples,
@@ -160,7 +216,7 @@ def evaluate_split(
         )
     )
 
-    # 기존 confusion matrix와 동일하게
+    # 기존 Confusion Matrix 평가와 동일:
     # threshold가 아닌 raw softmax argmax 사용
     predictions = np.argmax(
         probabilities,
@@ -172,13 +228,24 @@ def evaluate_split(
         predictions,
     )
 
+    # Confusion Matrix PNG 저장
+    confusion_matrix_path = save_confusion_matrix_image(
+        split,
+        labels,
+        predictions,
+        results_dir,
+    )
+
     result = {
         "split": split,
         "evaluation_level": "window",
         "prediction_method": "argmax",
         "window_seconds": pipeline.window_seconds,
-        "sample_count": int(len(labels)),
+        "hop_seconds": pipeline.hop_seconds,
         **metrics,
+        "confusion_matrix_image": str(
+            confusion_matrix_path
+        ),
     }
 
     output_path = (
@@ -204,6 +271,11 @@ def evaluate_split(
     print_confusion_matrix(
         split,
         metrics,
+    )
+
+    print(
+        f"Confusion Matrix Image : "
+        f"{confusion_matrix_path}"
     )
 
     return result
@@ -237,7 +309,9 @@ def evaluate_model(
         config["hop_seconds"],
     )
 
-    results_dir = Path(results_dir)
+    results_dir = Path(
+        results_dir
+    )
 
     results_dir.mkdir(
         parents=True,
@@ -248,14 +322,20 @@ def evaluate_model(
     print("=" * 64)
     print("DOOR EVENT MODEL EVALUATION")
     print("=" * 64)
-    print(f"Model  : {model_path}")
     print(
-        f"Window : {config['window_seconds']} sec"
+        f"Model  : {model_path}"
     )
     print(
-        f"Hop    : {config['hop_seconds']} sec"
+        f"Window : "
+        f"{config['window_seconds']} sec"
     )
-    print("Method : window-level argmax")
+    print(
+        f"Hop    : "
+        f"{config['hop_seconds']} sec"
+    )
+    print(
+        "Method : window-level argmax"
+    )
 
     validation_result = evaluate_split(
         split="validation",
@@ -277,15 +357,17 @@ def evaluate_model(
     print("=" * 64)
     print("EVALUATION COMPLETE")
     print("=" * 64)
+
     print(
         "Validation result : "
         f"{validation_result['result_path']}"
     )
+
     print(
         "Test result       : "
         f"{test_result['result_path']}"
     )
 
-    # 기존 evaluate CLI 호환성을 위해
-    # 기존과 동일하게 Test 결과를 반환
+    # 기존 evaluate_cli와 호환되도록
+    # Test 결과 반환
     return test_result
