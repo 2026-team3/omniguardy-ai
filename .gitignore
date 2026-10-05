@@ -31,3 +31,9 @@ matched_pairs.json
 
 api.zip
 *.zip
+
+g_cache.npz
+field_test/
+*.mp4
+*.pt
+*.onnx
