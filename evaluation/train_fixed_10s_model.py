@@ -141,12 +141,13 @@ def build_features(split: str, annotation_file: Path) -> pd.DataFrame:
                 if pose_columns.issubset(pose.columns)
                 else {"has_pose": 0, "pose_frame_count": 0}
             )
-            periodic_features = (
-                periodicity_features(pose, start, end)
-                if pose_columns.issubset(pose.columns)
-                else {"hand_motion_peak_count": 0, "hand_motion_peak_interval_mean": 0.0, "hand_motion_peak_interval_std": 0.0}
-            )
-            rows.append({**window.to_dict(), **behavior, **pose_features, **periodic_features})
+            # periodic_features = (
+            #     periodicity_features(pose, start, end)
+            #     if pose_columns.issubset(pose.columns)
+            #     else {"hand_motion_peak_count": 0, "hand_motion_peak_interval_mean": 0.0, "hand_motion_peak_interval_std": 0.0}
+            # )
+            # rows.append({**window.to_dict(), **behavior, **pose_features, **periodic_features})
+            rows.append({**window.to_dict(), **behavior, **pose_features})
     return pd.DataFrame(rows).fillna(0)
 
 
